@@ -10,37 +10,14 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <script defer src="assets/common.js"></script>
-<style>
-  html,body{margin:0}
-  body.splash-active{overflow:hidden}
-  #splash{position:fixed;inset:0;background:#fff;z-index:9999;display:grid;place-items:center}
-  #splash .splash-inner{text-align:center;padding:16px}
-  #splash img{width:90px;height:auto;margin-bottom:12px}
-  #splash.hide{opacity:0;transition:opacity .6s ease}
-</style>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-  document.body.classList.add("splash-active");
-  const splash = document.getElementById("splash");
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const DURATION = 4000;
-  const timeout = prefersReduced ? 10 : DURATION;
-  setTimeout(()=>{
-    splash.classList.add("hide");
-    setTimeout(()=>{ splash.remove(); document.body.classList.remove("splash-active"); }, prefersReduced ? 0 : 650);
-  }, timeout);
-});
-</script>
 </head>
 <body>
-
-<!-- Splash overlay (auto-hide) -->
 <div id="splash" aria-hidden="true">
   <div class="splash-inner">
     <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة">
     <h1>منصة الاختبارات القصيرة</h1>
     <p class="note">كليات الأصالة – كلية القانون</p>
-    <p class="note">المطور: محمد الشمراني – 2025</p>
+    <p class="note">المطور: د. محمد الشمراني – 2025</p>
   </div>
 </div>
 
@@ -77,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function(){
 </main>
 
 <footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: محمد الشمراني – 2025</div>
+  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 

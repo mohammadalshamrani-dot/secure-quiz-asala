@@ -12,7 +12,7 @@
 <header class="header" dir="rtl">
   <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
     <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-    <div class="brand">
+    <div>
       <div class="title">كليات الأصالة – كلية القانون</div>
       <div class="subtitle">منصة الاختبارات القصيرة</div>
     </div>
@@ -22,8 +22,8 @@
 <main class="container">
   <div class="card">
     <h2 class="section-title">التواصل مع الإدارة</h2>
-    <p class="note">أرسل شكوى/مشكلة/اقتراح، وسنعاودك عبر بريدك.</p>
-    <form id="mailtoForm" class="form-grid" onsubmit="sendMailto(event)">
+    <p class="note">أرسل شكوى/مشكلة/اقتراح، وستصل إلى بريد الأدمن مباشرة.</p>
+    <form id="mailtoForm" class="form-grid" onsubmit="sendContact(event)">
       <label>الاسم</label>
       <input required name="name" class="input" placeholder="اسمك الكامل">
       <label>البريد الإلكتروني</label>
@@ -40,11 +40,26 @@
 </main>
 
 <footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: محمد الشمراني – 2025</div>
+  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
 <a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+
+<script>
+async function sendContact(e){
+  e.preventDefault();
+  const f = document.getElementById('mailtoForm');
+  const data = {name:f.name.value.trim(), email:f.email.value.trim(), type:f.type.value, message:f.message.value.trim()};
+  const subject = `[منصة الاختبارات] ${data.type} من ${data.name}`;
+  const body = `الاسم: ${data.name}\nالبريد: ${data.email}\nالنوع: ${data.type}\n\nالرسالة:\n${data.message}`;
+  saveComplaintLocally(data);
+  const r = await sendEmail(ADMIN_EMAIL, subject, body);
+  if(r.ok) alert('تم الإرسال بنجاح. شكرًا لتواصلك.');
+  else alert('تعذر الإرسال، حاول لاحقًا.');
+  f.reset();
+}
+</script>
 </body>
 </html>

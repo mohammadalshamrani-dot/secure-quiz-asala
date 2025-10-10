@@ -12,7 +12,7 @@
 <header class="header" dir="rtl">
   <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
     <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-    <div class="brand">
+    <div>
       <div class="title">كليات الأصالة – كلية القانون</div>
       <div class="subtitle">منصة الاختبارات القصيرة</div>
     </div>
@@ -24,7 +24,8 @@
 
   <div class="card">
     <h2 class="section-title">إنشاء اختبار جديد</h2>
-    <div class="iframe-box">
+    <div class="iframe-box iframe-wrap">
+      <img class="overlay-logo" src="assets/asala-logo.jpg" alt="شعار الأصالة">
       <iframe src="https://secure-quiz-asala-1.onrender.com?embed=1" title="نظام إنشاء الاختبار"></iframe>
     </div>
     <p class="note small center">بعد إنشاء الاختبار انسخ رابط الطلاب أدناه لتوليد الباركود.</p>
@@ -46,7 +47,7 @@
 </main>
 
 <footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: محمد الشمراني – 2025</div>
+  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
@@ -70,14 +71,12 @@ const makeQR = () => {
 
 document.getElementById('makeQR').onclick = makeQR;
 urlInput.addEventListener('input', ()=>{ if(/^https?:\/\//.test(urlInput.value.trim())) makeQR(); });
-
 document.getElementById('copyLink').onclick = async () => {
   const url = urlInput.value.trim();
   if(!url) return alert('لا يوجد رابط لنسخه');
   try { await navigator.clipboard.writeText(url); alert('تم نسخ الرابط'); }
   catch(e) { alert('تعذّر نسخ الرابط تلقائيًا؛ انسخه يدويًا من الحقل.'); }
 };
-
 const params = new URLSearchParams(window.location.search);
 const pre = params.get('studentUrl');
 if(pre) { urlInput.value = pre; makeQR(); }

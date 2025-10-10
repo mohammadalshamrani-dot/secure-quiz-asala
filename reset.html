@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تعيين كلمة مرور جديدة – كليات الأصالة</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <script defer src="assets/common.js"></script>
+</head>
+<body>
+<header class="header" dir="rtl">
+  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
+    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
+    <div>
+      <div class="title">كليات الأصالة – كلية القانون</div>
+      <div class="subtitle">منصة الاختبارات القصيرة</div>
+    </div>
+  </a>
+</header>
+
+<main class="container">
+  <div class="card">
+    <h2 class="section-title">تعيين كلمة مرور جديدة</h2>
+    <form id="setForm" class="form-grid">
+      <label>البريد</label>
+      <input id="email" class="input" readonly>
+      <label>كلمة المرور الجديدة</label>
+      <input required type="password" name="password" class="input" minlength="6">
+      <button type="submit" class="btn btn-primary">تعيين</button>
+    </form>
+  </div>
+</main>
+
+<footer class="footer" dir="rtl">
+  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
+  <div class="note">© جميع الحقوق محفوظة</div>
+</footer>
+
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+
+<script>
+const p = new URLSearchParams(location.search);
+document.getElementById('email').value = p.get('email')||'';
+document.getElementById('setForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = e.target.password.value;
+  try{
+    const res = await fetch('/api/auth/reset', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, password, token: p.get('token')})
+    });
+    if(!res.ok) throw 0;
+    alert('تم تعيين كلمة المرور بنجاح.');
+    location.href = 'index.html';
+  }catch(e){
+    alert('تعذر التعيين. تأكد من صلاحية الرابط أو تواصل مع الإدارة.');
+  }
+});
+</script>
+</body>
+</html>
