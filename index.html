@@ -8,46 +8,61 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <script defer src="assets/common.js"></script>
 </head>
 <body>
-  
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<header class="header" dir="rtl">
-  <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-  <div class="brand">
-    <div class="title">كليات الأصالة – كلية القانون</div>
-    <div class="subtitle">منصة الاختبارات القصيرة</div>
+
+<div id="splash">
+  <div>
+    <img src="assets/asala-logo.jpg" alt="الأصالة">
+    <h1>منصة الاختبارات القصيرة</h1>
+    <p>كلية القانون – Al Asala University</p>
+    <p class="note">المطور: محمد الشمراني – 2025</p>
   </div>
+</div>
+
+<header class="header" dir="rtl">
+  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
+    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
+    <div class="brand">
+      <div class="title">كليات الأصالة – كلية القانون</div>
+      <div class="subtitle">منصة الاختبارات القصيرة</div>
+    </div>
+  </a>
 </header>
 
-  <main class="container">
-    <section class="hero">
-      <h1>منصة الاختبارات القصيرة</h1>
-      <p class="lead">
-        تتيح المنصة إجراء اختبارات قصيرة بتقنيات أمان عالية، تشمل مؤقتًا زمنيًا لكل سؤال،
-        ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.
-      </p>
-      <div class="actions">
-        <a class="btn btn-primary" id="goDashboard">دخول أعضاء هيئة التدريس</a>
-        <a class="btn btn-ghost" href="instructions.html">تعليمات سريعة</a>
-      </div>
-      <div class="features" dir="rtl">
-        <div class="card"><h3>توقيت لكل سؤال</h3><div class="badge">زمن مضبوط</div></div>
-        <div class="card"><h3>قفل عند مغادرة الصفحة</h3><div class="badge">منع الغش</div></div>
-        <div class="card"><h3>محاولات محدودة</h3><div class="badge">تحكم كامل</div></div>
-        <div class="card"><h3>تقارير فورية</h3><div class="badge">نتائج مباشرة</div></div>
-      </div>
-    </section>
-    <p class="note">لأعضاء هيئة التدريس فقط. بعد الدخول يمكنك إنشاء الاختبار ومشاركة رابط الطلاب وباركوده، والاطلاع على النتائج.</p>
-  </main>
-  
+<main class="container">
+  <section class="hero">
+    <h1 class="site-title">منصة الاختبارات القصيرة</h1>
+    <p class="lead">
+      تتيح المنصة إجراء اختبارات قصيرة بتقنيات أمان عالية، تشمل مؤقتًا زمنيًا لكل سؤال،
+      ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" id="goDashboard">دخول أعضاء هيئة التدريس</a>
+      <a class="btn btn-ghost" href="help.html">تعليمات سريعة</a>
+      <a class="btn btn-ghost" href="contact.html">التواصل مع الإدارة</a>
+    </div>
+    <div class="features" dir="rtl">
+      <div class="card"><h3>توقيت لكل سؤال</h3><div class="badge">زمن مضبوط</div></div>
+      <div class="card"><h3>قفل عند مغادرة الصفحة</h3><div class="badge">منع الغش</div></div>
+      <div class="card"><h3>محاولات محدودة</h3><div class="badge">تحكم كامل</div></div>
+      <div class="card"><h3>تقارير فورية</h3><div class="badge">نتائج مباشرة</div></div>
+    </div>
+  </section>
+  <p class="note">لأعضاء هيئة التدريس فقط. بعد الدخول يمكنك إنشاء الاختبار ومشاركة رابط الطلاب وباركوده، والاطلاع على النتائج.</p>
+</main>
+
 <footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة د. محمد الشمراني</div>
+  <div class="credit">تم تطوير المنصة بواسطة: محمد الشمراني – 2025</div>
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
+<a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+
 <script>
-// ضع "جلسة" خفيفة للوصول للصفحات الخاصة
 document.getElementById('goDashboard').onclick = () => {
   localStorage.setItem('asala_session', 'active');
   window.location.href = 'dashboard.html';

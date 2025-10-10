@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>لوحة التحكم – كليات الأصالة</title>
+  <title>التواصل مع الإدارة – كليات الأصالة</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <script defer src="assets/common.js"></script>
@@ -21,14 +21,21 @@
 
 <main class="container">
   <div class="card">
-    <h2 class="section-title">لوحة التحكم</h2>
-    <p class="note">اختر أحد الخيارات التالية:</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="create.html">إنشاء اختبار</a>
-      <a class="btn btn-primary" href="results.html">نتائج الطلاب</a>
-      <a class="btn btn-ghost" href="help.html">تعليمات سريعة</a>
-      <a class="btn btn-ghost" href="contact.html">التواصل مع الإدارة</a>
-    </div>
+    <h2 class="section-title">التواصل مع الإدارة</h2>
+    <p class="note">أرسل شكوى/مشكلة/اقتراح، وسنعاودك عبر بريدك.</p>
+    <form id="mailtoForm" class="form-grid" onsubmit="sendMailto(event)">
+      <label>الاسم</label>
+      <input required name="name" class="input" placeholder="اسمك الكامل">
+      <label>البريد الإلكتروني</label>
+      <input required type="email" name="email" class="input" placeholder="example@domain.com">
+      <label>النوع</label>
+      <select name="type" class="input">
+        <option>شكوى</option><option>مشكلة</option><option>اقتراح</option>
+      </select>
+      <label>النص</label>
+      <textarea required name="message" rows="6" class="input" placeholder="اكتب رسالتك هنا"></textarea>
+      <button type="submit" class="btn btn-primary">إرسال</button>
+    </form>
   </div>
 </main>
 
@@ -39,9 +46,5 @@
 
 <a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-
-<script>
-if(localStorage.getItem('asala_session')!=='active') window.location.href='index.html';
-</script>
 </body>
 </html>

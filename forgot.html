@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>لوحة التحكم – كليات الأصالة</title>
+  <title>استعادة كلمة المرور – كليات الأصالة</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <script defer src="assets/common.js"></script>
@@ -21,14 +21,13 @@
 
 <main class="container">
   <div class="card">
-    <h2 class="section-title">لوحة التحكم</h2>
-    <p class="note">اختر أحد الخيارات التالية:</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="create.html">إنشاء اختبار</a>
-      <a class="btn btn-primary" href="results.html">نتائج الطلاب</a>
-      <a class="btn btn-ghost" href="help.html">تعليمات سريعة</a>
-      <a class="btn btn-ghost" href="contact.html">التواصل مع الإدارة</a>
-    </div>
+    <h2 class="section-title">استعادة كلمة المرور</h2>
+    <form id="resetForm" class="form-grid">
+      <label>البريد الجامعي</label>
+      <input required type="email" name="email" class="input" placeholder="name@alasala.edu.sa">
+      <button type="submit" class="btn btn-primary">إرسال رابط الاستعادة</button>
+    </form>
+    <p class="note">ستصلك رسالة تتضمن رابط إعادة التعيين صالحاً لمدة 30 دقيقة.</p>
   </div>
 </main>
 
@@ -41,7 +40,18 @@
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 
 <script>
-if(localStorage.getItem('asala_session')!=='active') window.location.href='index.html';
+document.getElementById('resetForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const email = e.target.email.value.trim();
+  try{
+    const res = await fetch('/api/auth/request-reset', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email})
+    });
+    if(!res.ok) throw 0;
+    alert('تم إرسال رابط الاستعادة إلى بريدك.');
+  }catch{ alert('تعذر تنفيذ الطلب، حاول لاحقاً.'); }
+});
 </script>
 </body>
 </html>

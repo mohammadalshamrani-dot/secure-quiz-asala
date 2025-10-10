@@ -1,3 +1,16 @@
-# secure-quiz-asala-v3.9
+# secure-quiz-asala-v4.0
 
-Enhancements: session guard, prettier home, create/results embed with ?embed=1, QR section with auto-generate, copy/open buttons, instruction page, prefill via ?studentUrl=.
+- Splash ترحيبي 5 ثوانٍ مع الشعار واسم المطوّر (2025).
+- الشعار/العنوان يعيدان للصفحة الرئيسية في جميع الصفحات.
+- زر رجوع ثابت أسفل كل صفحة.
+- صفحة `contact.html` للتواصل عبر البريد (غيّر ADMIN_EMAIL في `assets/common.js`).
+- صفحة تعليمات `help.html`.
+- صفحة نتائج `results.html` (تضمين النظام الحالي).
+- صفحة إنشاء `create.html` مع توليد QR.
+- صفحة أدمن `admin.html` + `forgot.html` لاستعادة كلمة المرور.
+- فوتر موحّد باسم المطوّر + 2025.
+
+## الإعداد
+1) غيّر بريد الاستقبال في: `assets/common.js` → `ADMIN_EMAIL`.
+2) ارفع المجلد كاملًا إلى GitHub Pages أو خادمك.
+3) لمسارات الـ API (الأدمن/الاستعادة/النتائج المتقدمة) اربط باك-إندك حسب التوثيق الداخلي.

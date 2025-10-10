@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة تحكم الأدمن – كليات الأصالة</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <script defer src="assets/common.js"></script>
+</head>
+<body>
+<header class="header" dir="rtl">
+  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
+    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
+    <div class="brand">
+      <div class="title">كليات الأصالة – كلية القانون</div>
+      <div class="subtitle">منصة الاختبارات القصيرة</div>
+    </div>
+  </a>
+</header>
+
+<main class="container">
+  <div class="card">
+    <h2 class="section-title">لوحة تحكم الأدمن</h2>
+    <form id="adminLogin" class="form-grid">
+      <label>اسم المستخدم</label><input name="username" class="input" required>
+      <label>كلمة المرور</label><input name="password" type="password" class="input" required>
+      <button class="btn btn-primary" type="submit">دخول</button>
+      <a href="forgot.html" class="note">نسيت كلمة المرور؟</a>
+    </form>
+
+    <section id="adminPanel" hidden>
+      <h3>نظرة عامة</h3>
+      <div class="actions" id="metrics"></div>
+
+      <h3>المستخدمون</h3>
+      <div id="usersTable" class="table-wrap"></div>
+
+      <h3>الاختبارات</h3>
+      <div id="quizzesTable" class="table-wrap"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer" dir="rtl">
+  <div class="credit">تم تطوير المنصة بواسطة: محمد الشمراني – 2025</div>
+  <div class="note">© جميع الحقوق محفوظة</div>
+</footer>
+
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+
+<script>
+document.getElementById('adminLogin').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const res = await fetch('/api/admin/login', {method:'POST', body: fd});
+  if(!res.ok){ alert('بيانات الدخول غير صحيحة'); return; }
+  const {token} = await res.json();
+  localStorage.setItem('admin_token', token);
+  e.target.hidden = true; document.getElementById('adminPanel').hidden = false;
+  loadDashboard();
+});
+
+async function aFetch(url){
+  const t = localStorage.getItem('admin_token');
+  const res = await fetch(url,{headers:{'Authorization':`Bearer ${t}`}});
+  if(!res.ok) throw 0; return res.json();
+}
+async function loadDashboard(){
+  const m = await aFetch('/api/admin/metrics'); // {users, quizzes, attempts, today}
+  metrics.innerHTML = [
+   `<div class="card">المستخدمون: <strong>${m.users}</strong></div>`,
+   `<div class="card">الاختبارات: <strong>${m.quizzes}</strong></div>`,
+   `<div class="card">محاولات اليوم: <strong>${m.today}</strong></div>`
+  ].join('');
+
+  const users = await aFetch('/api/admin/users');
+  usersTable.innerHTML = renderTable(users, ['id','name','email','role','createdAt']);
+
+  const quizzes = await aFetch('/api/admin/quizzes');
+  quizzesTable.innerHTML = renderTable(quizzes, ['id','course','title','questions','createdBy','createdAt']);
+}
+function renderTable(rows, cols){
+  return `<table class="table">
+    <thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${r[c]}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table>`;
+}
+</script>
+</body>
+</html>
