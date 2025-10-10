@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة التحكم – إنشاء اختبار</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<header class="header" dir="rtl">
+  <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
+  <div class="brand">
+    <div class="title">كليات الأصالة – كلية القانون</div>
+    <div class="subtitle">منصة الاختبارات القصيرة</div>
+  </div>
+</header>
+
+  <main class="container">
+    <div class="card">
+      <h2 class="section-title">مرحبًا <span id="profName"></span></h2>
+      <div class="row">
+        <div><span class="badge">إنشاء اختبار</span></div>
+        <div><span class="badge">نتائج الطلاب</span></div>
+        <div><span class="badge">رسوم بيانية</span></div>
+      </div>
+    </div>
+    <section class="card" style="margin-top:14px">
+      <h3 class="section-title">إنشاء اختبار جديد</h3>
+      <div class="row">
+        <div>
+          <label class="label" for="qtitle">عنوان الاختبار</label>
+          <input class="input" id="qtitle" placeholder="مثال: Quiz 1 - LAW 224" />
+        </div>
+        <div>
+          <label class="label" for="duration">مدة كل سؤال (ثوانٍ)</label>
+          <input class="input" id="duration" type="number" value="60" />
+        </div>
+      </div>
+      <label class="label" for="qdesc">ملاحظات/تعليمات</label>
+      <input class="input" id="qdesc" placeholder="تعليمات للطلاب (اختياري)" />
+      <div class="actions" style="justify-content:flex-start">
+        <button class="btn btn-primary" id="createQuiz">إنشاء الاختبار</button>
+      </div>
+      <div id="publish" style="display:none;margin-top:14px" class="row">
+        <div class="qr-wrap">
+          <strong>الباركود للطلاب</strong>
+          <img id="qr" alt="QR Code" />
+          <a id="studentLink" target="_blank" rel="noopener">رابط الطلاب</a>
+        </div>
+        <div>
+          <strong>تعليمات مشاركة الرابط</strong>
+          <p>انسخ الرابط أو اطبع الباركود وشاركه مع الطلاب للدخول المباشر على الاختبار.</p>
+          <pre class="code" id="embedSnippet"></pre>
+        </div>
+      </div>
+    </section>
+    <section class="card" style="margin-top:14px">
+      <h3 class="section-title">نتائج الطلاب (نموذج توضيحي)</h3>
+      <canvas id="chart" height="120"></canvas>
+    </section>
+  </main>
+  
+<footer class="footer" dir="rtl">
+  <div class="credit">تم تطوير المنصة بواسطة د. محمد الشمراني</div>
+  <div class="note">© جميع الحقوق محفوظة</div>
+</footer>
+
+<script>
+const current = JSON.parse(localStorage.getItem('current_faculty')||'null');
+if(!current) window.location.href = 'faculty-auth.html';
+document.getElementById('profName').textContent = current?.name || '';
+document.getElementById('createQuiz').onclick = () => {
+  const id = 'q' + Date.now();
+  const title = document.getElementById('qtitle').value.trim() || 'Untitled Quiz';
+  const duration = parseInt(document.getElementById('duration').value||'60',10);
+  const desc = document.getElementById('qdesc').value.trim();
+  const quiz = {id,title,duration,desc,owner:current.email};
+  const quizzes = JSON.parse(localStorage.getItem('quizzes')||'[]');
+  quizzes.push(quiz);
+  localStorage.setItem('quizzes', JSON.stringify(quizzes));
+  const base = window.location.origin + window.location.pathname.replace('dashboard.html','');
+  const url = base + 'student.html?quizId=' + id;
+  document.getElementById('publish').style.display='grid';
+  document.getElementById('studentLink').href = url;
+  document.getElementById('studentLink').textContent = url;
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(url);
+  document.getElementById('qr').src = qrUrl;
+  document.getElementById('embedSnippet').textContent = '<img src="'+qrUrl+'" alt="QR" />';
+  alert('تم إنشاء الاختبار ورابط الطلاب والباركود تلقائيًا');
+};
+const ctx = document.getElementById('chart').getContext('2d');
+new Chart(ctx, { type:'bar', data: { labels:['A','B','C','D','E'], datasets:[{label:'عدد الطلاب', data:[5,8,3,12,6]}] } });
+</script>
+</body>
+</html>

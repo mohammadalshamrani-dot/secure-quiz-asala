@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تسجيل / دخول أعضاء هيئة التدريس</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<header class="header" dir="rtl">
+  <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
+  <div class="brand">
+    <div class="title">كليات الأصالة – كلية القانون</div>
+    <div class="subtitle">منصة الاختبارات القصيرة</div>
+  </div>
+</header>
+
+  <main class="container">
+    <div class="card form">
+      <div class="tabs">
+        <button class="tab active" id="tab-register">تسجيل جديد</button>
+        <button class="tab" id="tab-login">تسجيل الدخول</button>
+      </div>
+      <section id="register">
+        <label class="label" for="rname">الاسم الكامل</label>
+        <input class="input" id="rname" placeholder="الاسم كما هو في السجلات" />
+        <label class="label" for="remail">البريد الجامعي</label>
+        <input class="input" id="remail" placeholder="name@asala.edu.sa" />
+        <label class="label" for="rpass">كلمة المرور</label>
+        <input type="password" class="input" id="rpass" placeholder="••••••••" />
+        <div class="actions" style="justify-content:flex-start">
+          <button class="btn btn-primary" id="registerBtn">إنشاء حساب</button>
+        </div>
+      </section>
+      <section id="login" style="display:none">
+        <label class="label" for="lemail">البريد الجامعي</label>
+        <input class="input" id="lemail" placeholder="name@asala.edu.sa" />
+        <label class="label" for="lpass">كلمة المرور</label>
+        <input type="password" class="input" id="lpass" placeholder="••••••••" />
+        <div class="actions" style="justify-content:flex-start">
+          <button class="btn btn-primary" id="loginBtn">دخول</button>
+        </div>
+      </section>
+      <p id="msg" style="color:#065f46;font-weight:700"></p>
+    </div>
+  </main>
+  
+<footer class="footer" dir="rtl">
+  <div class="credit">تم تطوير المنصة بواسطة د. محمد الشمراني</div>
+  <div class="note">© جميع الحقوق محفوظة</div>
+</footer>
+
+<script>
+const regTab = document.getElementById('tab-register');
+const logTab = document.getElementById('tab-login');
+const regSec = document.getElementById('register');
+const logSec = document.getElementById('login');
+const msg = document.getElementById('msg');
+regTab.onclick = () => {regTab.classList.add('active');logTab.classList.remove('active');regSec.style.display='block';logSec.style.display='none';msg.textContent='';};
+logTab.onclick = () => {logTab.classList.add('active');regTab.classList.remove('active');logSec.style.display='block';regSec.style.display='none';msg.textContent='';};
+document.getElementById('registerBtn').onclick = () => {
+  const name = document.getElementById('rname').value.trim();
+  const email = document.getElementById('remail').value.trim().toLowerCase();
+  const pass = document.getElementById('rpass').value;
+  if(!name || !email || !pass) { msg.style.color='#b91c1c'; msg.textContent='يرجى تعبئة جميع الحقول'; return; }
+  const users = JSON.parse(localStorage.getItem('faculty_users')||'[]');
+  if(users.find(u=>u.email===email)) { msg.style.color='#b91c1c'; msg.textContent='هذا البريد مسجل مسبقًا'; return; }
+  users.push({name,email,pass});
+  localStorage.setItem('faculty_users', JSON.stringify(users));
+  localStorage.setItem('current_faculty', JSON.stringify({name,email}));
+  window.location.href = 'dashboard.html';
+};
+document.getElementById('loginBtn').onclick = () => {
+  const email = document.getElementById('lemail').value.trim().toLowerCase();
+  const pass = document.getElementById('lpass').value;
+  const users = JSON.parse(localStorage.getItem('faculty_users')||'[]');
+  const u = users.find(u=>u.email===email && u.pass===pass);
+  if(!u) { msg.style.color='#b91c1c'; msg.textContent='بيانات الدخول غير صحيحة'; return; }
+  localStorage.setItem('current_faculty', JSON.stringify({name:u.name,email:u.email}));
+  window.location.href = 'dashboard.html';
+};
+</script>
+</body>
+</html>

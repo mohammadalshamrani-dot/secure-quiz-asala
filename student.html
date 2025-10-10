@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>دخول الطلاب – منصة الاختبارات القصيرة</title>
+  <title>الدخول إلى الاختبار</title>
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -16,21 +16,22 @@
     <div class="title">كليات الأصالة – كلية القانون</div>
     <div class="subtitle">منصة الاختبارات القصيرة</div>
   </div>
-  <nav class="nav" aria-label="التنقل">
-    <a href="index.html">الصفحة الترحيبية</a>
-    <a href="student.html">دخول الطلاب</a>
-    <a href="faculty.html">دخول الأعضاء</a>
-  </nav>
 </header>
 
   <main class="container">
-    <div class="form-card">
-      <h2>دخول الطلاب</h2>
-      <label class="label" for="sid">الرقم الجامعي</label>
-      <input class="input" id="sid" placeholder="مثال: 22200000" />
-      <label class="label" for="name">الاسم الكامل</label>
-      <input class="input" id="name" placeholder="الاسم كما هو في السجلات" />
-      <button class="btn btn-student submit">دخول</button>
+    <div class="card">
+      <h2 class="section-title">مرحبًا بالطالب</h2>
+      <p>هذا الرابط خاص بالطلاب للوصول إلى الاختبار الذي أنشأه عضو هيئة التدريس.</p>
+      <div id="quizInfo" class="badge"></div>
+      <div class="form" style="margin-top:12px">
+        <label class="label" for="sid">الرقم الجامعي</label>
+        <input class="input" id="sid" placeholder="22200000" />
+        <label class="label" for="sname">الاسم الكامل</label>
+        <input class="input" id="sname" placeholder="الاسم كما هو في السجلات" />
+        <div class="actions" style="justify-content:flex-start">
+          <button class="btn btn-primary" id="startBtn">بدء الاختبار</button>
+        </div>
+      </div>
     </div>
   </main>
   
@@ -39,5 +40,13 @@
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get('quizId');
+const quizzes = JSON.parse(localStorage.getItem('quizzes')||'[]');
+const q = quizzes.find(x=>x.id===id);
+document.getElementById('quizInfo').textContent = q ? ('الاختبار: '+q.title+' • مدة كل سؤال: '+q.duration+' ثانية') : 'لم يتم العثور على الاختبار (نموذج توضيحي)';
+document.getElementById('startBtn').onclick = ()=> alert('نموذج واجهة للطلاب — التكامل مع نظام الأسئلة مؤجل.');
+</script>
 </body>
 </html>
