@@ -1,33 +1,19 @@
 <!DOCTYPE html><html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>لوحة الإدارة – منصة اختبارات الأصالة</title>
+<title>لوحة الإدارة – الأصالة</title>
 <style>
  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Arabic',sans-serif;margin:0;background:#0b1023;color:#e5e7eb}
- header{padding:12px 16px;border-bottom:1px solid #1f2a44;display:flex;align-items:center;justify-content:space-between;gap:12px}
- header .brand{display:flex;align-items:center;gap:10px}
- header img{height:34px;border-radius:6px}
- h1{margin:0;font-size:18px}
+ header{padding:12px 16px;border-bottom:1px solid #1f2a44;display:flex;align-items:center;justify-content:space-between}
  main{padding:18px;max-width:1100px;margin:auto}
  .row{display:flex;gap:10px;flex-wrap:wrap}
- .input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0b1220;color:#fff}
+ .input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0b1220;color:#fff}
  .btn{padding:12px 16px;border-radius:10px;border:none;background:#22c55e;color:#001;font-weight:800;cursor:pointer}
  .btn.secondary{background:transparent;border:1px solid #334155;color:#e5e7eb}
  .card{background:#0b1220;border:1px solid #1f2a44;padding:16px;border-radius:12px;margin-bottom:12px}
- .muted{color:#94a3b8;font-size:13px}
  table{width:100%;border-collapse:collapse;margin-top:10px}
  th,td{border-bottom:1px solid #1f2a44;padding:8px;text-align:right;font-size:14px}
- .pill{display:inline-block;background:#0b1220;border:1px solid #334155;border-radius:999px;padding:4px 8px}
- footer{padding:16px;text-align:center;color:#94a3b8;font-size:13px}
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head><body>
-<header>
-  <div class="brand">
-    <img src="/assets/alasala-logo.jpg" alt="ALASALA"/>
-    <div>منصة الاختبارات – الأصالة</div>
-  </div>
-  <div id="who" class="muted"></div>
-</header>
+</style></head><body>
+<header><div>منصة الاختبارات – الأصالة</div><img src="/assets/alasala-logo.jpg" style="height:34px;border-radius:6px"/></header>
 <main>
   <div class="card" id="authCard">
     <h3>تسجيل / دخول المدرّس</h3>
@@ -42,32 +28,21 @@
       <button class="btn secondary" id="doLogin">دخول</button>
       <button class="btn secondary" id="logout" style="margin-inline-start:auto;display:none">تسجيل الخروج</button>
     </div>
-    <div id="authMsg" class="muted"></div>
+    <div id="authMsg" style="color:#94a3b8"></div>
   </div>
 
   <div class="card" id="builder" style="display:none">
     <h3>إنشاء اختبار جديد</h3>
     <div class="row">
       <input id="title" class="input" placeholder="عنوان الاختبار" />
-      <input id="courseName" class="input" placeholder="اسم المقرر (مثال: مبادئ القانون)"/>
-      <input id="courseCode" class="input" placeholder="رمز المقرر (LAW-221)"/>
-      <input id="instructorName" class="input" placeholder="اسم المشرف (مثال: د. محمد الشمراني)"/>
       <input id="perSec" class="input" type="number" min="5" value="60" placeholder="الزمن لكل سؤال بالثواني"/>
     </div>
-    <div class="row">
-      <label class="pill"><input type="checkbox" id="singleAttempt" checked> محاولة واحدة لكل اسم</label>
-      <label class="pill"><input type="checkbox" id="requireApproval"> يتطلب موافقة المشرف قبل البدء</label>
-    </div>
-    <div class="row">
-      <input id="examStart" class="input" type="datetime-local" placeholder="وقت فتح الاختبار (اختياري)"/>
-      <input id="examEnd" class="input" type="datetime-local" placeholder="وقت إغلاق الاختبار (اختياري)"/>
-    </div>
-    <p class="muted">أضف أسئلتك (سؤال + 4 خيارات + رقم الإجابة الصحيحة 0..3).</p>
+    <p>أضف أسئلتك (سؤال + 4 خيارات + رقم الإجابة الصحيحة 0..3).</p>
     <div id="qList"></div>
     <button class="btn" id="addQuestion">إضافة سؤال</button>
     <hr />
     <button class="btn" id="createQuiz">إنشاء الاختبار</button>
-    <div id="result" class="muted"></div>
+    <div id="result" style="color:#94a3b8"></div>
   </div>
 
   <div class="card" id="panel" style="display:none">
@@ -77,158 +52,36 @@
       <button class="btn secondary" id="loadAttempts">تحميل المحاولات</button>
       <a id="csvLink" class="btn secondary" href="#" target="_blank">تحميل النتائج CSV</a>
     </div>
-    <div class="row">
-      <canvas id="chart" height="140"></canvas>
-    </div>
     <table id="attemptsTbl">
-      <thead><tr><th>الاسم</th><th>النتيجة</th><th>الحالة</th><th>موافقة</th><th>وقت البدء</th><th>وقت الانتهاء</th><th>إجراء</th></tr></thead>
+      <thead><tr><th>الاسم</th><th>النتيجة</th><th>الحالة</th><th>موافقة</th><th>بدء</th><th>انتهاء</th><th>إجراء</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
 </main>
-<footer>تم تطوير المنصة بواسطة د. محمد الشمراني – 2025</footer>
-
 <script>
 const $ = s => document.querySelector(s);
 function token(){ return localStorage.getItem('TOKEN') || ''; }
 function authHeaders(){ return { 'Content-Type':'application/json', 'Authorization':'Bearer '+token() }; }
-function toggleUI(logged, name){
-  document.getElementById('authCard').style.display = logged ? 'none' : 'block';
-  document.getElementById('builder').style.display = logged ? 'block' : 'none';
-  document.getElementById('panel').style.display = logged ? 'block' : 'none';
-  document.getElementById('logout').style.display = logged ? 'inline-block' : 'none';
-  document.getElementById('who').textContent = logged ? ('مرحبًا، '+name) : '';
-}
-(async function init(){
-  if(token()) { toggleUI(true, 'مدرّس'); }
-})();
+function toggleUI(logged){ document.getElementById('authCard').style.display = logged ? 'none':'block'; document.getElementById('builder').style.display = logged ? 'block':'none'; document.getElementById('panel').style.display = logged ? 'block':'none'; document.getElementById('logout').style.display = logged ? 'inline-block':'none'; }
 document.getElementById('logout').onclick = ()=> { localStorage.removeItem('TOKEN'); location.reload(); };
-
 document.getElementById('doRegister').onclick = async ()=>{
-  const email = document.getElementById('email').value.trim();
-  const name  = document.getElementById('name').value.trim();
-  const password = document.getElementById('pwd').value;
-  const signupCode = document.getElementById('signupCode').value.trim();
-  const r = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email,name,password,signupCode}) });
-  const d = await r.json();
-  if(!r.ok){ document.getElementById('authMsg').textContent = d.error||'خطأ بالتسجيل'; return; }
-  localStorage.setItem('TOKEN', d.token);
-  toggleUI(true, d.name||'مدرّس');
+  const r = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('#email').value.trim(),name:$('#name').value.trim(),password:$('#pwd').value,signupCode:$('#signupCode').value.trim()})}); const d=await r.json(); if(!r.ok){$('#authMsg').textContent=d.error||'خطأ بالتسجيل';return;} localStorage.setItem('TOKEN',d.token); toggleUI(true);
 };
 document.getElementById('doLogin').onclick = async ()=>{
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('pwd').value;
-  const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email,password}) });
-  const d = await r.json();
-  if(!r.ok){ document.getElementById('authMsg').textContent = d.error||'خطأ بالدخول'; return; }
-  localStorage.setItem('TOKEN', d.token);
-  toggleUI(true, d.name||'مدرّس');
+  const r = await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('#email').value.trim(),password:$('#pwd').value})}); const d=await r.json(); if(!r.ok){$('#authMsg').textContent=d.error||'خطأ بالدخول';return;} localStorage.setItem('TOKEN',d.token); toggleUI(true);
 };
-
-const qList = document.getElementById('qList');
-document.getElementById('addQuestion').onclick = () => addQ();
-function addQ(q={q:"",choices:["","","",""],correct:0}){
-  const div = document.createElement('div');
-  div.className='card';
-  div.innerHTML = `
-    <input class="input q" placeholder="نص السؤال" value="${q.q}"/>
-    <div class="row">
-      <input class="input c0" placeholder="الخيار 1" value="${q.choices[0]||""}"/>
-      <input class="input c1" placeholder="الخيار 2" value="${q.choices[1]||""}"/>
-      <input class="input c2" placeholder="الخيار 3" value="${q.choices[2]||""}"/>
-      <input class="input c3" placeholder="الخيار 4" value="${q.choices[3]||""}"/>
-    </div>
-    <select class="input correct">
-      <option value="0">الإجابة الصحيحة: 1</option>
-      <option value="1">الإجابة الصحيحة: 2</option>
-      <option value="2">الإجابة الصحيحة: 3</option>
-      <option value="3">الإجابة الصحيحة: 4</option>
-    </select>
-  `;
-  qList.appendChild(div);
-}
-addQ();
-
-document.getElementById('createQuiz').onclick = async () => {
-  const body = {
-    title: document.getElementById('title').value.trim(),
-    perQuestionSec: parseInt(document.getElementById('perSec').value || '60',10),
-    courseName: document.getElementById('courseName').value.trim(),
-    courseCode: document.getElementById('courseCode').value.trim(),
-    instructorName: document.getElementById('instructorName').value.trim(),
-    requireApproval: document.getElementById('requireApproval').checked,
-    singleAttempt: document.getElementById('singleAttempt').checked,
-    examStart: document.getElementById('examStart').value ? Date.parse(document.getElementById('examStart').value) : null,
-    examEnd: document.getElementById('examEnd').value ? Date.parse(document.getElementById('examEnd').value) : null,
-    questions: [...qList.querySelectorAll('.card')].map(c => ({
-      q: c.querySelector('.q').value.trim(),
-      choices: [0,1,2,3].map(i => c.querySelector('.c'+i).value.trim()),
-      correct: parseInt(c.querySelector('.correct').value,10)
-    })).filter(x => x.q && x.choices.every(s=>s))
-  };
-  try{
-    const res = await fetch('/api/quizzes', {
-      method:'POST', headers: authHeaders(), body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Error');
-    document.getElementById('result').innerHTML = `✅ تم الإنشاء. رابط الطالب: <a href="/q/${data.quizId}" target="_blank">/q/${data.quizId}</a> — Quiz ID: <b>${data.quizId}</b>`;
-    document.getElementById('quizId').value = data.quizId;
-  }catch(e){
-    document.getElementById('result').textContent = '❌ '+e.message;
-  }
+toggleUI(!!token());
+const qList = $('#qList'); function addQ(){ const div=document.createElement('div'); div.className='card'; div.innerHTML=`<input class="input q" placeholder="نص السؤال"/><div class="row"><input class="input c0" placeholder="الخيار 1"/><input class="input c1" placeholder="الخيار 2"/><input class="input c2" placeholder="الخيار 3"/><input class="input c3" placeholder="الخيار 4"/></div><select class="input correct"><option value="0">الإجابة الصحيحة: 1</option><option value="1">الإجابة الصحيحة: 2</option><option value="2">الإجابة الصحيحة: 3</option><option value="3">الإجابة الصحيحة: 4</option></select>`; qList.appendChild(div);} addQ(); document.getElementById('addQuestion').onclick=addQ;
+document.getElementById('createQuiz').onclick = async ()=>{
+  const body={ title:$('#title').value.trim(), perQuestionSec:parseInt($('#perSec').value||'60',10), questions:[...qList.querySelectorAll('.card')].map(c=>({q:c.querySelector('.q').value.trim(),choices:[0,1,2,3].map(i=>c.querySelector('.c'+i).value.trim()),correct:parseInt(c.querySelector('.correct').value,10)})).filter(x=>x.q && x.choices.every(s=>s)) };
+  const res = await fetch('/api/quizzes',{method:'POST',headers:authHeaders(),body:JSON.stringify(body)}); const data=await res.json();
+  if(!res.ok){ $('#result').textContent='❌ '+(data.error||'Error'); return; }
+  $('#result').innerHTML=`✅ تم الإنشاء. رابط الطالب: <a href="/q/${data.quizId}" target="_blank">/q/${data.quizId}</a> — Quiz ID: <b>${data.quizId}</b>`; $('#quizId').value=data.quizId;
 };
-
-let chart;
-document.getElementById('loadAttempts').onclick = async () => {
-  const qid = document.getElementById('quizId').value.trim();
-  if(!qid) return alert('أدخل Quiz ID');
-  const res = await fetch('/api/quizzes/'+qid+'/attempts', { headers: { 'Authorization':'Bearer '+token() } });
-  const data = await res.json();
-  if(!res.ok){ alert(data.error||'خطأ'); return; }
-  const tb = document.querySelector('#attemptsTbl tbody');
-  tb.innerHTML='';
-  let finished=0, cancelled=0, waiting=0;
-  data.forEach(at => {
-    const st = at.cheated ? 'ملغاة' : (at.finishedAt ? 'مكتملة' : 'نشطة/بانتظار');
-    if(at.cheated) cancelled++; else if(at.finishedAt) finished++; else waiting++;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${at.name}</td>
-      <td>${at.score==null?'—':at.score}</td>
-      <td>${st}</td>
-      <td>${at.approved?'✔️':'❌'}</td>
-      <td>${new Date(at.startedAt).toLocaleString('ar-SA',{hour12:false})}</td>
-      <td>${at.finishedAt?new Date(at.finishedAt).toLocaleString('ar-SA',{hour12:false}):'—'}</td>
-      <td>${at.approved?'' : '<button data-id="'+at.id+'" class="approve">موافقة</button>'}</td>
-    `;
-    tb.appendChild(tr);
-  });
-  tb.querySelectorAll('.approve').forEach(btn => {
-    btn.onclick = async () => {
-      await fetch('/api/attempts/'+btn.dataset.id+'/approve', {method:'POST', headers:{ 'Authorization':'Bearer '+token() }});
-      document.getElementById('loadAttempts').click();
-    };
-  });
-  document.getElementById('csvLink').href = '/api/quizzes/'+qid+'/results.csv';
-  document.getElementById('csvLink').onclick = (e)=>{
-    e.preventDefault();
-    fetch('/api/quizzes/'+qid+'/results.csv', { headers:{ 'Authorization':'Bearer '+token() }})
-      .then(r=>r.blob()).then(b=>{
-        const url = URL.createObjectURL(b);
-        const a = document.createElement('a'); a.href=url; a.download='results.csv'; a.click();
-        setTimeout(()=>URL.revokeObjectURL(url), 1000);
-      });
-  };
-
-  const ctx = document.getElementById('chart').getContext('2d');
-  if(chart) chart.destroy();
-  chart = new Chart(ctx, {
-    type: 'pie',
-    data: { labels: ['مكتملة','بانتظار/نشطة','ملغاة'],
-      datasets: [{ data: [finished, waiting, cancelled] }] },
-    options: { plugins:{ legend:{ labels:{ color:'#e5e7eb' } } } }
-  });
+document.getElementById('loadAttempts').onclick = async ()=>{
+  const qid=$('#quizId').value.trim(); if(!qid) return alert('أدخل Quiz ID');
+  const res=await fetch('/api/quizzes/'+qid+'/attempts',{headers:{'Authorization':'Bearer '+token()}}); const data=await res.json(); if(!res.ok){alert(data.error||'خطأ');return;}
+  const tb=document.querySelector('#attemptsTbl tbody'); tb.innerHTML=''; data.forEach(at=>{const st=at.cheated?'ملغاة':(at.finishedAt?'مكتملة':'نشطة'); const tr=document.createElement('tr'); tr.innerHTML=`<td>${at.name}</td><td>${at.score==null?'—':at.score}</td><td>${st}</td><td>${at.approved?'✔️':'❌'}</td><td>${new Date(at.startedAt).toLocaleString('ar-SA',{hour12:false})}</td><td>${at.finishedAt?new Date(at.finishedAt).toLocaleString('ar-SA',{hour12:false}):'—'}</td><td>${at.approved?'':'<button data-id="'+at.id+'" class="approve">موافقة</button>'}</td>`; tb.appendChild(tr); }); tb.querySelectorAll('.approve').forEach(b=>{b.onclick=async()=>{await fetch('/api/attempts/'+b.dataset.id+'/approve',{method:'POST',headers:{'Authorization':'Bearer '+token()}}); document.getElementById('loadAttempts').click();}});
+  document.getElementById('csvLink').onclick=(e)=>{e.preventDefault(); fetch('/api/quizzes/'+qid+'/results.csv',{headers:{'Authorization':'Bearer '+token()}}).then(r=>r.blob()).then(b=>{const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='results.csv';a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);});};
 };
-</script>
-</body></html>
+</script></body></html>

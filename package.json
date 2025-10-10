@@ -1,7 +1,7 @@
 {
   "name": "secure-quiz-asala",
-  "version": "3.1.0",
-  "description": "Asala University secure quiz platform with multi-teacher accounts (self-serve), JWT, per-question timer, approval, CSV.",
+  "version": "3.1.2",
+  "description": "Asala secure quiz platform with self-serve teacher accounts (JWT), per-question timer, approval and CSV.",
   "main": "server.js",
   "scripts": { "start": "node server.js" },
   "dependencies": {

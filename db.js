@@ -6,8 +6,8 @@ function readDB(){
   if(!fs.existsSync(DB_PATH)) {
     fs.writeFileSync(DB_PATH, JSON.stringify({quizzes:{}, attempts:{}}, null, 2));
   }
-  const raw = fs.readFileSync(DB_PATH, 'utf8');
-  return JSON.parse(raw || '{"quizzes":{},"attempts":{}}');
+  const raw = fs.readFileSync(DB_PATH, 'utf8') || '{}';
+  try{ return JSON.parse(raw); } catch(e){ return {quizzes:{}, attempts:{}}; }
 }
 function writeDB(db){
   fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
