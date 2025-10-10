@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>منصة الاختبارات القصيرة – كليات الأصالة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -18,13 +21,24 @@
 </header>
 
   <main class="container">
-    <div class="card">
-      <h2 class="section-title">أهلاً بأعضاء هيئة التدريس</h2>
-      <p class="note">يمكنك البدء بإنشاء اختبار جديد أو استعراض نتائج الطلاب.</p>
+    <section class="hero">
+      <h1>منصة الاختبارات القصيرة</h1>
+      <p class="lead">
+        تتيح المنصة إجراء اختبارات قصيرة بتقنيات أمان عالية، تشمل مؤقتًا زمنيًا لكل سؤال،
+        ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.
+      </p>
       <div class="actions">
-        <a class="btn btn-primary" href="dashboard.html">لوحة التحكم</a>
+        <a class="btn btn-primary" id="goDashboard">دخول أعضاء هيئة التدريس</a>
+        <a class="btn btn-ghost" href="instructions.html">تعليمات سريعة</a>
       </div>
-    </div>
+      <div class="features" dir="rtl">
+        <div class="card"><h3>توقيت لكل سؤال</h3><div class="badge">زمن مضبوط</div></div>
+        <div class="card"><h3>قفل عند مغادرة الصفحة</h3><div class="badge">منع الغش</div></div>
+        <div class="card"><h3>محاولات محدودة</h3><div class="badge">تحكم كامل</div></div>
+        <div class="card"><h3>تقارير فورية</h3><div class="badge">نتائج مباشرة</div></div>
+      </div>
+    </section>
+    <p class="note">لأعضاء هيئة التدريس فقط. بعد الدخول يمكنك إنشاء الاختبار ومشاركة رابط الطلاب وباركوده، والاطلاع على النتائج.</p>
   </main>
   
 <footer class="footer" dir="rtl">
@@ -32,5 +46,12 @@
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
+<script>
+// ضع "جلسة" خفيفة للوصول للصفحات الخاصة
+document.getElementById('goDashboard').onclick = () => {
+  localStorage.setItem('asala_session', 'active');
+  window.location.href = 'dashboard.html';
+};
+</script>
 </body>
 </html>

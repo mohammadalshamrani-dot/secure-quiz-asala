@@ -1,3 +1,3 @@
-# secure-quiz-asala-v3.7
+# secure-quiz-asala-v3.9
 
-Dashboard now includes two options: Create Quiz and Student Results, both linking to old system pages embedded with branding.
+Enhancements: session guard, prettier home, create/results embed with ?embed=1, QR section with auto-generate, copy/open buttons, instruction page, prefill via ?studentUrl=.

@@ -20,9 +20,8 @@
   <main class="container">
     <div class="card">
       <h2 class="section-title">نتائج الطلاب</h2>
-      <p class="note">يتم عرض نظام نتائج الطلاب القديم هنا بنفس الألوان والشعار.</p>
       <div class="iframe-box">
-        <iframe src="https://secure-quiz-asala-1.onrender.com/results" title="نتائج الطلاب"></iframe>
+        <iframe src="https://secure-quiz-asala-1.onrender.com/results?embed=1" title="نتائج الطلاب"></iframe>
       </div>
     </div>
   </main>
@@ -32,5 +31,8 @@
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
+<script>
+if(localStorage.getItem('asala_session')!=='active') window.location.href='index.html';
+</script>
 </body>
 </html>

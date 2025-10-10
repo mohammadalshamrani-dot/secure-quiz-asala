@@ -20,9 +20,22 @@
   <main class="container">
     <div class="card">
       <h2 class="section-title">إنشاء اختبار جديد</h2>
-      <p class="note">هذه الصفحة تعرض النظام القديم داخل إطار مع الحفاظ على ألوان وشعار كليات الأصالة.</p>
       <div class="iframe-box">
-        <iframe src="https://secure-quiz-asala-1.onrender.com" title="نظام إنشاء الاختبار"></iframe>
+        <iframe src="https://secure-quiz-asala-1.onrender.com?embed=1" title="نظام إنشاء الاختبار"></iframe>
+      </div>
+      <p class="note small center">يتم عرض النظام القديم داخل الإطار. بعد إنشاء الاختبار انسخ رابط الطلاب أدناه لتوليد الباركود.</p>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3 class="section-title">توليد الرابط والباركود للطلاب</h3>
+      <div class="flex">
+        <input id="studentUrl" class="input" placeholder="ألصق هنا رابط الطلاب..." />
+        <button class="btn btn-primary" id="makeQR">توليد</button>
+        <button class="btn btn-ghost" id="copyLink">نسخ الرابط</button>
+        <a class="btn btn-ghost" id="openLink" target="_blank" rel="noopener">فتح الرابط</a>
+      </div>
+      <div id="qrBox" class="qr-wrap" style="display:none;margin-top:12px">
+        <img id="qrImg" alt="QR" />
+        <a id="qrLink" target="_blank" rel="noopener">رابط الطلاب</a>
       </div>
     </div>
   </main>
@@ -32,5 +45,39 @@
   <div class="note">© جميع الحقوق محفوظة</div>
 </footer>
 
+<script>
+// حماية خفيفة
+if(localStorage.getItem('asala_session')!=='active') window.location.href='index.html';
+
+const urlInput = document.getElementById('studentUrl');
+const makeQR = () => {
+  const url = urlInput.value.trim();
+  if(!/^https?:\/\//.test(url)) { alert('الرجاء إدخال رابط صحيح يبدأ بـ http/https'); return; }
+  const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
+  document.getElementById('qrImg').src = qr;
+  document.getElementById('qrLink').href = url;
+  document.getElementById('qrLink').textContent = url;
+  document.getElementById('openLink').href = url;
+  document.getElementById('qrBox').style.display = 'flex';
+};
+
+document.getElementById('makeQR').onclick = makeQR;
+
+// Auto-generate when pasting a valid URL
+urlInput.addEventListener('input', ()=>{ if(/^https?:\/\//.test(urlInput.value.trim())) makeQR(); });
+
+// Copy to clipboard
+document.getElementById('copyLink').onclick = async () => {
+  const url = urlInput.value.trim();
+  if(!url) return alert('لا يوجد رابط لنسخه');
+  try { await navigator.clipboard.writeText(url); alert('تم نسخ الرابط'); }
+  catch(e) { alert('تعذّر نسخ الرابط تلقائيًا؛ انسخه يدويًا من الحقل.'); }
+};
+
+// Prefill from query (?studentUrl=...)
+const params = new URLSearchParams(window.location.search);
+const pre = params.get('studentUrl');
+if(pre) { urlInput.value = pre; makeQR(); }
+</script>
 </body>
 </html>
