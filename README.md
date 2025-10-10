@@ -1,3 +1,3 @@
-# secure-quiz-asala-v3.5
+# secure-quiz-asala-v3.7
 
-تم تلبية تعديلات الصفحة الرئيسية وإضافة مسارات التسجيل والدخول ولوحة التحكم وتوليد الباركود تلقائيًا.
+Dashboard now includes two options: Create Quiz and Student Results, both linking to old system pages embedded with branding.
