@@ -1,23 +1,11 @@
-# Secure Quiz Asala (v3)
+# Secure Quiz Asala (v3.1)
+Multi-teacher accounts (self-serve), JWT auth, per-question timer, approval flow, single attempt, time window, dashboard, CSV.
 
-Secure online quiz platform for Alasala University — developed by Dr. Mohammed Al‑Shamrani.
+## Environment
+- JWT_SECRET (required)
+- ALLOWED_EMAIL_DOMAIN (optional, e.g. alasala.edu.sa)
+- SIGNUP_CODE (optional)
 
-## Features
-- Per-question timer
-- Single attempt per student
-- Instructor approval before start (optional)
-- Anti-cheat (auto-cancel on tab/app switch)
-- Time window (start/end)
-- Admin dashboard + CSV export
-- Branding: Alasala logo + signature
-
-## Run locally
-```bash
+## Run
 npm install
-ADMIN_KEY=asala2025 node server.js
-# open http://localhost:3000/admin
-```
-
-## Deploy on Render
-This repo contains `render.yaml`. Use:
-https://render.com/deploy?repo=<your_repo_url>
+JWT_SECRET=dev node server.js

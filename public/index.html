@@ -26,12 +26,28 @@
     <img src="/assets/alasala-logo.jpg" alt="ALASALA"/>
     <div>منصة الاختبارات – الأصالة</div>
   </div>
+  <div id="who" class="muted"></div>
 </header>
 <main>
-  <div class="card">
+  <div class="card" id="authCard">
+    <h3>تسجيل / دخول المدرّس</h3>
+    <div class="row">
+      <input id="email" class="input" placeholder="البريد الجامعي">
+      <input id="name" class="input" placeholder="الاسم الكامل (للتسجيل فقط)">
+      <input id="pwd" class="input" type="password" placeholder="كلمة المرور">
+      <input id="signupCode" class="input" placeholder="رمز التسجيل (إن طُلب)">
+    </div>
+    <div class="row">
+      <button class="btn" id="doRegister">تسجيل جديد</button>
+      <button class="btn secondary" id="doLogin">دخول</button>
+      <button class="btn secondary" id="logout" style="margin-inline-start:auto;display:none">تسجيل الخروج</button>
+    </div>
+    <div id="authMsg" class="muted"></div>
+  </div>
+
+  <div class="card" id="builder" style="display:none">
     <h3>إنشاء اختبار جديد</h3>
     <div class="row">
-      <input id="adminKey" class="input" placeholder="ADMIN_KEY (مفتاح الإدارة) – أدخله مرة واحدة"/>
       <input id="title" class="input" placeholder="عنوان الاختبار" />
       <input id="courseName" class="input" placeholder="اسم المقرر (مثال: مبادئ القانون)"/>
       <input id="courseCode" class="input" placeholder="رمز المقرر (LAW-221)"/>
@@ -54,7 +70,7 @@
     <div id="result" class="muted"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="panel" style="display:none">
     <h3>لوحة بيانات الاختبار</h3>
     <div class="row">
       <input id="quizId" class="input" placeholder="ضع Quiz ID هنا" />
@@ -73,6 +89,42 @@
 <footer>تم تطوير المنصة بواسطة د. محمد الشمراني – 2025</footer>
 
 <script>
+const $ = s => document.querySelector(s);
+function token(){ return localStorage.getItem('TOKEN') || ''; }
+function authHeaders(){ return { 'Content-Type':'application/json', 'Authorization':'Bearer '+token() }; }
+function toggleUI(logged, name){
+  document.getElementById('authCard').style.display = logged ? 'none' : 'block';
+  document.getElementById('builder').style.display = logged ? 'block' : 'none';
+  document.getElementById('panel').style.display = logged ? 'block' : 'none';
+  document.getElementById('logout').style.display = logged ? 'inline-block' : 'none';
+  document.getElementById('who').textContent = logged ? ('مرحبًا، '+name) : '';
+}
+(async function init(){
+  if(token()) { toggleUI(true, 'مدرّس'); }
+})();
+document.getElementById('logout').onclick = ()=> { localStorage.removeItem('TOKEN'); location.reload(); };
+
+document.getElementById('doRegister').onclick = async ()=>{
+  const email = document.getElementById('email').value.trim();
+  const name  = document.getElementById('name').value.trim();
+  const password = document.getElementById('pwd').value;
+  const signupCode = document.getElementById('signupCode').value.trim();
+  const r = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email,name,password,signupCode}) });
+  const d = await r.json();
+  if(!r.ok){ document.getElementById('authMsg').textContent = d.error||'خطأ بالتسجيل'; return; }
+  localStorage.setItem('TOKEN', d.token);
+  toggleUI(true, d.name||'مدرّس');
+};
+document.getElementById('doLogin').onclick = async ()=>{
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('pwd').value;
+  const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email,password}) });
+  const d = await r.json();
+  if(!r.ok){ document.getElementById('authMsg').textContent = d.error||'خطأ بالدخول'; return; }
+  localStorage.setItem('TOKEN', d.token);
+  toggleUI(true, d.name||'مدرّس');
+};
+
 const qList = document.getElementById('qList');
 document.getElementById('addQuestion').onclick = () => addQ();
 function addQ(q={q:"",choices:["","","",""],correct:0}){
@@ -114,10 +166,9 @@ document.getElementById('createQuiz').onclick = async () => {
       correct: parseInt(c.querySelector('.correct').value,10)
     })).filter(x => x.q && x.choices.every(s=>s))
   };
-  const key = document.getElementById('adminKey').value.trim();
   try{
-    const res = await fetch('/api/quizzes?key='+encodeURIComponent(key), {
-      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+    const res = await fetch('/api/quizzes', {
+      method:'POST', headers: authHeaders(), body: JSON.stringify(body)
     });
     const data = await res.json();
     if(!res.ok) throw new Error(data.error || 'Error');
@@ -131,9 +182,8 @@ document.getElementById('createQuiz').onclick = async () => {
 let chart;
 document.getElementById('loadAttempts').onclick = async () => {
   const qid = document.getElementById('quizId').value.trim();
-  const key = document.getElementById('adminKey').value.trim();
   if(!qid) return alert('أدخل Quiz ID');
-  const res = await fetch('/api/quizzes/'+qid+'/attempts?key='+encodeURIComponent(key));
+  const res = await fetch('/api/quizzes/'+qid+'/attempts', { headers: { 'Authorization':'Bearer '+token() } });
   const data = await res.json();
   if(!res.ok){ alert(data.error||'خطأ'); return; }
   const tb = document.querySelector('#attemptsTbl tbody');
@@ -156,12 +206,20 @@ document.getElementById('loadAttempts').onclick = async () => {
   });
   tb.querySelectorAll('.approve').forEach(btn => {
     btn.onclick = async () => {
-      const key = document.getElementById('adminKey').value.trim();
-      await fetch('/api/attempts/'+btn.dataset.id+'/approve?key='+encodeURIComponent(key), {method:'POST'});
+      await fetch('/api/attempts/'+btn.dataset.id+'/approve', {method:'POST', headers:{ 'Authorization':'Bearer '+token() }});
       document.getElementById('loadAttempts').click();
     };
   });
-  document.getElementById('csvLink').href = '/api/quizzes/'+qid+'/results.csv?key='+encodeURIComponent(key);
+  document.getElementById('csvLink').href = '/api/quizzes/'+qid+'/results.csv';
+  document.getElementById('csvLink').onclick = (e)=>{
+    e.preventDefault();
+    fetch('/api/quizzes/'+qid+'/results.csv', { headers:{ 'Authorization':'Bearer '+token() }})
+      .then(r=>r.blob()).then(b=>{
+        const url = URL.createObjectURL(b);
+        const a = document.createElement('a'); a.href=url; a.download='results.csv'; a.click();
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+      });
+  };
 
   const ctx = document.getElementById('chart').getContext('2d');
   if(chart) chart.destroy();

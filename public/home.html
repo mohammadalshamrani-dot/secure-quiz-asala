@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>منصة الأصالة للاختبارات القصيرة</title>
+<style>
+  :root{--bg:#0b1023;--card:#0b1220;--ink:#e5e7eb;--muted:#94a3b8;--accent:#a5072e}
+  body{margin:0;background:radial-gradient(1200px 700px at 80% -10%, rgba(199,170,106,.12), transparent 60%),radial-gradient(1200px 700px at -20% 110%, rgba(165,7,46,.12), transparent 60%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Arabic',sans-serif}
+  header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid #1f2a44}
+  header img{height:38px;border-radius:6px}
+  main{max-width:880px;margin:40px auto;padding:0 16px;text-align:center}
+  h1{font-size:28px;margin:12px 0}
+  p.lead{color:var(--muted);margin:6px 0 26px}
+  .card{background:var(--card);border:1px solid #1f2a44;border-radius:16px;padding:20px 18px;display:inline-block;min-width:min(92%,720px)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .input{width:100%;max-width:560px;padding:13px;border-radius:12px;border:1px solid #334155;background:#0b1220;color:#fff}
+  .btn{padding:12px 16px;border-radius:12px;border:none;cursor:pointer;font-weight:800}
+  .btn.primary{background:linear-gradient(180deg,var(--accent),#7f0524);color:#fff}
+  .btn.secondary{background:transparent;border:1px solid #334155;color:#e5e7eb}
+  .hint{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{margin:28px 0 18px;color:var(--muted);font-size:13px}
+</style>
+</head><body>
+  <header>
+    <div></div>
+    <img src="/assets/alasala-logo.jpg" alt="ALASALA">
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>منصة الأصالة للاختبارات القصيرة</h1>
+      <p class="lead">بإشراف د. محمد الشمراني – كلية القانون – كليات الأصالة</p>
+
+      <div class="row" style="margin:18px 0 10px">
+        <input id="quizId" class="input" placeholder="أدخل رقم/معرّف الاختبار (QUIZ_ID) للطلاب">
+      </div>
+      <div class="row" style="margin-bottom:10px">
+        <button id="goStudent" class="btn primary">بدء الاختبار</button>
+        <button id="goAdmin" class="btn secondary">دخول الإدارة</button>
+      </div>
+      <div class="hint">يعطي المدرّس الـ QUIZ_ID للطلاب لبدء اختبارهم.</div>
+    </div>
+
+    <footer>تم تطوير المنصة بواسطة د. محمد الشمراني – 2025</footer>
+  </main>
+
+<script>
+  const $ = s => document.querySelector(s);
+  $('#goStudent').onclick = () => {
+    const id = ($('#quizId').value||'').trim();
+    if(!id) { alert('من فضلك أدخل رقم الاختبار QUIZ_ID'); return; }
+    location.href = '/q/'+encodeURIComponent(id);
+  };
+  $('#goAdmin').onclick = () => { location.href = '/admin'; };
+</script>
+</body></html>

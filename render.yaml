@@ -6,5 +6,9 @@ services:
     buildCommand: "npm install"
     startCommand: "node server.js"
     envVars:
-      - key: ADMIN_KEY
-        value: asala2025
+      - key: JWT_SECRET
+        value: asala-quiz-2025-secret
+      - key: ALLOWED_EMAIL_DOMAIN
+        value: ""
+      - key: SIGNUP_CODE
+        value: ""
