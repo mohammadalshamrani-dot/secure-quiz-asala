@@ -34,3 +34,38 @@ function saveResult(r){ const a=listResults(); const i=a.findIndex(x=>x.id===r.i
 
 async function ensureEmailJS(){ if(!(EMAILJS_SERVICE_ID&&EMAILJS_TEMPLATE_ID&&EMAILJS_PUBLIC_KEY))return false; if(!window.emailjs){await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});} if(window.emailjs&&!window.emailjs.__inited){window.emailjs.init(EMAILJS_PUBLIC_KEY);window.emailjs.__inited=true;} return !!window.emailjs; }
 async function sendEmail(to,subject,message){ if(await ensureEmailJS()){ try{await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {to_email:to,email:to,subject,message}); return {ok:true};}catch(e){console.warn(e);} } return {ok:false}; }
+
+// ===== Quiz runtime helpers =====
+const ATTKEY='asala_attempts';
+function listAttempts(){ return loadJSON(ATTKEY, []); }
+function saveAttempt(a){ const arr=listAttempts(); arr.push(a); saveJSON(ATTKEY, arr); return a; }
+
+function scoreSubmission(quiz, answers){
+  // returns {score, total, details:[{qid,correct}]}
+  let correct=0, total=quiz.questions.length, details=[];
+  for(const q of quiz.questions){
+    const user = answers[q.id];
+    let ok=false;
+    if(q.type==='mcq'){
+      ok = String(user||'').trim() === String(q.answer||'').trim();
+    }else if(q.type==='tf'){
+      ok = String(user||'').toLowerCase() === String(q.answer||'').toLowerCase();
+    }else if(q.type==='short'){
+      ok = (String(user||'').trim().toLowerCase() === String(q.answer||'').trim().toLowerCase());
+    }
+    if(ok) correct++;
+    details.push({qid:q.id, correct:ok});
+  }
+  return {score:correct, total, details};
+}
+
+// Unified back button injection
+document.addEventListener('DOMContentLoaded', function(){
+  if(!document.querySelector('.btn-back-fixed')){
+    const btn = document.createElement('button');
+    btn.className='btn-back-fixed';
+    btn.textContent='↩︎ رجوع';
+    btn.onclick = ()=>{ if(history.length>1) history.back(); else location.href='index.html'; };
+    document.body.appendChild(btn);
+  }
+});

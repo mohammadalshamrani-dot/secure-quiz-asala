@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>بدء الاختبار – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script>
+<style>.timer{font-weight:800;color:#7a1f2a}.lock{color:#b91c1c}.panel{border:1px solid #eee;border-radius:14px;padding:14px;background:#fff}</style>
+</head>
+<body>
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<main class="container">
+  <div class="card">
+    <h2 id="qtitle">الاختبار</h2>
+    <div class="panel">
+      <div class="note">الزمن لكل سؤال: <span class="timer" id="tps"></span> ثانية — المحاولات المسموحة: <b id="att"></b></div>
+      <div class="note lock">تنبيه: مغادرة الصفحة أثناء السؤال تُسجّل كمخالفة وقد تفقد السؤال.</div>
+    </div>
+  </div>
+
+  <div class="card" id="preStart">
+    <h3>بيانات الطالب</h3>
+    <div class="form-grid" style="max-width:560px">
+      <label>الرقم الجامعي</label>
+      <input id="studentId" class="input" placeholder="مثال: 441234567" required>
+      <label>الاسم (اختياري)</label>
+      <input id="studentName" class="input" placeholder="الاسم الثلاثي">
+      <button id="begin" class="btn btn-primary" type="button">بدء الاختبار</button>
+    </div>
+    <p class="note">لن يبدأ الاختبار حتى تُدخل الرقم الجامعي الصحيح.</p>
+  </div>
+
+  <div class="card" id="examCard" style="display:none">
+    <div id="qbox"></div>
+    <div class="actions" style="justify-content:flex-start;margin-top:10px">
+      <button id="next" class="btn btn-primary">السؤال التالي</button>
+      <span class="note">الوقت المتبقي: <span class="timer" id="remain">--</span></span>
+    </div>
+  </div>
+</main>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+
+<script>
+
+const params = new URLSearchParams(location.search);
+const id = params.get('quiz');
+const quiz = listQuizzes().find(x=>x.id===id);
+if(!quiz){ document.getElementById('qbox') && (document.getElementById('qbox').innerHTML='<p class="note">الاختبار غير موجود.</p>'); throw new Error('no quiz'); }
+
+document.getElementById('qtitle').textContent = quiz.title;
+document.getElementById('tps').textContent = quiz.settings.perQ;
+document.getElementById('att').textContent = quiz.settings.attempts;
+
+let i=0, remain=quiz.settings.perQ, timer=null, answers={}, fouls=0;
+let student = {id:'', name:''};
+const qbox=document.getElementById('qbox'), remainEl=document.getElementById('remain'), nextBtn=document.getElementById('next');
+const preStart=document.getElementById('preStart'), examCard=document.getElementById('examCard');
+const beginBtn=document.getElementById('begin');
+
+beginBtn.addEventListener('click', function(){
+  const sid = (document.getElementById('studentId').value||'').trim();
+  const sname = (document.getElementById('studentName').value||'').trim();
+  if(!/^[0-9]{5,}$/.test(sid)){ alert('فضلاً أدخل الرقم الجامعي بشكل صحيح.'); return; }
+
+  // Enforce attempts for this student
+  const attempts = listResults().filter(r=>r.quizId===quiz.id && r.studentId===sid).length;
+  if(attempts >= (quiz.settings.attempts||1)){
+    alert('لقد استنفدت جميع محاولاتك لهذا الاختبار.');
+    return;
+  }
+  student = {id:sid, name:sname};
+  preStart.style.display='none'; examCard.style.display='block';
+  render();
+});
+
+function render(){
+  const q = quiz.questions[i];
+  if(!q){ finish(); return; }
+  remain = quiz.settings.perQ;
+  remainEl.textContent = remain;
+  qbox.innerHTML = `<div class="panel"><h3>س${i+1}: ${q.text||''}</h3>
+    ${q.type==='mcq' ? q.options.map(opt=>`<label style="display:block;margin:.4rem 0"><input type="radio" name="ans" value="${opt}"> ${opt}</label>`).join('') :
+      q.type==='tf' ? `<label><input type="radio" name="ans" value="صحيح"> صحيح</label><br><label><input type="radio" name="ans" value="خطأ"> خطأ</label>` :
+      `<input class="input" id="short" placeholder="اكتب إجابتك">`}
+  </div>`;
+  if(timer) clearInterval(timer);
+  timer = setInterval(()=>{
+    remain--; remainEl.textContent = remain;
+    if(remain<=0){ clearInterval(timer); saveAndNext(); }
+  },1000);
+}
+function saveAndNext(){
+  const q = quiz.questions[i];
+  let val='';
+  if(q.type==='short'){ val = (document.getElementById('short')||{}).value||''; }
+  else { const sel = document.querySelector('input[name="ans"]:checked'); val = sel? sel.value : ''; }
+  answers[q.id]=val;
+  i++; render();
+}
+nextBtn.onclick=saveAndNext;
+
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden'){ fouls++; } });
+
+function finish(){
+  if(timer) clearInterval(timer);
+  const res = scoreSubmission(quiz, answers);
+  const rec = { id:'r_'+Date.now(), quizId:quiz.id, owner:quiz.owner, score: Math.round((res.score/res.total)*100), createdAt:new Date().toISOString(), details:res.details, fouls, studentId:student.id, studentName:student.name };
+  saveResult(rec);
+  document.body.innerHTML = `<main class="container"><div class="card"><h2>تم الإنهاء</h2><p>رقمك الجامعي: <b>${student.id}</b></p><p>درجتك: <b>${rec.score}</b>%</p><p>المخالفات المسجّلة: ${fouls}</p><a class="btn" href="index.html">العودة للرئيسية</a></div></main>`;
+}
+</script>
+</body></html>
