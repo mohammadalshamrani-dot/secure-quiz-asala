@@ -1,0 +1,130 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>نتائج الطلاب - منصة الاختبارات القصيرة</title>
+  <style>
+    body{font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, Arial; background:#fafafa; margin:0; padding:24px;}
+    .wrap{max-width:1100px; margin-inline:auto;}
+    h1{font-size:24px; margin:0 0 16px;}
+    .toolbar{display:flex; gap:12px; align-items:center; margin: 8px 0 24px;}
+    input,select,button{font:inherit; padding:10px 12px; border:1px solid #ddd; border-radius:12px; background:#fff;}
+    table{width:100%; border-collapse:collapse; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,.06);}
+    thead{background:#f3f3f3;}
+    th, td{padding:12px 14px; border-bottom:1px solid #eee; text-align:right;}
+    .cards{display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:12px; margin:18px 0;}
+    .card{background:#fff; border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.07);}
+    .muted{opacity:.7;}
+    canvas{display:block; width:100%; max-width:100%; height:320px !important; background:#fff; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.07); padding:10px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>نتائج الطلاب</h1>
+    <div class="toolbar">
+      <label>اختبار:
+        <select id="quizPicker"></select>
+      </label>
+      <button id="refreshBtn">تحديث</button>
+      <span class="muted" id="status"></span>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div><strong>المعدل</strong></div>
+        <div id="avgScore" class="muted">—</div>
+      </div>
+      <div class="card">
+        <div><strong>عدد المشاركين</strong></div>
+        <div id="count" class="muted">—</div>
+      </div>
+      <div class="card">
+        <div><strong>أعلى درجة</strong></div>
+        <div id="max" class="muted">—</div>
+      </div>
+      <div class="card">
+        <div><strong>أقل درجة</strong></div>
+        <div id="min" class="muted">—</div>
+      </div>
+    </div>
+
+    <table id="tbl">
+      <thead><tr><th>الطالب</th><th>الدرجة</th><th>من</th><th>المدة (دقيقة)</th><th>أنهِيت</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>الرسم البياني للدرجات</h2>
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const BACKEND_BASE = "https://secure-quiz-asala-1.onrender.com";
+    function savedQuizzes(){ try { return JSON.parse(localStorage.getItem("asala_quizzes") || "[]"); } catch{ return []; } }
+    function byId(id){ return document.getElementById(id); }
+    function minutes(s,f){ return Math.round((new Date(f)-new Date(s))/60000); }
+
+    function fillPicker(){
+      const picker = byId("quizPicker");
+      const list = savedQuizzes();
+      picker.innerHTML = "";
+      const urlQuiz = new URLSearchParams(location.search).get("quiz");
+      if(urlQuiz && !list.find(q=>q.quizId===urlQuiz)){ list.unshift({quizId:urlQuiz, title:"(من الرابط) "+urlQuiz, internal:""}); }
+      for(const q of list){
+        const opt = document.createElement("option");
+        opt.value = q.quizId;
+        opt.textContent = (q.title && q.title.trim()) ? q.title : ("اختبار #" + q.quizId);
+        picker.appendChild(opt);
+      }
+      if(urlQuiz) picker.value = urlQuiz;
+    }
+
+    async function loadResults(quizId){
+      byId("status").textContent = "جاري الجلب…";
+      const resp = await fetch(`${BACKEND_BASE}/api/results?quiz=${encodeURIComponent(quizId)}`);
+      const rows = await resp.json();
+      renderTable(rows); renderStats(rows); renderChart(rows);
+      byId("status").textContent = `تم التحديث (${new Date().toLocaleTimeString()})`;
+    }
+
+    function renderTable(rows){
+      const tb = document.querySelector("#tbl tbody");
+      tb.innerHTML = rows.map(r => `
+        <tr>
+          <td>${(r.student_name||"—").replace(/</g,"&lt;")}</td>
+          <td>${r.score}</td>
+          <td>${r.max_score}</td>
+          <td>${minutes(r.started_at, r.finished_at)}</td>
+          <td>${new Date(r.finished_at).toLocaleString()}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderStats(rows){
+      if(!rows.length){ byId("avgScore").textContent = "—"; byId("count").textContent = "0"; byId("max").textContent = "—"; byId("min").textContent = "—"; return; }
+      const scores = rows.map(r=>r.score);
+      const avg = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2);
+      const mx = Math.max.apply(null, scores);
+      const mn = Math.min.apply(null, scores);
+      byId("avgScore").textContent = avg;
+      byId("count").textContent = String(scores.length);
+      byId("max").textContent = String(mx);
+      byId("min").textContent = String(mn);
+    }
+
+    let _chart;
+    function renderChart(rows){
+      const labels = rows.map(r=> r.student_name || "—");
+      const data = rows.map(r=> r.score);
+      const ctx = document.getElementById("chart").getContext("2d");
+      if(_chart){ _chart.destroy(); }
+      _chart = new Chart(ctx, { type: "bar", data: { labels, datasets: [{ label: "الدرجات", data }] }, options: { responsive: true, maintainAspectRatio: false } });
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", ()=>{ const quizId = document.getElementById("quizPicker").value; if(quizId) loadResults(quizId); });
+    fillPicker(); const qp = document.getElementById("quizPicker"); if(qp.value) loadResults(qp.value);
+  </script>
+</body>
+</html>
