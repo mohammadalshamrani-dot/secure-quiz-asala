@@ -8,59 +8,47 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div class="wrapper">
-    <div class="headerbar">
-      <div class="brand">
-        <img class="logo" src="./logo-alasala.png" alt="ALASALA">
-        <div class="school">كليات الأصالة – كلية القانون</div>
-      </div>
+  <header class="header">
+    <div class="brand">
+      <img class="logo" src="./logo-alasala.png" alt="ALASALA">
+      <div class="title">كليات الأصالة – كلية القانون</div>
     </div>
+    <div class="subtitle">منصة الاختبارات القصيرة</div>
+  </header>
 
-    <section class="hero">
-      <h1 class="title">منصة الاختبارات القصيرة</h1>
-      <p class="sub">بدون تسجيل دخول — اختبارات بسيطة بنتائج فورية قابلة للالتقاط كصورة شاشة وإرسالها لعضو هيئة التدريس.</p>
+  <main class="wrapper">
+    <section class="hero-card">
+      <h1>منصة الاختبارات القصيرة</h1>
+      <p class="sub">تتيح المنصة إجراء اختبارات قصيرة بأقل تعقيد — بدون تسجيل دخول — ونتيجة فورية قابلة للالتقاط كصورة شاشة وإرسالها لعضو هيئة التدريس.</p>
+
       <div class="actions">
-        <a class="btn btn-primary" href="./result.html">إنهاء اختبار / توليد النتيجة (التقاط صورة)</a>
-        <a class="btn btn-ghost" href="#fast">تعليمات سريعة</a>
-      </div>
-    </section>
-
-    <div class="columns" id="fast">
-      <div class="card">
-        <h3 style="margin:4px 0 12px; color:var(--accent)">تعليمات سريعة</h3>
-        <ol style="margin-top:0; padding-right:18px; color:#4b5563; line-height:1.9">
-          <li>يؤدي الطالب الاختبار بأي وسيلة.</li>
-          <li>بعد الانتهاء، يفتح صفحة <b>إنهاء اختبار / توليد النتيجة</b> ويعبّئ بياناته والدرجة.</li>
-          <li>تُنشأ بطاقة نتيجة تحتوي على ختم الوقت، متصفح الجهاز، ورمز تحقق، و(اختياريًا) باركود لرابط التحقق.</li>
-          <li>يضغط <b>التقاط صورة</b> ويحفظ الصورة ويرسلها لعضو هيئة التدريس.</li>
-        </ol>
-        <p class="notice">لا حاجة لتسجيل الدخول أو إنشاء صفحات للأعضاء.</p>
+        <a class="btn btn-prim" href="./result.html">دخول لصفحة النتيجة (التقاط الصورة)</a>
+        <a class="btn btn-ghost" href="#features">تعليمات سريعة</a>
       </div>
 
-      <div class="card">
-        <h3 style="margin:4px 0 12px; color:var(--accent)">مميزات</h3>
-        <div class="pills">
-          <div class="pill">
-            <h4>توقيت لكل سؤال</h4>
-            <div class="muted">زمن مضبوط ومنع الرجوع (اختياري في منصة الاختبار)</div>
-          </div>
-          <div class="pill">
-            <h4>قفل عند مغادرة الصفحة</h4>
-            <div class="muted">منع الغش (اختياري)</div>
-          </div>
-          <div class="pill">
-            <h4>تقارير فورية</h4>
-            <div class="muted">نتيجة فورية مع ختم وقت ورمز تحقق</div>
-          </div>
-          <div class="pill">
-            <h4>باركود للمشاركة</h4>
-            <div class="muted">إن توفر رابط تحقق رسمي</div>
-          </div>
+      <div class="pills" id="features">
+        <div class="pill">
+          <div class="title">توقيت لكل سؤال</div>
+          <div class="bubble">زمن مضبوط</div>
+        </div>
+        <div class="pill">
+          <div class="title">قفل عند مغادرة الصفحة</div>
+          <div class="bubble">منع الغش</div>
+        </div>
+        <div class="pill">
+          <div class="title">محاولات محدودة</div>
+          <div class="bubble">تحكم كامل</div>
+        </div>
+        <div class="pill">
+          <div class="title">تقارير فورية</div>
+          <div class="bubble">نتائج مباشرة</div>
         </div>
       </div>
-    </div>
 
-    <div class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
-  </div>
+      <p class="notice">لا يحتاج عضو هيئة التدريس إلى صفحة خاصة — يكفي أن يطلب من الطالب صورة النتيجة المُلتقطة مع رمز التحقق.</p>
+    </section>
+
+    <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+  </main>
 </body>
 </html>

@@ -10,34 +10,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-  <div class="wrapper">
-    <div class="headerbar">
-      <div class="brand">
-        <img class="logo" src="./logo-alasala.png" alt="ALASALA">
-        <div class="school">كليات الأصالة – كلية القانون</div>
-      </div>
+  <header class="header">
+    <div class="brand">
+      <img class="logo" src="./logo-alasala.png" alt="ALASALA">
+      <div class="title">كليات الأصالة – كلية القانون</div>
     </div>
+    <div class="subtitle">منصة الاختبارات القصيرة</div>
+  </header>
 
-    <section class="hero">
-      <h1 class="title">توليد نتيجة الاختبار</h1>
+  <main class="wrapper">
+    <section class="hero-card">
+      <h1>توليد نتيجة الاختبار</h1>
       <p class="sub">املأ الحقول ثم اضغط "إنشاء النتيجة" لعرض بطاقة النتيجة مع زر التقاط الصورة.</p>
     </section>
 
-    <div class="card" style="margin-top:16px;">
-      <div class="form-grid">
+    <section class="form-card">
+      <div class="row">
+        <button class="btn btn-prim" id="make">إنشاء النتيجة</button>
+        <button class="btn btn-ghost" id="capture" disabled>التقاط صورة</button>
+      </div>
+
+      <div class="form-grid" style="margin-top:12px">
         <div><label>اسم الطالب</label><input id="studentName" placeholder="مثال: أحمد خالد"></div>
         <div><label>الرقم الجامعي (اختياري)</label><input id="studentId" placeholder="441234567"></div>
-        <div><label>عنوان الاختبار</label><input id="quizTitle" placeholder="مثال: اختبار مهارات البحث القانوني"></div>
+        <div><label>عنوان الاختبار</label><input id="quizTitle" placeholder="اختبار مهارات البحث القانوني"></div>
         <div><label>كود/معرّف الاختبار (إن وجد)</label><input id="quizId" placeholder="QZ-2025-001"></div>
         <div><label>الدرجة</label><input id="score" type="number" min="0" placeholder="8"></div>
         <div><label>من (الدرجة الكلية)</label><input id="outOf" type="number" min="1" placeholder="10"></div>
         <div><label>زمن الحل (دقيقة)</label><input id="minutes" type="number" min="0" placeholder="12"></div>
         <div><label>رابط تحقق رسمي (اختياري)</label><input id="verifyUrl" placeholder="ألصق رابط نتيجة منصة خارجية إن توفر"></div>
         <div style="grid-column:1/-1"><label>ملاحظات (اختياري)</label><textarea id="notes" placeholder="مثال: تم الحل دون مغادرة الصفحة."></textarea></div>
-      </div>
-      <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap">
-        <button class="btn btn-primary" id="make">إنشاء النتيجة</button>
-        <button class="btn btn-ghost" id="capture" disabled>التقاط صورة</button>
       </div>
 
       <div id="resultCard" class="result-card" style="display:none">
@@ -49,13 +51,13 @@
               <div class="small">ALASALA | Law College</div>
             </div>
           </div>
-          <div class="score-box" id="scoreBox">—</div>
+          <div class="score" id="scoreBox">—</div>
         </div>
 
         <div class="meta" id="meta"></div>
 
-        <div class="qr-and-hash">
-          <div class="qr" id="qrBox">—</div>
+        <div class="qrrow">
+          <div class="qrbox" id="qrBox">—</div>
           <div class="small" id="hashBox">
             <div><b>رمز التحقق:</b> <span id="sig">—</span></div>
             <div id="verifyHint">لا يوجد رابط تحقق.</div>
@@ -66,10 +68,10 @@
         <div class="small" style="margin-top:8px" id="notesBox"></div>
         <div class="small" style="margin-top:8px; color:#999">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
       </div>
-    </div>
+    </section>
 
-    <div class="footer">بعد التقاط الصورة: أرسلها لعضو هيئة التدريس.</div>
-  </div>
+    <footer class="footer">بعد التقاط الصورة: أرسلها لعضو هيئة التدريس.</footer>
+  </main>
 
 <script>
   function sha1(str){
@@ -100,6 +102,7 @@
     }
 
     document.getElementById('scoreBox').textContent = `${score} / ${outOf}`;
+
     const meta = [
       ['اسم الطالب', studentName || '—'],
       ['الرقم الجامعي', studentId || '—'],
@@ -111,7 +114,6 @@
     const metaEl = document.getElementById('meta');
     metaEl.innerHTML = meta.map(([k,v]) => `<div><b>${k}:</b> ${String(v).replace(/</g,'&lt;')}</div>`).join('');
 
-    // QR
     const qrBox = document.getElementById('qrBox');
     qrBox.innerHTML = '';
     if(verifyUrl){
