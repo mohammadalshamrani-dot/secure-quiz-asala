@@ -2,11 +2,19 @@
 (function () {
   const btn = document.querySelector('[data-action="create-quiz"]');
   if (!btn) return;
+
+  function siteBase(){
+    try{
+      return (window.__CONFIG__ && window.__CONFIG__.SITE_BASE) ? window.__CONFIG__.SITE_BASE : (location.origin + location.pathname.replace(/[^/]+$/, ''));
+    }catch(e){ return location.origin + '/'; }
+  }
+
   function genQR(text){
     const node = document.getElementById('qrcode');
     node.innerHTML='';
     new QRCode(node, { text, width: 160, height: 160 });
   }
+
   btn.addEventListener("click", async function (e) {
     e.preventDefault();
     if (!window.Auth.ensureAuthOrRedirect()) return;
@@ -36,8 +44,9 @@
       alert("تم إنشاء الاختبار بنجاح");
       const id = data.quizId || data.id;
       if(id){
-        const internalUrl = `results.html?quiz=${encodeURIComponent(id)}`;
-        const externalUrl = data.publicUrl || `${location.origin}/t/${encodeURIComponent(id)}`;
+        const base = siteBase();
+        const internalUrl = `${base}results.html?quiz=${encodeURIComponent(id)}`;
+        const externalUrl = data.publicUrl || `${base}t/${encodeURIComponent(id)}`;
 
         document.getElementById('internal-link').value = internalUrl;
         document.getElementById('public-link').value = externalUrl;

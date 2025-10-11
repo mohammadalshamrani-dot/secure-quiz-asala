@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="api-base" content="">
   <title>نتائج الطلاب</title>
   <link rel="stylesheet" href="styles/main.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,6 +26,7 @@
     <canvas id="gradesChart" height="120"></canvas>
   </section>
 
+  <script src="src/js/config.js"></script>
   <script src="src/js/auth.js"></script>
   <script src="src/js/api.js"></script>
   <script>
@@ -40,7 +40,6 @@
       if(!id){ alert('أدخل رقم الاختبار'); return; }
       try{
         const data = await API.request('/api/results?quiz='+encodeURIComponent(id), { method:'GET', auth:true });
-        // نتوقع: { participants, successRate, average, histogram:[...] }
         document.getElementById('summary').innerHTML =
           'المشاركون: '+data.participants+' — نسبة النجاح: '+Math.round(data.successRate*100)+'% — المتوسط: '+data.average.toFixed(2);
 

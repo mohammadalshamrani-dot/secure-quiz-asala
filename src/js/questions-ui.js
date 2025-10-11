@@ -27,8 +27,8 @@
         </label>
       </div>
       <div class="options"></div>
-      <button class="btn outline addOpt">إضافة خيار</button>
-      <button class="btn remove">حذف السؤال</button>
+      <button class="btn outline addOpt" type="button">إضافة خيار</button>
+      <button class="btn remove" type="button">حذف السؤال</button>
     `;
     wrap.querySelector('.remove').onclick = ()=> wrap.remove();
     const opts = wrap.querySelector('.options');
@@ -46,7 +46,7 @@
       <label>صحيح؟
         <input type="checkbox" class="opt-correct">
       </label>
-      <button class="btn removeOpt">حذف</button>
+      <button class="btn removeOpt" type="button">حذف</button>
     `;
     row.querySelector('.removeOpt').onclick = ()=> row.remove();
     container.appendChild(row);
@@ -73,5 +73,5 @@
   };
 
   addBtn.onclick = newQuestion;
-  newQuestion(); // سؤال أول تلقائي
+  newQuestion();
 })();

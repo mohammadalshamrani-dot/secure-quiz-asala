@@ -1,14 +1,8 @@
 
 (function () {
-  const getApiBase = () => {
-    const meta = document.querySelector('meta[name="api-base"]');
-    if (meta && meta.content) return meta.content.trim();
-    if (window.__CONFIG__ && window.__CONFIG__.API_BASE) return window.__CONFIG__.API_BASE;
-    return "";
-  };
-  const API_BASE = getApiBase();
-
+  const getConfig = () => (window.__CONFIG__||{API_BASE:"",SITE_BASE:""});
   async function request(path, { method="GET", headers={}, body=null, auth=true } = {}) {
+    const { API_BASE } = getConfig();
     const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
     const finalHeaders = new Headers(headers);
     if (auth) {
@@ -38,5 +32,5 @@
     alert("انتهت صلاحية الجلسة، سجّل الدخول مجدداً.");
     window.location.href = "login.html";
   }
-  window.API = { request, API_BASE };
+  window.API = { request, getConfig };
 })();
