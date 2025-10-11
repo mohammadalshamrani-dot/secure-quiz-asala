@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script></head>
 <body>
-<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<header class="header"><a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a><div style="margin-inline-start:auto"><a class="btn btn-ghost" href="member-home.html">رجوع</a></div></header>
 <main class="container">
   <div class="card">
     <h2>نتائج الطلاب</h2>
@@ -17,10 +17,8 @@
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
-function render(){ const rows=listResults(); list.innerHTML = rows.length?('<table class="table"><thead><tr><th>ID</th><th>الاختبار</th><th>العضو</th><th>النتيجة</th><th>التاريخ</th></tr></thead><tbody>'+rows.map(x=>`<tr><td>${x.id}</td><td>${x.quizId}</td><td>${x.owner}</td><td>${x.score}</td><td>${x.createdAt}</td></tr>`).join('')+'</tbody></table>'):'<p class="note">لا توجد نتائج محفوظة بعد.</p>'; }
-add.onclick=()=>{ saveResult({id:'r_'+uid(), quizId:'q_demo', owner:'fac1', score:Math.round(60+Math.random()*40), createdAt:new Date().toISOString()}); render(); };
-render();
+const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
+function render(){ const rows=listResults().filter(x=>!uid || x.owner===uid); list.innerHTML = rows.length?('<table class="table"><thead><tr><th>ID</th><th>الاختبار</th><th>النتيجة</th><th>التاريخ</th></tr></thead><tbody>'+rows.map(x=>`<tr><td>${x.id}</td><td>${x.quizId||'-'}</td><td>${x.score}</td><td>${x.createdAt}</td></tr>`).join('')+'</tbody></table>'):'<p class="note">لا توجد نتائج محفوظة بعد.</p>'; } add.onclick=()=>{ saveResult({id:'r_'+uid, quizId:'q_demo', owner:uid, score:Math.round(60+Math.random()*40), createdAt:new Date().toISOString()}); render(); }; render();
 </script>
 </body></html>

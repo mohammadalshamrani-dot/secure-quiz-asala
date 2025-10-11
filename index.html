@@ -12,13 +12,12 @@
 <main class="container">
   <section class="hero">
     <h1 class="site-title">منصة الاختبارات القصيرة</h1>
-    <p class="lead">منصة لإجراء الاختبارات القصيرة بأمان عالٍ وإدارة النتائج بسهولة.</p>
-    <div class="actions" style="justify-content:flex-start">
-      <a class="btn btn-primary" id="goDashboard">دخول أعضاء هيئة التدريس</a>
+    <p class="lead">تتيح المنصة إجراء اختبارات قصيرة بتقنيات أمان عالية، تشمل زمنًا لكل سؤال، ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="auth.html">دخول أعضاء هيئة التدريس</a>
       <a class="btn btn-ghost" href="help.html">تعليمات سريعة</a>
       <a class="btn btn-ghost" href="contact.html">التواصل مع الإدارة</a>
-      <!-- ضعها كآخر خيار على اليسار -->
-      <a class="btn btn-ghost" href="contact.html" style="margin-inline-start:auto">نسيت كلمة المرور</a>
+      <a class="btn btn-ghost" href="contact.html">نسيت كلمة المرور</a>
     </div>
     <div class="features">
       <div class="card"><h3>توقيت لكل سؤال</h3><span class="badge">زمن مضبوط</span></div>
@@ -26,10 +25,10 @@
       <div class="card"><h3>محاولات محدودة</h3><span class="badge">تحكم كامل</span></div>
       <div class="card"><h3>تقارير فورية</h3><span class="badge">نتائج مباشرة</span></div>
     </div>
+    <p class="note center">أعضاء هيئة التدريس فقط. بعد الدخول يمكنك إنشاء الاختبار، ومشاركة رابط الطلاب، والاطلاع على النتائج.</p>
   </section>
   <p class="note center">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</p>
 </main>
 <a class="admin-fab" href="admin.html">⚙️</a>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-<script>document.getElementById('goDashboard').onclick=()=>{localStorage.setItem('asala_session','active');location.href='dashboard.html';};</script>
 </body></html>

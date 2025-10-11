@@ -1,0 +1,30 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>لوحة العضو – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
+<body>
+<header class="header">
+  <a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo">
+    <div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a>
+  <div style="margin-inline-start:auto"><button id="logout" class="btn btn-ghost">خروج</button></div>
+</header>
+<main class="container">
+  <div class="card">
+    <h2 id="welcome">لوحة العضو</h2>
+    <div class="actions">
+      <a class="btn btn-primary" href="create.html">إنشاء الاختبار</a>
+      <a class="btn btn-primary" href="results.html">نتائج الطلاب</a>
+      <a class="btn btn-ghost" id="profile">الملف الشخصي</a>
+      <a class="btn btn-ghost" href="help.html">التعليمات السريعة</a>
+    </div>
+  </div>
+</main>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+<script>
+const id=localStorage.getItem('asala_current_user'); const u=id&&getUserById(id); if(!u){ location.href='auth.html'; } else { welcome.textContent='مرحبًا '+u.name; profile.href='faculty.html?id='+u.id; } logout.onclick=()=>{ localStorage.removeItem('asala_current_user'); location.href='index.html'; };
+</script>
+</body></html>

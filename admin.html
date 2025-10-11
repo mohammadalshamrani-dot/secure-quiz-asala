@@ -4,64 +4,29 @@
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>لوحة تحكم الأدمن – كليات الأصالة</title>
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<script defer src="assets/common.js"></script>
-<style>
-.layout{display:grid;grid-template-columns:260px 1fr;gap:18px}
-.nav{border:1px solid #eee;border-radius:16px;padding:12px;height:calc(100vh - 200px);position:sticky;top:90px}
-.nav a{display:block;padding:10px;border-radius:10px;color:#374151}
-.nav a.active{background:#f2f2f2;font-weight:800}
-.section{display:none}.section.active{display:block}
-</style>
-</head>
+<script defer src="assets/common.js"></script></head>
 <body>
 <header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
-  <div class="layout">
-    <nav class="nav">
-      <a href="#dashboard" class="active">نظرة عامة</a>
-      <a href="#requests">الطلبات الواردة</a>
-      <a href="#users">المستخدمون</a>
-      <a href="#quizzes">الاختبارات</a>
-      <a href="#results">النتائج</a>
-      <a href="#settings">الإعدادات</a>
-    </nav>
-    <div>
-      <section id="dashboard" class="section active card">
-        <h2>نظرة عامة</h2><div id="m"></div>
-      </section>
-      <section id="requests" class="section card">
-        <h2>الطلبات الواردة</h2><div id="req"></div>
-        <p class="note">لطلبات <b>طلب كلمة المرور</b>: اضغط على الصف وحدّد كلمة مؤقتة للمستخدم من تبويب "المستخدمون".</p>
-      </section>
-      <section id="users" class="section card">
-        <h2>المستخدمون</h2>
-        <div class="actions" style="justify-content:flex-start">
-          <button id="addU" class="btn btn-ghost">إضافة مستخدم</button>
-        </div>
-        <div id="users"></div>
-        <div id="pwdBox" style="display:none;margin-top:10px">
-          <h3>تعيين كلمة مؤقتة</h3>
-          <div class="form-grid"><input id="uid" class="input" placeholder="ID" readonly><input id="pwd" class="input" placeholder="كلمة مؤقتة"><button id="set" class="btn btn-primary">تعيين</button></div>
-        </div>
-      </section>
-      <section id="quizzes" class="section card"><h2>الاختبارات</h2><div id="q"></div></section>
-      <section id="results" class="section card"><h2>النتائج</h2><div id="r"></div></section>
-      <section id="settings" class="section card">
-        <h2>الإعدادات</h2>
-        <div class="actions" style="justify-content:flex-start"><a class="btn btn-ghost" href="admin-settings.html">إعدادات البريد</a></div>
-      </section>
-    </div>
+  <div class="card">
+    <h2>لوحة تحكم الأدمن</h2>
+    <div class="tabs"><a href="#overview" class="active">نظرة عامة</a><a href="#requests">الطلبات الواردة</a><a href="#users">المستخدمون</a><a href="#quizzes">الاختبارات</a><a href="#results">النتائج</a></div>
+    <section id="overview" class="section active"><div id="m"></div></section>
+    <section id="requests" class="section"><div id="req"></div><p class="note">لطلبات <b>طلب كلمة المرور</b> اضغط الصف ثم عيّن كلمة مؤقتة من تبويب <b>المستخدمون</b>.</p></section>
+    <section id="users" class="section"><div class="actions" style="justify-content:flex-start"><button id="addU" class="btn btn-ghost">إضافة مستخدم</button></div><div id="usersTable"></div><div id="pwdBox" style="display:none;margin-top:10px"><h3>تعيين كلمة مؤقتة</h3><div class="form-grid"><input id="uid" class="input" placeholder="ID" readonly><input id="pwd" class="input" placeholder="كلمة مؤقتة"><button id="set" class="btn btn-primary">تعيين</button></div></div></section>
+    <section id="quizzes" class="section"><div id="q"></div></section>
+    <section id="results" class="section"><div id="r"></div></section>
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
-document.querySelectorAll('.nav a').forEach(a=>a.onclick=(e)=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelector(a.getAttribute('href')).classList.add('active');});
+document.querySelectorAll('.tabs a').forEach(a=>a.onclick=(e)=>{e.preventDefault();document.querySelectorAll('.tabs a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelector(a.getAttribute('href')).classList.add('active');});
 function h(s){return (s||'').toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function t(rows,cols){ if(!rows.length)return '<p class="note">لا توجد بيانات بعد.</p>'; return '<table class="table"><thead><tr>'+cols.map(c=>`<th>${c[1]||c[0]}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>`<tr data-id="${r.id}">`+cols.map(c=>`<td>${h(r[c[0]])}</td>`).join('')+`</tr>`).join('')+'</tbody></table>'; }
-function refresh(){ const us=listUsers(), qs=listQuizzes(), rs=listResults(), rq=listRequests(); m.innerHTML=['المستخدمون: '+us.length, 'الاختبارات: '+qs.length, 'النتائج: '+rs.length, 'الطلبات: '+rq.length].map(x=>'<span style="margin-inline-end:12px">'+x+'</span>').join(''); req.innerHTML=t(rq,[['id','ID'],['createdAt','الوقت'],['name','الاسم'],['email','البريد'],['kind','النوع'],['message','النص'],['handled','معالجة؟']]); users.innerHTML=t(us,[['id','ID'],['name','الاسم'],['email','البريد'],['role','الدور'],['dept','القسم'],['pwdSetAt','آخر تعيين كلمة']]); q.innerHTML=t(qs,[['id','ID'],['title','العنوان'],['owner','العضو'],['createdAt','الوقت']]); r.innerHTML=t(rs,[['id','ID'],['quizId','الاختبار'],['owner','العضو'],['score','النتيجة'],['createdAt','الوقت']]); document.querySelectorAll('#users tbody tr').forEach(tr=>tr.onclick=()=>{uid.value=tr.dataset.id; document.getElementById('pwdBox').style.display='block';}); document.querySelectorAll('#req tbody tr').forEach(tr=>tr.onclick=()=>{const row=listRequests().find(x=>x.id===tr.dataset.id); if(row && row.kind==='طلب كلمة المرور'){ const u=getUserByEmail(row.email); if(u){ uid.value=u.id; document.querySelector('.nav a[href="#users"]').click(); document.getElementById('pwdBox').style.display='block'; pwd.value='Aa123456'; } else alert('لا يوجد مستخدم بهذا البريد.'); }}); }
-addU.onclick=()=>{ const name=prompt('اسم المستخدم'); if(!name) return; const email=prompt('البريد'); if(!email) return; const dept=prompt('القسم','القانون')||'القانون'; upsertUser({id:'u_'+uid(), role:'faculty', name, email, dept, createdAt:new Date().toISOString()}); refresh(); };
-set.onclick=()=>{ if(!uid.value||!pwd.value) return alert('أدخل الحقول'); if(setUserPassword(uid.value, pwd.value)){ alert('تم التعيين'); refresh(); }else alert('تعذر'); };
+function refresh(){ const us=listUsers(), qs=listQuizzes(), rs=listResults(), rq=listRequests(); m.innerHTML=['المستخدمون: '+us.length,'الاختبارات: '+qs.length,'النتائج: '+rs.length,'الطلبات: '+rq.length].map(x=>'<span style="margin-inline-end:12px">'+x+'</span>').join(''); req.innerHTML=t(rq,[['id','ID'],['createdAt','الوقت'],['name','الاسم'],['email','البريد'],['kind','النوع'],['message','النص'],['handled','معالجة؟']]); usersTable.innerHTML=t(us,[['id','ID'],['name','الاسم'],['email','البريد'],['role','الدور'],['dept','القسم'],['pwdSetAt','آخر تعيين']]); document.querySelectorAll('#usersTable tbody tr').forEach(tr=>tr.onclick=()=>{uid.value=tr.dataset.id; document.getElementById('pwdBox').style.display='block';}); document.querySelectorAll('#req tbody tr').forEach(tr=>tr.onclick=()=>{const row=listRequests().find(x=>x.id===tr.dataset.id); if(row && row.kind==='طلب كلمة المرور'){ const u=getUserByEmail(row.email); if(u){ uid.value=u.id; document.querySelector('.tabs a[href="#users"]').click(); document.getElementById('pwdBox').style.display='block'; pwd.value='Aa123456'; } else alert('لا يوجد مستخدم بهذا البريد.'); }}); q.innerHTML=t(qs,[['id','ID'],['title','العنوان'],['owner','العضو'],['createdAt','الوقت']]); r.innerHTML=t(rs,[['id','ID'],['quizId','الاختبار'],['owner','العضو'],['score','النتيجة'],['createdAt','الوقت']]); }
+addU.onclick=()=>{ const name=prompt('اسم المستخدم'); if(!name) return; const email=prompt('البريد'); if(!email) return; const dept=prompt('القسم','القانون')||'القانون'; upsertUser({id:'u_'+uid(),role:'faculty',name,email,dept,createdAt:new Date().toISOString()}); refresh(); };
+set.onclick=()=>{ if(!uid.value||!pwd.value) return alert('أدخل الحقول'); if(setUserPassword(uid.value,pwd.value)){ alert('تم التعيين'); refresh(); } else alert('تعذر'); };
 refresh();
 </script>
 </body></html>

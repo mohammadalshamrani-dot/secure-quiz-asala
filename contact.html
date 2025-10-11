@@ -8,7 +8,7 @@
 <body>
 <header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
-  <div class="card">
+  <div class="card" style="max-width:820px;margin:0 auto">
     <h2>التواصل مع الإدارة</h2>
     <form id="f" class="form-grid">
       <label>الاسم</label><input name="name" class="input" required>
@@ -20,22 +20,17 @@
       <label>نص الرسالة</label><textarea name="message" rows="6" class="input" placeholder="اكتب تفاصيل الرسالة..."></textarea>
       <button class="btn btn-primary">إرسال</button>
     </form>
-    <p class="note">سيتم حفظ الرسالة في لوحة تحكم الأدمن ضمن "الطلبات الواردة". سيحاول النظام أيضًا إرسال نسخة إلى بريد الإدارة إن كانت إعدادات البريد مفعَّلة.</p>
+    <p class="note">سيتم حفظ الرسالة داخليًا لتظهر في لوحة الأدمن ضمن "الطلبات الواردة".</p>
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
-document.getElementById('f').addEventListener('submit', async (e)=>{
+f.addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const fd = new FormData(e.target);
-  const data = {name:fd.get('name').trim(), email:fd.get('email').trim(), type:fd.get('type'), message:fd.get('message').trim()};
-  addRequest({name:data.name, email:data.email, kind:data.type, message:data.message});
-  const subject = `[منصة الاختبارات] ${data.type} – ${data.name}`;
-  const body = `الاسم: ${data.name}\nالبريد: ${data.email}\nالنوع: ${data.type}\n\n${data.message}`;
-  const r = await sendEmail(ADMIN_EMAIL, subject, body);
-  alert('تم استلام رسالتك' + (r.ok?' وتم إرسال نسخة للإدارة.': ' (نسخة البريد غير مفعلة).'));
-  e.target.reset();
+  const fd=new FormData(f); const data={name:fd.get('name').trim(),email:fd.get('email').trim(),kind:fd.get('type'),message:fd.get('message').trim()};
+  addRequest(data); alert('تم استلام رسالتك، وسيتم الرد عبر الإدارة.');
+  f.reset();
 });
 </script>
 </body></html>

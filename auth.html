@@ -1,0 +1,41 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>تسجيل / دخول أعضاء هيئة التدريس – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
+<body>
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<main class="container">
+  <div class="card" style="max-width:740px;margin:0 auto">
+    <h2 class="center">منصة الأعضاء</h2>
+    <div class="tabs"><a href="#login" class="active">تسجيل الدخول</a><a href="#register">تسجيل جديد</a></div>
+    <section id="login" class="section active">
+      <form id="lf" class="form-grid">
+        <label>البريد الجامعي</label><input name="email" type="email" class="input" required>
+        <label>كلمة المرور</label><input name="password" type="password" class="input" required>
+        <div class="actions" style="justify-content:flex-start">
+          <button class="btn btn-primary">دخول</button>
+          <a class="btn btn-ghost" href="contact.html">نسيت كلمة المرور</a>
+        </div>
+      </form>
+    </section>
+    <section id="register" class="section">
+      <form id="rf" class="form-grid">
+        <label>الاسم الكامل</label><input name="name" class="input" required>
+        <label>البريد الجامعي</label><input name="email" type="email" class="input" required>
+        <label>كلمة المرور</label><input name="password" type="password" class="input" required>
+        <button class="btn btn-primary">تسجيل</button>
+      </form>
+    </section>
+  </div>
+</main>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+<script>
+document.querySelectorAll('.tabs a').forEach(a=>a.onclick=(e)=>{e.preventDefault();document.querySelectorAll('.tabs a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelector(a.getAttribute('href')).classList.add('active');});
+lf.addEventListener('submit',(e)=>{e.preventDefault(); const fd=new FormData(lf); const email=fd.get('email').trim(); const pass=fd.get('password'); const u=getUserByEmail(email); if(!u||!u.password||u.password!==pass){alert('بيانات الدخول غير صحيحة.');return;} localStorage.setItem('asala_current_user',u.id); location.href='member-home.html';});
+rf.addEventListener('submit',(e)=>{e.preventDefault(); const fd=new FormData(rf); const name=fd.get('name').trim(), email=fd.get('email').trim(), password=fd.get('password'); if(getUserByEmail(email)){alert('يوجد حساب بهذا البريد.');return;} const u={id:'u_'+uid(), role:'faculty', name, email, dept:'القانون', password, createdAt:new Date().toISOString()}; upsertUser(u); alert('تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول.'); document.querySelector('.tabs a[href="#login"]').click();});
+</script>
+</body></html>

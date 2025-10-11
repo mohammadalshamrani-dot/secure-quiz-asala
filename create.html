@@ -6,10 +6,10 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script></head>
 <body>
-<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<header class="header"><a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a><div style="margin-inline-start:auto"><a class="btn btn-ghost" href="member-home.html">رجوع</a></div></header>
 <main class="container">
   <div class="card">
-    <h2>إنشاء اختبار</h2>
+    <h2>إنشاء الاختبار (منصة الإنشاء)</h2>
     <form id="qf" class="form-grid">
       <label>العنوان</label><input name="title" class="input" required>
       <label>وصف (اختياري)</label><textarea name="desc" rows="4" class="input"></textarea>
@@ -18,13 +18,8 @@
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
-document.getElementById('qf').addEventListener('submit',(e)=>{
-  e.preventDefault();
-  const fd=new FormData(e.target);
-  const q={id:'q_'+uid(), owner:'fac1', title:fd.get('title').trim(), desc:fd.get('desc').trim(), createdAt:new Date().toISOString()};
-  saveQuiz(q); alert('تم الحفظ في الاختبارات المحفوظة.'); e.target.reset();
-});
+const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
+qf.addEventListener('submit',(e)=>{ e.preventDefault(); const fd=new FormData(qf); const q={id:'q_'+uid, owner:uid, title:fd.get('title').trim(), desc:fd.get('desc').trim(), createdAt:new Date().toISOString()}; saveQuiz(q); alert('تم حفظ الاختبار.'); qf.reset(); });
 </script>
 </body></html>
