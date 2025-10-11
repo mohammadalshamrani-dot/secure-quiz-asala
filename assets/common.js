@@ -49,7 +49,14 @@ async function ensureEmailJS(){
 async function sendEmail(to, subject, message){
   if(await ensureEmailJS()){
     try{
-      const resp = await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: to, subject: subject, message: message });
+      const resp = await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: to,
+        email: to,
+        user_email: to,
+        reply_to: to,
+        subject: subject,
+        message: message
+      });
       return {ok:true, via:"emailjs", resp};
     }catch(e){ console.warn("EmailJS failed", e); return {ok:false, via:"emailjs", error: e?.text || e?.message || String(e)}; }
   }

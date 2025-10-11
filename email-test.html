@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>اختبار الإرسال – EmailJS</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
+<body>
+<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<main class="container">
+  <div class="card">
+    <h2 class="section-title">اختبار إرسال البريد</h2>
+    <div id="status" class="note" style="margin-bottom:8px"></div>
+    <form id="t" class="form-grid">
+      <label>إلى (To)</label><input name="to" class="input" placeholder="example@example.com">
+      <label>الموضوع</label><input name="subj" class="input" value="اختبار إرسال – منصة الاختبارات">
+      <label>الرسالة</label><textarea name="msg" class="input" rows="5">هذه رسالة اختبار للتأكد من أن EmailJS يعمل.</textarea>
+      <button class="btn btn-primary" type="submit">إرسال</button>
+    </form>
+  </div>
+</main>
+<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+<script>
+(function(){const s=getEmailConfigStatus();document.getElementById('status').textContent = s.ready?`جاهز للإرسال عبر EmailJS | Service: ${s.service} | Template: ${s.template}`:'لم تُضبط مفاتيح EmailJS بشكل صحيح.';})();
+document.getElementById('t').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const to=e.target.to.value||ADMIN_EMAIL;
+  const subj=e.target.subj.value||'اختبار';
+  const msg=e.target.msg.value||'Test';
+  const r = await sendEmail(to, subj, msg);
+  alert(r?.ok ? 'تم الإرسال.' : ('تعذر الإرسال: '+(r.error||'')));
+});
+</script>
+</body></html>
