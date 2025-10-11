@@ -24,7 +24,15 @@
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+
 <script>
-const id=localStorage.getItem('asala_current_user'); const u=id&&getUserById(id); if(!u){ location.href='auth.html'; } else { welcome.textContent='مرحبًا '+u.name; profile.href='faculty.html?id='+u.id; } logout.onclick=()=>{ localStorage.removeItem('asala_current_user'); location.href='index.html'; };
+(function(){
+  const id=localStorage.getItem('asala_current_user');
+  const u=id && getUserById(id);
+  if(!u){ location.href='auth.html'; return; }
+  var w = document.getElementById('welcome'); if(w) w.textContent='مرحبًا '+u.name;
+  var prof = document.getElementById('profile'); if(prof) prof.href='faculty.html?id='+u.id;
+  var lo = document.getElementById('logout'); if(lo) lo.onclick=function(){ localStorage.removeItem('asala_current_user'); location.href='index.html'; };
+})();
 </script>
 </body></html>

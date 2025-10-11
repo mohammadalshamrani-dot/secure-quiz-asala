@@ -2,24 +2,60 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>إنشاء اختبار – كليات الأصالة</title>
+<title>إنشاء الاختبار – كليات الأصالة</title>
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<script defer src="assets/common.js"></script></head>
+<script defer src="assets/common.js"></script>
+<!-- QRCode library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>.frame{height:900px;border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff}.grid{display:grid;gap:10px;grid-template-columns:1fr auto}</style>
+</head>
 <body>
-<header class="header"><a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a><div style="margin-inline-start:auto"><a class="btn btn-ghost" href="member-home.html">رجوع</a></div></header>
+<header class="header">
+  <a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo">
+    <div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a>
+  <div style="margin-inline-start:auto"><a class="btn" href="member-home.html">رجوع</a></div>
+</header>
 <main class="container">
   <div class="card">
-    <h2>إنشاء الاختبار (منصة الإنشاء)</h2>
+    <h2>منصة إنشاء الاختبار</h2>
+    <p class="note">تُعرض أدناه منصة الإنشاء الخارجية. بعد إنشاء الاختبار انسخ رابط الاختبار ثم خزّنه وولّد له باركود من الأدوات أسفل الإطار.</p>
+    <div class="frame"><iframe src="https://secure-quiz-asala-1.onrender.com" width="100%" height="100%" style="border:0"></iframe></div>
+  </div>
+
+  <div class="card">
+    <h3>حفظ بيانات الاختبار وتوليد الباركود</h3>
     <form id="qf" class="form-grid">
-      <label>العنوان</label><input name="title" class="input" required>
-      <label>وصف (اختياري)</label><textarea name="desc" rows="4" class="input"></textarea>
-      <button class="btn btn-primary">حفظ كاختبار محفوظ</button>
+      <label>عنوان الاختبار</label>
+      <input name="title" class="input" required>
+      <label>رابط الاختبار (انسخه من المنصة بالأعلى)</label>
+      <div class="grid">
+        <input name="link" class="input" placeholder="https://...">
+        <button id="saveBtn" class="btn btn-primary" type="submit">حفظ</button>
+      </div>
     </form>
+    <div id="qrBox" style="margin-top:12px;display:none">
+      <h4>الباركود</h4>
+      <div id="qrcode"></div>
+      <p class="note">يمكنك حفظ الصورة وطباعتها.</p>
+    </div>
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <script>
 const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
-qf.addEventListener('submit',(e)=>{ e.preventDefault(); const fd=new FormData(qf); const q={id:'q_'+uid, owner:uid, title:fd.get('title').trim(), desc:fd.get('desc').trim(), createdAt:new Date().toISOString()}; saveQuiz(q); alert('تم حفظ الاختبار.'); qf.reset(); });
+const form = document.getElementById('qf'); const qrBox=document.getElementById('qrBox');
+form.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const fd=new FormData(form);
+  const title=fd.get('title').trim(), link=fd.get('link').trim();
+  if(!/^https?:\/\//.test(link)){ alert('فضلاً أدخل رابطًا صحيحًا يبدأ بـ https://'); return; }
+  const q={id:'q_'+Date.now(), owner:uid, title, link, createdAt:new Date().toISOString()};
+  saveQuiz(q);
+  // Generate QR
+  qrBox.style.display='block';
+  document.getElementById('qrcode').innerHTML='';
+  new QRCode(document.getElementById('qrcode'), {text: link, width: 220, height: 220});
+  alert('تم حفظ بيانات الاختبار.');
+});
 </script>
 </body></html>

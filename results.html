@@ -6,19 +6,31 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script></head>
 <body>
-<header class="header"><a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a><div style="margin-inline-start:auto"><a class="btn btn-ghost" href="member-home.html">رجوع</a></div></header>
+<header class="header">
+  <a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo">
+    <div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a>
+  <div style="margin-inline-start:auto"><a class="btn" href="member-home.html">رجوع</a></div>
+</header>
 <main class="container">
   <div class="card">
     <h2>نتائج الطلاب</h2>
+    <p class="note">تعرض هذه الصفحة اختباراتك المحفوظة. لعرض النتائج التفصيلية والرسوم البيانية، سيتم فتح صفحة النتائج في المنصة الخارجية.</p>
     <div id="list"></div>
-    <div class="form-grid" style="margin-top:10px">
-      <button id="add" class="btn btn-ghost">إضافة نتيجة تجريبية</button>
-    </div>
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <script>
 const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
-function render(){ const rows=listResults().filter(x=>!uid || x.owner===uid); list.innerHTML = rows.length?('<table class="table"><thead><tr><th>ID</th><th>الاختبار</th><th>النتيجة</th><th>التاريخ</th></tr></thead><tbody>'+rows.map(x=>`<tr><td>${x.id}</td><td>${x.quizId||'-'}</td><td>${x.score}</td><td>${x.createdAt}</td></tr>`).join('')+'</tbody></table>'):'<p class="note">لا توجد نتائج محفوظة بعد.</p>'; } add.onclick=()=>{ saveResult({id:'r_'+uid, quizId:'q_demo', owner:uid, score:Math.round(60+Math.random()*40), createdAt:new Date().toISOString()}); render(); }; render();
+function render(){
+  const rows = listQuizzes().filter(x=>x.owner===uid);
+  if(!rows.length){ list.innerHTML='<p class="note">لا توجد اختبارات محفوظة بعد.</p>'; return; }
+  const body = rows.map((q,i)=>{
+    // تخمين رابط النتائج: إن لم توفر المنصة رابطًا منفصلًا، نفتح نفس الرابط
+    const resultsLink = q.link; 
+    return `<tr><td>${i+1}</td><td>${q.title||'-'}</td><td><a class="btn btn-primary" target="_blank" href="${resultsLink}">فتح صفحة النتائج</a></td><td>${q.createdAt}</td></tr>`;
+  }).join('');
+  list.innerHTML = `<table class="table"><thead><tr><th>#</th><th>الاختبار</th><th>النتائج</th><th>التاريخ</th></tr></thead><tbody>${body}</tbody></table>`;
+}
+render();
 </script>
 </body></html>
