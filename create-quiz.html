@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="api-base" content="">
+  <title>إنشاء اختبار</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body class="container">
+  <header class="space-between">
+    <h1>إنشاء اختبار</h1>
+    <nav>
+      <a class="link" href="index.html">الصفحة الرئيسية</a>
+      <a class="link" href="#" id="logout">خروج</a>
+    </nav>
+  </header>
+
+  <section class="card">
+    <h2>١) المعلومات الأساسية</h2>
+    <label>عنوان الاختبار
+      <input id="quiz-title" placeholder="مثال: اختبار مبادئ القانون - الأسبوع 3">
+    </label>
+    <label>وصف مختصر
+      <textarea id="quiz-desc" rows="2" placeholder="نبذة عن الاختبار..."></textarea>
+    </label>
+    <div class="grid-3">
+      <label>المادة
+        <input id="quiz-course" placeholder="LAW 101">
+      </label>
+      <label>الدرجة الكلية
+        <input id="quiz-total" type="number" min="1" value="10">
+      </label>
+      <label>وقت الاختبار (دقائق)
+        <input id="quiz-duration" type="number" min="1" value="10">
+      </label>
+    </div>
+    <div class="grid-3">
+      <label><input type="checkbox" id="opt-anti-cheat"> إغلاق عند مغادرة الصفحة</label>
+      <label><input type="checkbox" id="opt-no-back"> منع الرجوع للسؤال السابق</label>
+      <label><input type="checkbox" id="opt-shuffle"> عشوائية الأسئلة والخيارات</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>٢) الأسئلة</h2>
+    <div id="questions"></div>
+    <button id="addQ" class="btn">إضافة سؤال</button>
+  </section>
+
+  <section class="card">
+    <h2>٣) إنشاء الاختبار</h2>
+    <button class="btn primary" data-action="create-quiz">إنشاء الاختبار</button>
+    <div class="links">
+      <label>الرابط الداخلي (نتائج):
+        <input id="internal-link" readonly>
+      </label>
+      <label>الرابط العام (للطلاب):
+        <input id="public-link" readonly>
+      </label>
+      <div id="qrcode"></div>
+    </div>
+  </section>
+
+  <script src="src/js/auth.js"></script>
+  <script src="src/js/api.js"></script>
+  <script src="src/js/qrcode.min.js"></script>
+  <script src="src/js/questions-ui.js"></script>
+  <script src="src/js/create-quiz.js"></script>
+  <script>
+    document.getElementById('logout').onclick = () => { Auth.clearToken(); location.href='index.html' };
+  </script>
+</body>
+</html>

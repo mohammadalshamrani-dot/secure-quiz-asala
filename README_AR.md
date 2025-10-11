@@ -1,49 +1,33 @@
-# إصلاح مشكلة **Invalid token** في واجهة منصة الاختبارات
 
-هذا الحزمة تحتوي فقط على الملفات المعدّلة لتصحيح خطأ `Invalid token` عند الضغط على **إنشاء الاختبار**.
-ضع هذه الملفات مكان نظيراتها في مشروع الواجهة (GitHub Pages)، ثم حدّث الصفحة (Hard Refresh).
+# حزمة واجهة منصة الاختبارات (Static Frontend Pack)
 
-## ملخص التعديل
-1) إضافة طبقة موحّدة للطلبات `api.js` تضيف ترويسة `Authorization: Bearer <jwt>` تلقائياً.
-2) معالجة الاستجابة **401** أو رسالة **Invalid token** بمسح التوكن وإعادة المستخدم لصفحة الدخول.
-3) ملف `auth.js` لإدارة حفظ/قراءة التوكن والتحقق السريع قبل تنفيذ أي إجراء حساس (مثل إنشاء الاختبار).
-4) تحديث منطق زر **إنشاء الاختبار** في `create-quiz.js` ليتأكد من وجود توكن صالح قبل الإرسال.
+هذه الحزمة ثابتة (HTML/JS/CSS) جاهزة للرفع على GitHub Pages **أو** Render Static Site
+وموصولة تلقائيًا بخادمك: `https://secure-quiz-asala-1.onrender.com` عبر الوسم:
+```html
+<meta name="api-base" content="https://secure-quiz-asala-1.onrender.com" />
+```
 
-> **ملاحظة مهمة**: لا تضع قيمة `JWT_SECRET` في الواجهة إطلاقاً. السر يبقى على الخادم فقط.
-> الواجهة تحتاج فقط لمتغير بيئة عام `API_BASE` (مثل: `https://secure-quiz-asala-1.onrender.com`).
+## الصفحات
+- `index.html` الصفحة الترحيبية + أزرار الدخول والنتائج
+- `login.html` تسجيل الدخول (يحفظ التوكن في LocalStorage)
+- `create-quiz.html` واجهة مبسّطة لإنشاء الاختبار + توليد QR + روابط
+- `results.html` عرض ملخص النتائج ورسوم بيانية (يتطلب تسجيل دخول)
 
-## طريقة التركيب (Frontend)
-1. أنشئ/عدّل ملف `/.env` أو `config.json` (حسب مشروعك) لتحديد مسار الخادم:
-   ```json
-   { "API_BASE": "https://secure-quiz-asala-1.onrender.com" }
-   ```
-   وإن كنت تستخدم سكربتاً بسيطاً بدون بناء، ضع وسماً مخفياً في الـHTML:
-   ```html
-   <meta name="api-base" content="https://secure-quiz-asala-1.onrender.com" />
-   ```
+## التثبيت السريع (GitHub Pages)
+1) ارفع المجلد كله في مستودع GitHub (مثال: `secure-quiz-asala`).
+2) من إعدادات المستودع → Pages → اختر النشر من فرع `main`/`root`.
+3) تأكد أن الخادم يسمح بالوصول من مصدر موقعك (CORS): 
+   - `Access-Control-Allow-Origin: https://<username>.github.io`
+   - `Access-Control-Allow-Headers: Authorization, Content-Type`
+4) افتح `https://<username>.github.io/secure-quiz-asala/`
 
-2. انسخ الملفات التالية فوق ملفاتك الحالية:
-   - `src/js/api.js`
-   - `src/js/auth.js`
-   - `src/js/create-quiz.js`
-
-3. تأكد أن صفحاتك تحمل هذه الملفات بالترتيب:
-   ```html
-   <script src="src/js/auth.js"></script>
-   <script src="src/js/api.js"></script>
-   <script src="src/js/create-quiz.js"></script>
-   ```
-
-4. اذا ظهر لك تنبيه بوجوب تسجيل الدخول، ادخل من صفحة الدخول الرسمية للمنصة
-   (التي تُصدِر الـJWT من الخادم) ثم أعد المحاولة.
-
-## تحقق سريع
-- جرّب فتح صفحة إنشاء الاختبار.
-- اضغط **إنشاء الاختبار**.
-- إن لم يكن هناك توكن محفوظ، سيظهر تنبيه ويعاد توجيهك لصفحة الدخول.
-- بعد تسجيل الدخول، أعد المحاولة وسيُرسل الطلب مع ترويسة **Authorization** الصحيحة.
+## التثبيت على Render (Static Site)
+- نوع الخدمة: **Static Site**
+- Build command: (فارغ)
+- Publish directory: `/` (أو `dist` لو بنيت)
+- أضف نفس إعدادات CORS في الخادم ليسمح لمصدر Render Domain.
 
 ## ملاحظات
-- إذا كان لديك مسار تحديث توكن (Refresh Token) على الخادم مثل `/auth/refresh`،
-  عدّل داخل `api.js` لتفعيل دالة `attemptRefreshToken()` (مُعلّمة كمكان مخصص).
-- في حال كانت تسمية ترويسة التوثيق على الخادم مختلفة، غيّرها من `Authorization` إلى الاسم المطلوب.
+- الواجهة ترسل التوكن في ترويسة `Authorization: Bearer <token>`.
+- إذا الخادم يستخدم Cookies بدل الهيدر: عدّل `api.js` لقراءة الكوكي.
+- ملفات الجافاسكربت: `src/js/*` — لا تنسَ تضمينها في الصفحات بالترتيب.

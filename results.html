@@ -1,51 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نتائج الطلاب - منصة الاختبارات القصيرة</title>
-
-  <!-- الخط الرسمي -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-
-  <!-- مكتبة QR -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="api-base" content="">
+  <title>نتائج الطلاب</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
-<body>
-  <!-- الهيدر -->
-  <header class="main-header">
-    <div class="header-content">
-      <div class="logo-section">
-        <img src="شعار الاصالة.jpg" alt="شعار جامعة الأصالة" class="asal-logo">
-        <p class="platform-subtitle">منصة الاختبارات القصيرة – كلية الحقوق</p>
-      </div>
-      <nav>
-        <a href="index.html">الرئيسية</a>
-        <a href="create-quiz.html">إنشاء اختبار</a>
-        <a href="results.html" class="active">نتائج الطلاب</a>
-        <a href="profile.html">الملف الشخصي</a>
-        <a href="#" onclick="logout()">تسجيل الخروج</a>
-      </nav>
-    </div>
+<body class="container">
+  <header class="space-between">
+    <h1>نتائج الطلاب</h1>
+    <a class="link" href="index.html">الصفحة الرئيسية</a>
   </header>
 
-  <!-- المحتوى الرئيسي -->
-  <main class="results-container">
-    <h2>نتائج الاختبارات</h2>
-    <div id="quiz-list" class="quiz-list"></div>
-  </main>
+  <section class="card">
+    <label>رقم الاختبار (quizId)
+      <input id="quizId" placeholder="مثال: QZ123">
+    </label>
+    <button id="load" class="btn">تحميل النتائج</button>
+  </section>
 
-  <!-- نافذة التفاصيل -->
-  <div id="details-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h3 id="quiz-title"></h3>
-      <div id="quiz-results"></div>
-    </div>
-  </div>
+  <section class="card">
+    <h2>الملخص</h2>
+    <div id="summary"></div>
+    <canvas id="gradesChart" height="120"></canvas>
+  </section>
 
-  <script src="script.js"></script>
+  <script src="src/js/auth.js"></script>
+  <script src="src/js/api.js"></script>
+  <script>
+    function getParam(name){ const u=new URLSearchParams(location.search); return u.get(name) || ''; }
+    const quizInput = document.getElementById('quizId');
+    quizInput.value = getParam('quiz') || '';
+
+    document.getElementById('load').onclick = async () => {
+      if(!Auth.ensureAuthOrRedirect()) return;
+      const id = quizInput.value.trim();
+      if(!id){ alert('أدخل رقم الاختبار'); return; }
+      try{
+        const data = await API.request('/api/results?quiz='+encodeURIComponent(id), { method:'GET', auth:true });
+        // نتوقع: { participants, successRate, average, histogram:[...] }
+        document.getElementById('summary').innerHTML =
+          'المشاركون: '+data.participants+' — نسبة النجاح: '+Math.round(data.successRate*100)+'% — المتوسط: '+data.average.toFixed(2);
+
+        const ctx = document.getElementById('gradesChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: data.histogram.map(x=>x.label),
+            datasets: [{ label:'عدد الطلاب', data: data.histogram.map(x=>x.count) }]
+          }
+        });
+      }catch(err){
+        alert('تعذر تحميل النتائج: '+err.message);
+      }
+    };
+  </script>
 </body>
 </html>

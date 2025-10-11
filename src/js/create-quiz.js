@@ -1,25 +1,31 @@
-/* src/js/create-quiz.js
- * ربط زر إنشاء الاختبار مع التحقق من التوكن وإرسال الطلب بالترويسة الصحيحة
- */
+
 (function () {
   const btn = document.querySelector('[data-action="create-quiz"]');
   if (!btn) return;
-
+  function genQR(text){
+    const node = document.getElementById('qrcode');
+    node.innerHTML='';
+    new QRCode(node, { text, width: 160, height: 160 });
+  }
   btn.addEventListener("click", async function (e) {
     e.preventDefault();
     if (!window.Auth.ensureAuthOrRedirect()) return;
 
-    // مثال بسيط لتجميع الحقول؛ عدّل selectors بما يلائم صفحتك
-    const titleInput = document.querySelector('#quiz-title');
-    const questionsPayload = window.collectQuestions ? window.collectQuestions() : []; // توقع وجود دالة تجمع الأسئلة
-
     const payload = {
-      title: titleInput ? titleInput.value : "اختبار بدون عنوان",
-      questions: questionsPayload
+      title: (document.getElementById('quiz-title')||{}).value || 'اختبار بدون عنوان',
+      description: (document.getElementById('quiz-desc')||{}).value || '',
+      course: (document.getElementById('quiz-course')||{}).value || '',
+      total: parseFloat((document.getElementById('quiz-total')||{}).value||"10"),
+      durationMinutes: parseInt((document.getElementById('quiz-duration')||{}).value||"10"),
+      options: {
+        antiCheat: document.getElementById('opt-anti-cheat')?.checked || false,
+        noBack: document.getElementById('opt-no-back')?.checked || false,
+        shuffle: document.getElementById('opt-shuffle')?.checked || false
+      },
+      questions: window.collectQuestions ? window.collectQuestions() : []
     };
 
-    btn.disabled = true;
-    btn.innerText = "جاري الإنشاء...";
+    btn.disabled = true; const old = btn.innerText; btn.innerText = "جاري الإنشاء...";
 
     try {
       const data = await window.API.request("/api/quizzes", {
@@ -27,25 +33,20 @@
         body: payload,
         auth: true
       });
-      // نجاح
       alert("تم إنشاء الاختبار بنجاح");
-      // إذا كان الخادم يرجع رابط داخلي/عام
-      if (data && data.quizId) {
-        const internalUrl = `/results.html?quiz=${encodeURIComponent(data.quizId)}`;
-        const externalUrl = data.publicUrl || data.shareUrl || null;
+      const id = data.quizId || data.id;
+      if(id){
+        const internalUrl = `results.html?quiz=${encodeURIComponent(id)}`;
+        const externalUrl = data.publicUrl || `${location.origin}/t/${encodeURIComponent(id)}`;
 
-        const internalField = document.querySelector('#internal-link');
-        const externalField = document.querySelector('#public-link');
-
-        if (internalField) internalField.value = internalUrl;
-        if (externalField && externalUrl) externalField.value = externalUrl;
+        document.getElementById('internal-link').value = internalUrl;
+        document.getElementById('public-link').value = externalUrl;
+        genQR(externalUrl);
       }
     } catch (err) {
-      console.error(err);
       alert("تعذر إنشاء الاختبار: " + (err && err.message ? err.message : "خطأ غير معروف"));
     } finally {
-      btn.disabled = false;
-      btn.innerText = "إنشاء الاختبار";
+      btn.disabled = false; btn.innerText = old;
     }
   });
 })();

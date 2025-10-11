@@ -1,67 +1,39 @@
-
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>منصة الاختبارات القصيرة – كليات الأصالة</title>
-<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<script defer src="assets/common.js"></script>
-<style>
-/* Splash overlay (5s) */
-.splash{
-  position:fixed;inset:0;background:#ffffff;display:flex;align-items:center;justify-content:center;
-  z-index:9999;transition:opacity .6s ease;
-}
-.splash-inner{ text-align:center; }
-.splash img{ width:180px; height:auto; margin-bottom:16px; }
-.splash h1{ margin:8px 0 4px; font-size:1.6rem; color:#7a1f2a; }
-.splash p{ margin:2px 0; color:#374151 }
-.splash .dev{ margin-top:8px; color:#6b7280; font-size:.95rem }
-.splash.hide{ opacity:0; pointer-events:none; }
-</style>
-
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="api-base" content="https://secure-quiz-asala-1.onrender.com">
+  <title>منصة الاختبارات القصيرة – كلية الأصالة</title>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
-<body>
-<header class="header">
-  <a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo" alt="الأصالة"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a>
-</header>
-<main class="container">
-  <section class="hero">
-    <h1 class="site-title">منصة الاختبارات القصيرة</h1>
-    <p class="lead">تتيح المنصة إجراء اختبارات قصيرة بتقنيات أمان عالية، تشمل زمنًا لكل سؤال، ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="auth.html">دخول أعضاء هيئة التدريس</a>
-      <a class="btn btn-ghost" href="help.html">تعليمات سريعة</a>
-      <a class="btn btn-ghost" href="contact.html">التواصل مع الإدارة</a>
-      <a class="btn btn-ghost" href="contact.html">نسيت كلمة المرور</a>
-    </div>
-    <div class="features">
-      <div class="card"><h3>توقيت لكل سؤال</h3><span class="badge">زمن مضبوط</span></div>
-      <div class="card"><h3>قفل عند مغادرة الصفحة</h3><span class="badge">منع الغش</span></div>
-      <div class="card"><h3>محاولات محدودة</h3><span class="badge">تحكم كامل</span></div>
-      <div class="card"><h3>تقارير فورية</h3><span class="badge">نتائج مباشرة</span></div>
-    </div>
-    <p class="note center">أعضاء هيئة التدريس فقط. بعد الدخول يمكنك إنشاء الاختبار، ومشاركة رابط الطلاب، والاطلاع على النتائج.</p>
+<body class="container">
+  <header class="hero">
+    <img src="assets/logo.svg" alt="شعار الأصالة" class="logo"/>
+    <h1>منصة الاختبارات القصيرة – كلية القانون</h1>
+    <p>اختبارات آمنة، وقت لكل سؤال، منع الغش، ونتائج فورية مع رسوم بيانية.</p>
+  </header>
+
+  <nav class="grid">
+    <a class="btn" href="create-quiz.html">دخول الأعضاء وإنشاء اختبار</a>
+    <a class="btn outline" href="results.html">نتائج الطلاب</a>
+  </nav>
+
+  <section class="card">
+    <h2>مميزات المنصّة</h2>
+    <ul>
+      <li>توقيت لكل سؤال ومنع الرجوع (اختياري)</li>
+      <li>إغلاق الاختبار عند مغادرة الصفحة (اختياري)</li>
+      <li>عشوائية ترتيب الأسئلة والخيارات</li>
+      <li>نتائج فورية ورسوم بيانية</li>
+      <li>توليد باركود لمشاركة رابط الاختبار</li>
+    </ul>
   </section>
-  <p class="note center">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</p>
-</main>
-<a class="admin-fab" href="admin-login.html">⚙️</a>
-<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 
-<div id="splash" class="splash">
-  <div class="splash-inner">
-    <img src="assets/asala-logo.jpg" alt="شعار الأصالة">
-    <h1>منصة الاختبارات القصيرة</h1>
-    <p>كليات الأصالة – كلية القانون</p>
-    <p class="dev">تم التطوير بواسطة: د. محمد الشمراني – 2025</p>
-  </div>
-</div>
-<script>
-// Show splash for ~5 seconds, then fade & remove
-(function(){
-  var el = document.getElementById('splash');
-  setTimeout(function(){ el.classList.add('hide'); }, 4800);
-  setTimeout(function(){ el.parentNode && el.parentNode.removeChild(el); }, 5600);
-})();
-</script>
-
-</body></html>
+  <footer class="footer">
+    <a href="login.html">تسجيل الدخول</a>
+    <span>—</span>
+    <a href="create-quiz.html">إنشاء اختبار</a>
+  </footer>
+</body>
+</html>
