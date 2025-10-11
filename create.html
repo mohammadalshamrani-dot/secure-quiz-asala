@@ -20,24 +20,43 @@
     <p class="note">تُعرض أدناه المنصة الخارجية. بعد إنشاء الاختبار انسخ رابط الاختبار ثم خزّنه وولّد له باركود من الأدوات أسفل الإطار.</p>
     <div class="frame"><iframe src="https://secure-quiz-asala-1.onrender.com" width="100%" height="100%" style="border:0"></iframe></div>
   </div>
+  
   <div class="card">
-    <h3>حفظ بيانات الاختبار وتوليد الباركود</h3>
+    <h3>بيانات الاختبار (حفظ تلقائي)</h3>
     <form id="qf" class="form-grid">
       <label>عنوان الاختبار</label>
-      <input name="title" class="input" required>
+      <input name="title" class="input" placeholder="أدخل عنوانًا واضحًا">
       <label>رابط الاختبار (انسخه من المنصة بالأعلى)</label>
-      <div class="grid">
-        <input name="link" class="input" placeholder="https://...">
-        <button id="saveBtn" class="btn btn-primary" type="submit">حفظ</button>
-      </div>
+      <input name="link" class="input" placeholder="https://...">
+      <p id="savedHint" class="note" style="display:none">تم الحفظ تلقائيًا.</p>
     </form>
-    <div id="qrBox" style="margin-top:12px;display:none">
-      <h4>الباركود</h4>
-      <div id="qrcode"></div>
-      <p class="note">يمكنك حفظ الصورة وطباعتها.</p>
-    </div>
   </div>
 </main>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+<script>
+const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
+const form = document.getElementById('qf'); const hint = document.getElementById('savedHint');
+let currentId = null; let debounce;
+
+function autoSave(){
+  const fd=new FormData(form);
+  const title=(fd.get('title')||'').trim();
+  const link=(fd.get('link')||'').trim();
+  if(!title && !link){ return; }
+  if(!currentId){ currentId = 'q_'+Date.now(); }
+  const q={ id: currentId, owner:uid, title, link, createdAt: new Date().toISOString() };
+  saveQuiz(q);
+  hint.style.display='block';
+  clearTimeout(window.__hideHint); window.__hideHint = setTimeout(()=>{ hint.style.display='none'; }, 1200);
+}
+
+form.addEventListener('input', ()=>{
+  clearTimeout(debounce);
+  debounce = setTimeout(autoSave, 400);
+});
+</script>
+</body></html>
+
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <script>
 const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }

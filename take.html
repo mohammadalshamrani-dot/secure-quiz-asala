@@ -106,7 +106,13 @@ function finish(){
   const res = scoreSubmission(quiz, answers);
   const rec = { id:'r_'+Date.now(), quizId:quiz.id, owner:quiz.owner, score: Math.round((res.score/res.total)*100), createdAt:new Date().toISOString(), details:res.details, fouls, studentId:student.id, studentName:student.name };
   saveResult(rec);
-  document.body.innerHTML = `<main class="container"><div class="card"><h2>تم الإنهاء</h2><p>رقمك الجامعي: <b>${student.id}</b></p><p>درجتك: <b>${rec.score}</b>%</p><p>المخالفات المسجّلة: ${fouls}</p><a class="btn" href="index.html">العودة للرئيسية</a></div></main>`;
+  document.body.innerHTML = `<main class="container"><div class="card">
+<h2>تم الإنهاء</h2>
+<p>رقمك الجامعي: <b>${student.id}</b></p>
+<p><b>درجة الاختبار:</b> ${rec.score}%</p>
+<p>المخالفات المسجّلة: ${fouls}</p>
+<a class="btn" href="index.html">العودة للرئيسية</a>
+</div></main>`;
 }
 </script>
 </body></html>
