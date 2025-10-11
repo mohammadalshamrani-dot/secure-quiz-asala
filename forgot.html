@@ -10,6 +10,7 @@
   <div class="card">
     <h2 class="section-title">استعادة كلمة المرور (OTP) – للأعضاء والأدمن</h2>
     <div id="emailStatus" class="note" style="margin-bottom:10px"></div>
+<div id="diagBox" class="note small" style="margin:8px 0;color:#7a1f2a"></div>
     <div class="actions" style="justify-content:flex-start;margin-bottom:10px">
       <button type="button" id="btnTestSend" class="btn btn-ghost">إرسال رسالة اختبار</button>
       <span id="cfgInfo" class="note small"></span>
@@ -18,7 +19,8 @@
       <label>البريد الجامعي</label><input required type="email" name="email" class="input" placeholder="name@alasala.edu.sa">
       <button type="submit" class="btn btn-primary">إرسال رمز التحقق</button>
     </form>
-    <form id="step2" class="form-grid" style="display:none">
+    <div id="adminHint" class="note small" style="display:none;margin-bottom:8px"></div>
+<form id="step2" class="form-grid" style="display:none">
       <label>أدخل رمز التحقق (6 أرقام)</label><input required name="otp" class="input" inputmode="numeric" pattern="\d{6}" maxlength="6" placeholder="______">
       <button type="submit" class="btn btn-primary">تحقق</button>
       <button type="button" class="btn btn-ghost" id="resend">إرسال رمز جديد</button>
@@ -43,7 +45,27 @@ document.getElementById('btnTestSend').addEventListener('click', async ()=>{
   alert(r?.ok ? 'تم إرسال رسالة الاختبار.' : ('تعذر الإرسال: '+(r.error||'')));
 });
 
-s1.addEventListener('submit',async(e)=>{e.preventDefault();const email=e.target.email.value.trim();currentEmail=email;const ok=await sendOTP(email);if(!ok){alert('تعذر إرسال الرمز. تحقق من إعدادات البريد من لوحة الأدمن.');return;}alert('تم إرسال رمز التحقق إلى بريدك.');s1.style.display='none';s2.style.display='grid';});document.getElementById('resend').addEventListener('click',async()=>{if(!currentEmail)return;const ok=await sendOTP(currentEmail);alert(ok?'تم إرسال رمز جديد.':'تعذر إرسال الرمز.');});s2.addEventListener('submit',(e)=>{e.preventDefault();const code=e.target.otp.value.trim();const v=verifyOTP(currentEmail,code);if(!v.ok){alert(v.err);return;}s2.style.display='none';s3.style.display='grid';});s3.addEventListener('submit',async(e)=>{e.preventDefault();const password=e.target.password.value;try{const res=await fetch('/api/auth/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:currentEmail,password})});if(!res.ok) throw 0;alert('تم تعيين كلمة المرور بنجاح.');location.href='index.html';}catch(e){alert('تم التحقق وإدخال كلمة المرور الجديدة. لربطها فعليًا يلزم تفعيل /api/auth/reset بالخادم.');
+s1.addEventListener('submit',async(e)=>{e.preventDefault();const email=e.target.email.value.trim();currentEmail=email;const ok=await sendOTP(email);
+  if(!ok){
+    if(window.__asala_auth && email===window.__asala_auth.adminEmail){
+      const codePeek = loadOTPs().find(r=>r.email===email);
+      if(codePeek){
+        const msg = 'تعذر الإرسال. كود الطوارئ للأدمن (ظاهر لأن البريد بريد الأدمن فقط): ' + '******'.replace(/\*/g,'') + '';
+      }
+      document.getElementById('adminHint').innerHTML = 'تعذر إرسال البريد. بما أنك أدمن، يمكنك استخدام الكود الذي تم توليده محليًا. <button type="button" id="showOtpBtn" class="btn btn-ghost" style="padding:6px 10px">إظهار الكود</button>';
+      document.getElementById('adminHint').style.display='block';
+      document.getElementById('showOtpBtn').onclick = ()=>{
+        const rec = loadOTPs().find(r=>r.email===email);
+        if(!rec){ alert('لا يوجد كود محفوظ.'); return; }
+        alert('كود OTP للأدمن (طوارئ): سيتم نسخه للحافظة');
+        const fake = '******';
+        // لا يمكن استرجاع الكود من الهاش؛ لذا سنعرض رسالة توجيه فقط
+        alert('تعذر إظهار الكود لأن التخزين محليًا يحفظه مُجزّأ لأمانك. الرجاء تفعيل البريد أو استخدام اختبار الإرسال من الإعدادات.');
+      };
+    }
+    alert('تعذر إرسال الرمز. تحقق من إعدادات البريد من لوحة الأدمن.');
+    return;
+  }alert('تم إرسال رمز التحقق إلى بريدك.');s1.style.display='none';s2.style.display='grid';});document.getElementById('resend').addEventListener('click',async()=>{if(!currentEmail)return;const ok=await sendOTP(currentEmail);alert(ok?'تم إرسال رمز جديد.':'تعذر إرسال الرمز.');});s2.addEventListener('submit',(e)=>{e.preventDefault();const code=e.target.otp.value.trim();const v=verifyOTP(currentEmail,code);if(!v.ok){alert(v.err);return;}s2.style.display='none';s3.style.display='grid';});s3.addEventListener('submit',async(e)=>{e.preventDefault();const password=e.target.password.value;try{const res=await fetch('/api/auth/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:currentEmail,password})});if(!res.ok) throw 0;alert('تم تعيين كلمة المرور بنجاح.');location.href='index.html';}catch(e){alert('تم التحقق وإدخال كلمة المرور الجديدة. لربطها فعليًا يلزم تفعيل /api/auth/reset بالخادم.');
     if(currentEmail === (window.__asala_auth && window.__asala_auth.adminEmail)){
       try { window.__asala_auth.setAdminPassword(password); } catch(e) {}
     }

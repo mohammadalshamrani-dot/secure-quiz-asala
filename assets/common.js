@@ -46,7 +46,7 @@ async function ensureEmailJS(){
   return !!window.emailjs;
 }
 
-async function sendEmail(to, subject, message){
+async function sendEmail(to, subject, message, extras={}){
   if(await ensureEmailJS()){
     try{
       const resp = await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
@@ -62,7 +62,7 @@ async function sendEmail(to, subject, message){
   }
   try{
     window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-    return {ok:true, via:"mailto"};
+    return {ok:true, via:"mailto"}; // fallback mailto
   }catch(e){ return {ok:false, error: String(e)}; }
 }
 
