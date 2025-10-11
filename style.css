@@ -16,3 +16,4 @@ body{margin:0;background:var(--bg);color:var(--text)}
 .table th,.table td{padding:10px 12px}
 .small{font-size:13px;color:#6b7280}
 .notice{background:#fffbe6;border:1px dashed #facc15;padding:10px;border-radius:12px}
+.footer{color:#6b7280;text-align:center;padding:24px 0}

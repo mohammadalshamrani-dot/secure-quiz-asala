@@ -1,11 +1,9 @@
 
-// Local minimal storage for admin + inbox
-const ADMIN_KEY='asala_admin_min';
-const INBOX_KEY='asala_inbox_min';
+// Storage keys
+const ADMIN_KEY='asala_admin_auth';
+const INBOX_KEY='asala_inbox_messages';
 
-function load(key){
-  try{ return JSON.parse(localStorage.getItem(key)) || {}; }catch(e){ return {}; }
-}
+function load(key){ try{ return JSON.parse(localStorage.getItem(key)) || {}; }catch(e){ return {}; } }
 function save(key,data){ localStorage.setItem(key, JSON.stringify(data)); }
 
 function uid(){
@@ -14,18 +12,14 @@ function uid(){
   );
 }
 
-// Admin auth
+// Admin
 function getAdmin(){
   const a = load(ADMIN_KEY);
   if(!a.username){ a.username='admin'; a.password='AaBbCc123'; save(ADMIN_KEY,a); }
   return a;
 }
-function adminLogin(u,p){
-  const a = getAdmin(); return (u===a.username && p===a.password);
-}
-function adminChangePassword(np){
-  const a = getAdmin(); a.password = np; save(ADMIN_KEY, a);
-}
+function adminLogin(u,p){ const a = getAdmin(); return (u===a.username && p===a.password); }
+function adminChangePassword(np){ const a = getAdmin(); a.password=np; save(ADMIN_KEY,a); }
 
 // Inbox
 function submitContact(payload){
@@ -43,5 +37,5 @@ function setMessageStatus(id, status){
   const b = load(INBOX_KEY); b.messages=(b.messages||[]).map(m=>m.id===id?{...m,status}:m); save(INBOX_KEY,b);
 }
 function addReply(id, reply){
-  const b = load(INBOX_KEY); b.messages=(b.messages||[]).map(m=>m.id===id?{...m, reply, status:'replied', repliedAt:new Date().toISOString()}:m); save(INBOX_KEY,b);
+  const b = load(INBOX_KEY); b.messages=(b.messages||[]).map(m=>m.id===id?{...m,reply,status:'replied',repliedAt:new Date().toISOString()}:m); save(INBOX_KEY,b);
 }
