@@ -1,129 +1,37 @@
 
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>إنشاء الاختبار – كليات الأصالة</title>
-<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<script defer src="assets/common.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>.frame{height:900px;border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff}.grid{display:grid;gap:10px;grid-template-columns:1fr auto}</style>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إنشاء اختبار – ضمن موقع الأصالة</title>
+<link rel="stylesheet" href="./style.css">
+<style>
+  .frame-note{color:#6b7280;margin:8px 0 12px;text-align:center}
+  iframe.platform{width:100%;height:85vh;border:1px solid #e5e7eb;border-radius:12px;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.06)}
+</style>
 </head>
 <body>
-<header class="header">
-  <a href="member-home.html" class="brand"><img src="assets/asala-logo.jpg" class="logo">
-    <div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a>
-  <div style="margin-inline-start:auto"><a class="btn" href="member-home.html">رجوع</a></div>
-</header>
-<main class="container">
-  <div class="card">
-    <h2>منصة إنشاء الاختبار</h2>
-    <p class="note">تُعرض أدناه المنصة الخارجية. بعد إنشاء الاختبار انسخ رابط الاختبار ثم خزّنه وولّد له باركود من الأدوات أسفل الإطار.</p>
-    <div class="frame"><iframe src="https://secure-quiz-asala-1.onrender.com" width="100%" height="100%" style="border:0"></iframe></div>
-  </div>
-  
-  
-  <div class="card">
-    <h3>بيانات الاختبار (حفظ تلقائي + رابط داخلي جاهز)</h3>
-    <form id="qf" class="form-grid">
-      <label>عنوان الاختبار</label>
-      <input name="title" class="input" placeholder="أدخل عنوانًا واضحًا">
-      <label>الرابط الداخلي للطلاب (مرتبط بالنتائج تلقائيًا)</label>
-      <input id="internalLink" class="input" readonly placeholder="سيظهر تلقائيًا بعد إدخال العنوان">
-      <div id="qrBox" style="display:none">
-        <label>الباركود (يتولد تلقائيًا)</label>
-        <div id="qrcode" style="margin-top:10px"></div>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="./alasala-logo.jpg" alt="شعار الأصالة">
+        <div class="title">كليات الأصالة – كلية القانون</div>
       </div>
-      <p id="savedHint" class="note" style="display:none">تم الحفظ تلقائيًا.</p>
-    </form>
-    <p class="note">شارك هذا الرابط (أو الباركود) مع الطلاب لضمان ربط النتائج مباشرة بصفحة نتائجك.</p>
+      <nav>
+        <a href="./index.html">الرئيسية</a>
+        <a href="./instructions.html">التعليمات السريعة</a>
+        <a href="./feedback.html">تواصل مع الإدارة</a>
+        <a href="./admin.html">لوحة التحكم</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <div class="frame-note">تظهر منصة إنشاء الاختبار أدناه داخل الموقع. إذا لم تُعرض هنا، فقد يمنع الخادم التضمين — في هذه الحالة استخدم الرابط المباشر من داخل الموقع فقط.</div>
+      <iframe class="platform" src="https://secure-quiz-asala-1.onrender.com" title="منصة إنشاء الاختبار"></iframe>
+    </section>
+
+    <footer>تم تطوير المنصّة بواسطة: د.محمد الشمراني – 2025</footer>
   </div>
-</main>
-<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-<script>
-const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
-const form = document.getElementById('qf'); const hint = document.getElementById('savedHint');
-const ilink = document.getElementById('internalLink'); const qrBox = document.getElementById('qrBox'); const qrEl = document.getElementById('qrcode');
-let quizId = null; let debounce;
-
-function computeInternalLink(id){
-  const base = location.origin + location.pathname.replace('create.html','take.html');
-  return base + '?quiz=' + encodeURIComponent(id);
-}
-
-function ensureQuizId(){
-  if(!quizId){ quizId = 'q_' + Date.now(); }
-  return quizId;
-}
-
-function autoSave(){
-  const fd=new FormData(form);
-  const title=(fd.get('title')||'').trim();
-  if(!title){ return; }
-  const id = ensureQuizId();
-  const link = computeInternalLink(id);
-  const quiz = { id, owner:uid, title, link, createdAt: new Date().toISOString() };
-  saveQuiz(quiz);
-  // Show link + QR
-  ilink.value = link;
-  if(qrBox.style.display!=='block'){
-    qrBox.style.display='block';
-  }
-  qrEl.innerHTML='';
-  if(window.QRCode){ new QRCode(qrEl, {text: link, width: 220, height: 220}); }
-  // Saved hint
-  hint.style.display='block';
-  clearTimeout(window.__hideHint); window.__hideHint = setTimeout(()=>{ hint.style.display='none'; }, 1200);
-}
-
-form.addEventListener('input', ()=>{
-  clearTimeout(debounce);
-  debounce = setTimeout(autoSave, 300);
-});
-</script>
-</body></html>
-
-<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-<script>
-const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
-const form = document.getElementById('qf'); const hint = document.getElementById('savedHint');
-let currentId = null; let debounce;
-
-function autoSave(){
-  const fd=new FormData(form);
-  const title=(fd.get('title')||'').trim();
-  const link=(fd.get('link')||'').trim();
-  if(!title && !link){ return; }
-  if(!currentId){ currentId = 'q_'+Date.now(); }
-  const q={ id: currentId, owner:uid, title, link, createdAt: new Date().toISOString() };
-  saveQuiz(q);
-  hint.style.display='block';
-  clearTimeout(window.__hideHint); window.__hideHint = setTimeout(()=>{ hint.style.display='none'; }, 1200);
-}
-
-form.addEventListener('input', ()=>{
-  clearTimeout(debounce);
-  debounce = setTimeout(autoSave, 400);
-});
-</script>
-</body></html>
-
-<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-<script>
-const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
-const form = document.getElementById('qf'); const qrBox=document.getElementById('qrBox');
-form.addEventListener('submit',(e)=>{
-  e.preventDefault();
-  const fd=new FormData(form);
-  const title=fd.get('title').trim(), link=fd.get('link').trim();
-  if(!/^https?:\/\//.test(link)){ alert('فضلاً أدخل رابطًا صحيحًا يبدأ بـ https://'); return; }
-  const q={id:'q_'+Date.now(), owner:uid, title, link, createdAt:new Date().toISOString()};
-  saveQuiz(q);
-  // Generate QR
-  qrBox.style.display='block';
-  document.getElementById('qrcode').innerHTML='';
-  new QRCode(document.getElementById('qrcode'), {text: link, width: 220, height: 220});
-  alert('تم حفظ بيانات الاختبار.');
-});
-</script>
-</body></html>
+</body>
+</html>

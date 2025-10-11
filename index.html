@@ -7,6 +7,11 @@
 <title>منصّة الاختبارات القصيرة – كليات الأصالة</title>
 <link rel="stylesheet" href="./style.css">
 <script defer src="./site.js"></script>
+<style>
+  .frame-wrap{display:none;margin-top:16px}
+  .frame-note{color:#6b7280;margin:8px 0 12px;text-align:center}
+  iframe.platform{width:100%;height:80vh;border:1px solid #e5e7eb;border-radius:12px;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.06)}
+</style>
 </head>
 <body>
   <div class="container">
@@ -23,11 +28,11 @@
       </nav>
     </header>
 
-    <section class="card hero">
+    <section class="card hero" id="hero">
       <h1>منصّة الاختبارات القصيرة</h1>
       <p class="lead">اختبارات قصيرة بزمن محدد – نتيجة فورية – رمز تحقّق – مريحة للطالب ولعضو هيئة التدريس.</p>
       <div style="display:flex;justify-content:center">
-        <a class="btn btn-primary" href="https://secure-quiz-asala-1.onrender.com" target="_blank" rel="noopener">إنشاء اختبار قصير</a>
+        <button class="btn btn-primary" id="openEmbed">إنشاء اختبار قصير</button>
       </div>
 
       <div id="steps" class="steps">
@@ -36,6 +41,11 @@
         <div class="step"><b>(3) تظهر النتيجة</b><div class="small-muted">مع تعليمات ورمز تحقّق</div></div>
         <div class="step"><b>(4) أخذ صورة للشاشة</b><div class="small-muted">إرسالها لعضو هيئة التدريس</div></div>
       </div>
+    </section>
+
+    <section class="card frame-wrap" id="frameWrap" aria-hidden="true">
+      <div class="frame-note">تم فتح المنصّة داخل الموقع للحفاظ على حقوق التطوير. إذا لم تظهر، <a href="https://secure-quiz-asala-1.onrender.com" target="_self" rel="noopener">اضغط هنا</a>.</div>
+      <iframe class="platform" id="platformFrame" src="about:blank" title="منصة إنشاء الاختبار"></iframe>
     </section>
 
     <footer>تم تطوير المنصّة بواسطة: د.محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>

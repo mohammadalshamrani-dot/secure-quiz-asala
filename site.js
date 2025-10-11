@@ -138,3 +138,24 @@
     });
   }
 })(); 
+
+
+// Embed platform inside same page (no new tab)
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btn = document.getElementById('openEmbed');
+  const wrap = document.getElementById('frameWrap');
+  const frame = document.getElementById('platformFrame');
+  const hero = document.getElementById('hero');
+  if (btn && wrap && frame){
+    btn.addEventListener('click', ()=>{
+      if (hero) hero.style.display='none';
+      wrap.style.display='block';
+      wrap.setAttribute('aria-hidden','false');
+      // Try to load external platform in iframe
+      const url = "https://secure-quiz-asala-1.onrender.com";
+      frame.src = url;
+      // If blocked by X-Frame-Options, provide fallback link already in DOM.
+      // Nothing else to do here.
+    });
+  }
+});
