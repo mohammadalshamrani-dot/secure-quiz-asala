@@ -1,18 +1,65 @@
+# حزمة تصحيح فقط (Patch Only) — **بدون أي تغيير للتصميم**
+هذه الحزمة تُبقي المنصة القديمة كما هي 100%، وتضيف فقط:
+- `auth.js` لإدارة التوكن.
+- `api.js` لإرسال `Authorization: Bearer <jwt>` ومعالجة Invalid token.
+- `results-client.js` لعرض النتائج مباشرة للمدرس بعد انتهاء الاختبار.
+- `server-snippets.md` قصاصات خادم لتخزين النتائج **ليوم واحد فقط** ثم حذفها تلقائيًا.
 
-# Secure Quiz Asala — Frontend v2.1 (SITE_BASE linked)
+> **لا ترفع أي HTML/CSS جديد**. اترك `index.html`, `style.css`, وكل القوالب كما هي.
+> فقط أضف ملفات JS التالية واستدعها في الصفحات المناسبة.
 
-- هذه النسخة جاهزة للرفع على GitHub Pages.
-- مربوطة بخادمك على Render: `https://secure-quiz-asala-1.onrender.com`
-- تولِّد الروابط (العام والداخلي) بناءً على `SITE_BASE`:
-  `https://mohammadalshamrani-dot.github.io/secure-quiz-asala/`
+## 1) الملفات التي تُضاف للواجهة (Frontend)
+انسخ المجلد `src/js` إلى مشروعك ثم:
+- في صفحة تسجيل الدخول القديمة (لا تغيّر شكلها) أضف قبل سكربتاتك المعتادة:
+  ```html
+  <script src="src/js/auth.js"></script>
+  <script src="src/js/api.js"></script>
+  ```
 
-## أهم ملف: `src/js/config.js`
-غير الروابط متى ما احتجت — بدون تعديل باقي الملفات.
+- في صفحة إنشاء الاختبار القديمة (نفس القالب القديم) عدّل استدعاء الإرسال ليصبح:
+  ```html
+  <!-- بعد سكربتاتك القديمة: -->
+  <script>
+    async function sqaCreateQuiz(payload){
+      // payload: هي البيانات التي كان كودك القديم يرسلها
+      return API.request('/api/quizzes', { method:'POST', body: payload, auth:true });
+    }
+  </script>
+  ```
 
-## خطوات النشر السريعة
-1) ارفع كل الملفات إلى مستودع GitHub (جذر الفرع).
-2) فعّل GitHub Pages من الإعدادات (Source: main, Folder: /(root)).
-3) تأكد من CORS على الخادم للسماح بـ Origin:
-   - https://mohammadalshamrani-dot.github.io/secure-quiz-asala
-4) افتح الصفحة الرئيسية وجرب:
-   - تسجيل الدخول → إنشاء اختبار → انسخ الروابط وشغّل الباركود.
+- في صفحة **نتائج الطلاب** القديمة (خانتك القديمة) أضف:
+  ```html
+  <script src="src/js/results-client.js"></script>
+  <script>
+    // مثال: عند اختيار اختبار من القائمة أو إدخال QuizId قديم
+    async function loadResultsFor(id){
+      const data = await SQAResults.load(id);
+      // استخدم دوال الرسم/الجدول القديمة لديك
+      // مثال:
+      // renderTable(data.rows);
+      // renderCharts(data.histogram);
+    }
+  </script>
+  ```
+
+## 2) ضبط الربط مع الموقع الأساسي
+لا تغيّر شيء في الروابط. السكربت `api.js` لا يلمس التصميم ولا الروابط العامة، فقط يتكفل بإرسال التوكن بشكل صحيح.
+
+لو كنت تحتاج تحديد مسار الخادم صراحة، أضف في `<head>` لأي صفحة تتصل بالخادم:
+```html
+<meta name="api-base" content="https://secure-quiz-asala-1.onrender.com">
+```
+
+## 3) إظهار النتائج فورًا للمدرس ثم حذفها بعد يوم
+### (أ) واجهة — جاهزة
+`results-client.js` ينادي `/api/results?quiz=<id>` ويعرض الناتج. لا يحتاج تخزين دائم في الواجهة.
+
+### (ب) خادم — احتفاظ لمدة 24 ساعة فقط
+افتح `server-snippets.md` وطبّق واحدًا من الخيارين (Redis الموصى به، أو تخزين مؤقت بالذاكرة) — كلاهما يضع **TTL = 86400 ثانية**.
+
+---
+
+## أسئلة شائعة
+- **التصميم تغيّر؟** لا. هذه الحزمة **لا تحتوي HTML/CSS** أصلًا.
+- **النتائج فورية؟** نعم، تُقرأ مباشرة من الخادم بعد تسليم الطالب.
+- **الحذف بعد يوم؟** نعم عبر كود الخادم (قصاصة جاهزة). الواجهة لا تخزّن شيئًا.

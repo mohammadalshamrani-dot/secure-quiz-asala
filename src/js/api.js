@@ -1,8 +1,13 @@
-
 (function () {
-  const getConfig = () => (window.__CONFIG__||{API_BASE:"",SITE_BASE:""});
+  const getApiBase = () => {
+    const meta = document.querySelector('meta[name="api-base"]');
+    if (meta && meta.content) return meta.content.trim();
+    if (window.__CONFIG__ && window.__CONFIG__.API_BASE) return window.__CONFIG__.API_BASE;
+    return "";
+  };
+  const API_BASE = getApiBase();
+
   async function request(path, { method="GET", headers={}, body=null, auth=true } = {}) {
-    const { API_BASE } = getConfig();
     const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
     const finalHeaders = new Headers(headers);
     if (auth) {
@@ -30,7 +35,7 @@
   function handleInvalidToken(){
     window.Auth.clearToken();
     alert("انتهت صلاحية الجلسة، سجّل الدخول مجدداً.");
-    window.location.href = "login.html";
+    // لا نغيّر مساراتك: اترك login القديم لديك
   }
-  window.API = { request, getConfig };
+  window.API = { request };
 })();
