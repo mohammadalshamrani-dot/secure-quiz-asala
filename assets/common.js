@@ -1,93 +1,69 @@
 
-// ===== Configuration (embedded) =====
-const ADMIN_EMAIL = "mhd-1407@hotmail.com";
-const EMAILJS_SERVICE_ID = "service_74mxmoa";
-const EMAILJS_TEMPLATE_ID = "template_xv8x4ju";
-const EMAILJS_PUBLIC_KEY = "MUdZZODORkGM7TCd7";
+// ===== Config =====
+const ADMIN_EMAIL = "mohammad.alshamrani@alasala.edu.sa";
+// EmailJS optional (can be blank). Even if not working, UI continues.
+const EMAILJS_SERVICE_ID = "";
+const EMAILJS_TEMPLATE_ID = "";
+const EMAILJS_PUBLIC_KEY = "";
 
-// ===== Navigation helpers =====
+// ===== Nav helpers =====
 window.goBack = function(){ if(history.length>1) history.back(); else location.href='index.html'; };
-
 document.addEventListener('click',(e)=>{
-  const t = e.target.closest('.brand, .logo, .site-title');
-  if(t && !t.closest('a')) location.href = 'index.html';
+  const t=e.target.closest('.brand, .logo, .site-title');
+  if(t && !t.closest('a')) location.href='index.html';
 });
 
-// ===== Splash =====
-document.addEventListener('DOMContentLoaded', function(){
-  const splash = document.getElementById('splash');
-  if(!splash) return;
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  setTimeout(()=>{
-    splash.classList.add('hide');
-    setTimeout(()=> splash.remove(), prefersReduced?0:650);
-  }, prefersReduced?10:4000);
-});
+// ===== Local data stores =====
+const UKEY='asala_users', QKEY='asala_quizzes', RKEY='asala_results', REQKEY='asala_requests';
+function loadJSON(k,def){ try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(def));}catch(e){return def;} }
+function saveJSON(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+function uid(){ return Math.random().toString(36).slice(2,10); }
 
-// ===== EmailJS Integration =====
+(function seed(){
+  const users = loadJSON(UKEY, []);
+  if(!users.length){
+    users.push({id:'admin', role:'admin', name:'مسؤول المنصة', email: ADMIN_EMAIL, createdAt:new Date().toISOString()});
+    users.push({id:'fac1', role:'faculty', name:'عضو هيئة تجريبي', email:'faculty.demo@alasala.edu.sa', dept:'القانون', createdAt:new Date().toISOString()});
+    saveJSON(UKEY, users);
+  }
+})();
+
+// User operations
+function listUsers(){ return loadJSON(UKEY, []); }
+function getUserByEmail(e){ return listUsers().find(x=>x.email===e); }
+function getUserById(id){ return listUsers().find(x=>x.id===id); }
+function upsertUser(u){ const a=listUsers(); const i=a.findIndex(x=>x.id===u.id); if(i>=0)a[i]={...a[i],...u}; else a.push(u); saveJSON(UKEY,a); return u; }
+function setUserPassword(id,p){ const a=listUsers(); const i=a.findIndex(x=>x.id===id); if(i>=0){ a[i].password=p; a[i].pwdSetAt=new Date().toISOString(); saveJSON(UKEY,a); return true;} return false; }
+
+// Requests
+function listRequests(){ return loadJSON(REQKEY, []); }
+function addRequest(obj){ const a=listRequests(); const rec={...obj,id:'r_'+uid(),createdAt:new Date().toISOString()}; a.unshift(rec); saveJSON(REQKEY,a); return rec; }
+function markRequestHandled(id, note){ const a=listRequests(); const i=a.findIndex(x=>x.id===id); if(i>=0){ a[i].handled=true; a[i].handledNote=note||''; a[i].handledAt=new Date().toISOString(); saveJSON(REQKEY,a); } }
+
+// Quiz/Results minimal persistence
+function listQuizzes(){ return loadJSON(QKEY, []); }
+function saveQuiz(q){ const a=listQuizzes(); const i=a.findIndex(x=>x.id===q.id); if(i>=0)a[i]={...a[i],...q}; else a.push(q); saveJSON(QKEY,a); return q; }
+function listResults(){ return loadJSON(RKEY, []); }
+function saveResult(r){ const a=listResults(); const i=a.findIndex(x=>x.id===r.id); if(i>=0)a[i]={...a[i],...r}; else a.push(r); saveJSON(RKEY,a); return r; }
+
+// ===== Optional EmailJS send (best-effort) =====
 function canUseEmailJS(){
-  return EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY &&
-         EMAILJS_SERVICE_ID.startsWith('service_') && EMAILJS_TEMPLATE_ID.startsWith('template_');
+  return EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY;
 }
-
 async function ensureEmailJS(){
   if(!canUseEmailJS()) return false;
   if(!window.emailjs){
-    await new Promise((res,rej)=>{
-      const s = document.createElement('script');
-      s.src = "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
-      s.onload = res; s.onerror = rej; document.head.appendChild(s);
-    });
+    await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
   }
-  if(window.emailjs && !window.emailjs.__inited){
-    window.emailjs.init(EMAILJS_PUBLIC_KEY);
-    window.emailjs.__inited = true;
-  }
+  if(window.emailjs && !window.emailjs.__inited){ window.emailjs.init(EMAILJS_PUBLIC_KEY); window.emailjs.__inited=true; }
   return !!window.emailjs;
 }
-
-async function sendEmail(to, subject, message, extras={}){
+async function sendEmail(to, subject, message){
   if(await ensureEmailJS()){
     try{
-      const resp = await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: to,
-        email: to,
-        user_email: to,
-        reply_to: to,
-        subject: subject,
-        message: message
-      });
-      return {ok:true, via:"emailjs", resp};
-    }catch(e){ console.warn("EmailJS failed", e); return {ok:false, via:"emailjs", error: e?.text || e?.message || String(e)}; }
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {to_email:to, email:to, user_email:to, subject, message});
+      return {ok:true, via:"emailjs"};
+    }catch(e){ console.warn(e); }
   }
-  try{
-    window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-    return {ok:true, via:"mailto"}; // fallback mailto
-  }catch(e){ return {ok:false, error: String(e)}; }
+  return {ok:false};
 }
-
-// Complaints local store
-function saveComplaintLocally(obj){
-  try{ const k='asala_complaints'; const a=JSON.parse(localStorage.getItem(k)||'[]'); a.unshift({...obj,savedAt:new Date().toISOString()}); localStorage.setItem(k, JSON.stringify(a)); }catch(e){}
-}
-function loadComplaintsLocally(){ try{return JSON.parse(localStorage.getItem('asala_complaints')||'[]');}catch(e){return [];} }
-
-// Status for settings page
-window.getEmailConfigStatus = function(){ return {admin:ADMIN_EMAIL, service:EMAILJS_SERVICE_ID, template:EMAILJS_TEMPLATE_ID, publicKey:EMAILJS_PUBLIC_KEY, ready:canUseEmailJS()}; };
-
-// ===== Local Admin Auth (fallback for static hosting) =====
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD_DEFAULT = "AaBbCc123";
-
-function getAdminPassword() {
-  try { return localStorage.getItem('asala_admin_pwd') || ADMIN_PASSWORD_DEFAULT; } catch(e) { return ADMIN_PASSWORD_DEFAULT; }
-}
-function setAdminPassword(p) {
-  try { localStorage.setItem('asala_admin_pwd', p); } catch(e) { /*ignore*/ }
-}
-window.__asala_auth = {
-  adminUser: ADMIN_USERNAME,
-  getAdminPassword,
-  setAdminPassword,
-  adminEmail: ADMIN_EMAIL
-};

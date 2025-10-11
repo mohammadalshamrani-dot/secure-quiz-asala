@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -5,18 +6,21 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
-<div class="note" style="text-align:center;margin-top:8px">هل نسيت كلمة المرور كعضو هيئة تدريس؟ <a href="forgot.html">استعادة كلمة المرور</a></div>
-
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
   <div class="card">
-    <h2 class="section-title">نتائج الطلاب</h2>
-    <div class="iframe-box"><iframe src="https://secure-quiz-asala-1.onrender.com/results?embed=1" title="نتائج الطلاب"></iframe></div>
-    <p class="note small center">تعرض النتائج المربوطة بحساب عضو هيئة التدريس الذي أنشأ الاختبارات.</p>
+    <h2>نتائج الطلاب</h2>
+    <div id="list"></div>
+    <div class="form-grid" style="margin-top:10px">
+      <button id="add" class="btn btn-ghost">إضافة نتيجة تجريبية</button>
+    </div>
   </div>
 </main>
-<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
-<a class="admin-fab" href="admin.html">⚙️</a>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-<script>if(localStorage.getItem('asala_session')!=='active') location.href='index.html';</script>
+<script>
+function render(){ const rows=listResults(); list.innerHTML = rows.length?('<table class="table"><thead><tr><th>ID</th><th>الاختبار</th><th>العضو</th><th>النتيجة</th><th>التاريخ</th></tr></thead><tbody>'+rows.map(x=>`<tr><td>${x.id}</td><td>${x.quizId}</td><td>${x.owner}</td><td>${x.score}</td><td>${x.createdAt}</td></tr>`).join('')+'</tbody></table>'):'<p class="note">لا توجد نتائج محفوظة بعد.</p>'; }
+add.onclick=()=>{ saveResult({id:'r_'+uid(), quizId:'q_demo', owner:'fac1', score:Math.round(60+Math.random()*40), createdAt:new Date().toISOString()}); render(); };
+render();
+</script>
 </body></html>

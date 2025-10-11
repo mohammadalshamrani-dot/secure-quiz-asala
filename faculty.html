@@ -1,43 +1,41 @@
+
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>دخول الأعضاء – منصة الاختبارات القصيرة</title>
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <link rel="stylesheet" href="css/style.css" />
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ملف عضو هيئة التدريس – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script>
+<style>.tabs{display:flex;gap:8px;margin-bottom:10px}.tabs a{padding:8px 12px;border:1px solid #eee;border-radius:10px}.tabs a.active{background:#f2f2f2;font-weight:800}.section{display:none}.section.active{display:block}</style>
 </head>
 <body>
-  
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<header class="header" dir="rtl">
-  <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-  <div class="brand">
-    <div class="title">كليات الأصالة – كلية القانون</div>
-    <div class="subtitle">منصة الاختبارات القصيرة</div>
-  </div>
-  <nav class="nav" aria-label="التنقل">
-    <a href="index.html">الصفحة الترحيبية</a>
-    <a href="student.html">دخول الطلاب</a>
-    <a href="faculty.html">دخول الأعضاء</a>
-  </nav>
-</header>
-
-  <main class="container">
-    <div class="form-card">
-      <h2>دخول الأعضاء (الدكاترة)</h2>
-      <label class="label" for="email">البريد الجامعي</label>
-      <input class="input" id="email" placeholder="name@asala.edu.sa" />
-      <label class="label" for="pass">كلمة المرور</label>
-      <input type="password" class="input" id="pass" placeholder="••••••••" />
-      <button class="btn btn-faculty submit">دخول</button>
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<main class="container">
+  <div class="card">
+    <h2 id="title">ملف عضو هيئة التدريس</h2>
+    <div class="tabs">
+      <a href="#profile" class="active">الملف الشخصي</a>
+      <a href="#password">تغيير الرقم السري</a>
+      <a href="#quizzes">اختباراتي المحفوظة</a>
+      <a href="#results">نتائجي السابقة</a>
     </div>
-  </main>
-  
-<footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة د. محمد الشمراني</div>
-  <div class="note">© جميع الحقوق محفوظة</div>
-</footer>
-
-</body>
-</html>
+    <section id="profile" class="section active"><div id="info"></div></section>
+    <section id="password" class="section"><div class="form-grid"><input id="newPwd" class="input" placeholder="كلمة جديدة"><button id="btnChange" class="btn btn-primary">تغيير</button></div></section>
+    <section id="quizzes" class="section"><div id="q"></div></section>
+    <section id="results" class="section"><div id="r"></div></section>
+  </div>
+</main>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+<script>
+document.querySelectorAll('.tabs a').forEach(a=>a.onclick=(e)=>{e.preventDefault();document.querySelectorAll('.tabs a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelector(a.getAttribute('href')).classList.add('active');});
+const id=new URLSearchParams(location.search).get('id')||'fac1'; const u=getUserById(id);
+if(!u){ title.textContent='المستخدم غير موجود'; } else {
+  title.textContent='ملف: '+u.name;
+  info.innerHTML=`<p><b>الاسم:</b> ${u.name}</p><p><b>البريد:</b> ${u.email}</p><p><b>القسم:</b> ${u.dept||''}</p><p><b>أنشئ في:</b> ${u.createdAt}</p>`;
+  btnChange.onclick=()=>{ if(!newPwd.value) return alert('أدخل كلمة جديدة'); setUserPassword(u.id,newPwd.value); alert('تم التغيير'); };
+  const qs=listQuizzes().filter(x=>x.owner===u.id); const rs=listResults().filter(x=>x.owner===u.id);
+  const render=(rows,cols)=> rows.length?`<table class="table"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map(x=>`<tr><td>${x.id}</td><td>${x.title||x.quizId}</td><td>${x.createdAt}</td></tr>`).join('')}</tbody></table>`:'<p class="note">لا توجد بيانات بعد.</p>';
+  q.innerHTML=render(qs,['ID','العنوان','التاريخ']); r.innerHTML=render(rs,['ID','الاختبار/النتيجة','التاريخ']);
+}
+</script>
+</body></html>

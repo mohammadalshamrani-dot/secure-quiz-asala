@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -5,25 +6,24 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
   <div class="card">
-    <h2 class="section-title">إعدادات البريد (EmailJS)</h2><div class="actions" style="justify-content:flex-start;margin-bottom:8px"><a class="btn btn-ghost" href="email-test.html">اختبار الإرسال</a></div>
-    <p class="note">الإعدادات الحالية مضمنة داخل الملفات، ويمكنك تعديلها هنا محليًا إذا رغبت.</p>
+    <h2>إعدادات البريد (EmailJS)</h2>
+    <p class="note">الإرسال اختياري. المنصة تعمل حتى بدون تفعيل البريد.</p>
     <form id="cfg" class="form-grid">
-      <label>بريد الأدمن</label><input name="admin" class="input">
-      <label>Service ID</label><input name="sid" class="input">
-      <label>Template ID</label><input name="tid" class="input">
-      <label>Public Key</label><input name="pk" class="input">
-      <button class="btn btn-primary" type="submit">حفظ الإعدادات محليًا</button>
+      <label>بريد الأدمن</label><input name="admin" class="input" value="mohammad.alshamrani@alasala.edu.sa">
+      <label>Service ID</label><input name="sid" class="input" value="">
+      <label>Template ID</label><input name="tid" class="input" value="">
+      <label>Public Key</label><input name="pk" class="input" value="">
+      <button class="btn btn-primary">حفظ محليًا</button>
     </form>
-    <div class="note" id="status"></div><div class="note small" id="cfgInfo"></div>
   </div>
 </main>
-<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
-const form=document.getElementById('cfg');(function(){const s=getEmailConfigStatus();form.admin.value=s.admin||'';form.sid.value=s.service||'';form.tid.value=s.template||'';form.pk.value=s.publicKey||'';document.getElementById('status').textContent=s.ready?'الإعدادات مضبوطة وتعمل مباشرة.':'الإعدادات المضمنة غير مكتملة.';})();
-form.addEventListener('submit',(e)=>{e.preventDefault();const cfg={ADMIN_EMAIL:form.admin.value.trim()||undefined,SERVICE_ID:form.sid.value.trim()||undefined,TEMPLATE_ID:form.tid.value.trim()||undefined,PUBLIC_KEY:form.pk.value.trim()||undefined};localStorage.setItem('asala_emailjs_cfg',JSON.stringify(cfg));alert('تم الحفظ. أعد تحميل الصفحات لتطبيق القيم.');});
+const form=document.getElementById('cfg');
+form.addEventListener('submit',e=>{e.preventDefault(); const obj={ADMIN_EMAIL:form.admin.value,SERVICE_ID:form.sid.value,TEMPLATE_ID:form.tid.value,PUBLIC_KEY:form.pk.value}; localStorage.setItem('asala_emailjs_cfg', JSON.stringify(obj)); alert('تم الحفظ محليًا');});
 </script>
 </body></html>

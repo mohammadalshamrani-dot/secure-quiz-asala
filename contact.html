@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -5,33 +6,36 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
   <div class="card">
-    <h2 class="section-title">التواصل مع الإدارة</h2>
-    <form id="mailtoForm" class="form-grid" onsubmit="sendContact(event)">
-      <label>الاسم</label><input required name="name" class="input" placeholder="اسمك الكامل">
-      <label>البريد الإلكتروني</label><input required type="email" name="email" class="input" placeholder="example@domain.com">
-      <label>النوع</label><select name="type" class="input"><option>شكوى</option><option>مشكلة</option><option>اقتراح</option></select>
-      <label>النص</label><textarea required name="message" rows="6" class="input" placeholder="اكتب رسالتك هنا"></textarea>
-      <button type="submit" class="btn btn-primary">إرسال</button>
+    <h2>التواصل مع الإدارة</h2>
+    <form id="f" class="form-grid">
+      <label>الاسم</label><input name="name" class="input" required>
+      <label>البريد الإلكتروني</label><input name="email" type="email" class="input" required>
+      <label>نوع الرسالة</label>
+      <select name="type" class="input">
+        <option>شكوى</option><option>مشكلة</option><option>اقتراح</option><option>طلب كلمة المرور</option>
+      </select>
+      <label>نص الرسالة</label><textarea name="message" rows="6" class="input" placeholder="اكتب تفاصيل الرسالة..."></textarea>
+      <button class="btn btn-primary">إرسال</button>
     </form>
+    <p class="note">سيتم حفظ الرسالة في لوحة تحكم الأدمن ضمن "الطلبات الواردة". سيحاول النظام أيضًا إرسال نسخة إلى بريد الإدارة إن كانت إعدادات البريد مفعَّلة.</p>
   </div>
 </main>
-<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
-<a class="admin-fab" href="admin.html">⚙️</a>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
-async function sendContact(e){
+document.getElementById('f').addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const f=document.getElementById('mailtoForm');
-  const data={name:f.name.value.trim(),email:f.email.value.trim(),type:f.type.value,message:f.message.value.trim()};
-  const subject=`[منصة الاختبارات] ${data.type} من ${data.name}`;
-  const body=`الاسم: ${data.name}\nالبريد: ${data.email}\nالنوع: ${data.type}\n\nالرسالة:\n${data.message}`;
-  saveComplaintLocally(data);
-  const r=await sendEmail(ADMIN_EMAIL, subject, body);
-  alert(r.ok ? 'تم الإرسال بنجاح.' : 'تعذر الإرسال، حاول لاحقًا.');
-  f.reset();
-}
+  const fd = new FormData(e.target);
+  const data = {name:fd.get('name').trim(), email:fd.get('email').trim(), type:fd.get('type'), message:fd.get('message').trim()};
+  addRequest({name:data.name, email:data.email, kind:data.type, message:data.message});
+  const subject = `[منصة الاختبارات] ${data.type} – ${data.name}`;
+  const body = `الاسم: ${data.name}\nالبريد: ${data.email}\nالنوع: ${data.type}\n\n${data.message}`;
+  const r = await sendEmail(ADMIN_EMAIL, subject, body);
+  alert('تم استلام رسالتك' + (r.ok?' وتم إرسال نسخة للإدارة.': ' (نسخة البريد غير مفعلة).'));
+  e.target.reset();
+});
 </script>
 </body></html>
