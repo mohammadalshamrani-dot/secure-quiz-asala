@@ -1,0 +1,19 @@
+
+<!-- ضع هذا القسم داخل صفحة عرض النتيجة في منصة Render حيث تتوفر متغيرات النتيجة -->
+<link rel="stylesheet" href="/static/style.css">
+<section class="card">
+  <div class="result-badge">نتيجة الاختبار</div>
+  <div class="result-grid">
+    <div class="kv"><b>اسم الاختبار</b><span>{{exam.title}}</span></div>
+    <div class="kv"><b>رقم/اسم الطالب</b><span>{{student.identifier}}</span></div>
+    <div class="kv"><b>الدرجة</b><span>{{result.score}} / {{exam.total}}</span></div>
+    <div class="kv"><b>التاريخ والوقت</b><span>{{result.timestamp}}</span></div>
+    <div class="kv"><b>رمز التحقّق</b>
+      <div style="display:flex; gap:8px; align-items:center">
+        <span style="font-family:ui-monospace; font-weight:800">{{result.verification_code}}</span>
+      </div>
+      <div class="small-muted">شارك هذا الرمز عند الحاجة للتحقّق من النتيجة.</div>
+    </div>
+  </div>
+  <div class="notice"><div><b>مهم:</b> يُرجى <u>أخذ صورة شاشة الآن</u> وإرسالها لمدرّس المقرر قبل إغلاق النافذة.</div></div>
+</section>

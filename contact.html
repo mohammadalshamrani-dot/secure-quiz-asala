@@ -2,80 +2,28 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>التواصل مع الإدارة – منصة الاختبارات القصيرة</title>
-  <link rel="stylesheet" href="./style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>التواصل مع الإدارة – منصة الاختبارات القصيرة</title>
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="brand">
-      <img class="logo" src="./assets/logo-alasala.png" alt="ALASALA">
-      <div class="title">كليات الأصالة – كلية القانون</div>
-    </div>
-    <nav class="nav">
-      <a class="navlink" href="./index.html">الصفحة الرئيسية</a>
-      <a class="navlink" href="./contact.html">التواصل مع الإدارة</a>
-    </nav>
-  </header>
-
-  <main class="wrapper">
-    <section class="hero-card center">
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="./alasala-logo.jpg" alt="شعار الأصالة">
+        <div class="title">كليات الأصالة – كلية القانون</div>
+      </div>
+      <nav>
+        <a href="./index.html">الصفحة الرئيسية</a>
+      </nav>
+    </header>
+    <section class="card">
       <h1>التواصل مع الإدارة</h1>
-      <p class="sub">يمكنك إرسال <b>شكوى</b> أو <b>اقتراح</b> أو <b>استفسار</b>. هذا النموذج يفتح برنامج البريد لديك ويُجهّز رسالة تلقائيًا.</p>
+      <p class="lead">يسعدنا استقبال استفساراتكم واقتراحاتكم بخصوص المنصّة.</p>
+      <a class="btn btn-primary" href="mailto:example@alasala.edu.sa?subject=منصة الاختبارات القصيرة – تواصل">إرسال بريد</a>
     </section>
-
-    <section class="form-card">
-      <div class="row">
-        <div class="grow"><label>الاسم</label><input id="name"></div>
-        <div class="grow"><label>البريد الإلكتروني</label><input id="email"></div>
-      </div>
-      <div class="row">
-        <div class="grow">
-          <label>نوع الرسالة</label>
-          <select id="type">
-            <option>اقتراح</option>
-            <option>شكوى</option>
-            <option>استفسار</option>
-          </select>
-        </div>
-        <div class="grow">
-          <label>الموضوع</label>
-          <input id="subject" placeholder="موضوع مختصر">
-        </div>
-      </div>
-      <div><label>الرسالة</label><textarea id="body" placeholder="اكتب رسالتك هنا..."></textarea></div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn btn-prim" onclick="sendMail()">إرسال</button>
-        <a class="btn btn-ghost" href="./index.html">العودة للصفحة الرئيسية</a>
-      </div>
-    </section>
-
-    <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-  </main>
-
-<script>
-  // غيّر بريد الإدارة هنا
-  const ADMIN_MAIL = "admin@example.com";
-
-  function sendMail(){
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const typ = document.getElementById('type').value;
-    const subject = document.getElementById('subject').value.trim() || 'مراسلة من منصة الاختبارات القصيرة';
-    const body = document.getElementById('body').value.trim();
-
-    const full = [
-      `الاسم: ${name || '—'}`,
-      `البريد: ${email || '—'}`,
-      `النوع: ${typ}`,
-      '',
-      body || ''
-    ].join('\n');
-
-    const link = `mailto:${ADMIN_MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(full)}`;
-    window.location.href = link;
-  }
-</script>
+    <footer>تم تطوير المنصّة بواسطة: محمد الشمراني – 2025</footer>
+  </div>
 </body>
 </html>
