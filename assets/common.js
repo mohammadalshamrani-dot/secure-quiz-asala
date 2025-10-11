@@ -12,7 +12,7 @@ function uid(){ return Math.random().toString(36).slice(2,10); }
 (function seed(){
   const users = loadJSON(UKEY, []);
   if(!users.length){
-    users.push({id:'admin', role:'admin', name:'مسؤول المنصة', email: ADMIN_EMAIL, password:'AaBbCc123', createdAt:new Date().toISOString()});
+    users.push({id:'admin', role:'admin', name:'مسؤول المنصة', email:'mohammad.alshamrani@alasala.edu.sa', password:'AaBbCc123', createdAt:new Date().toISOString()});
     users.push({id:'fac1', role:'faculty', name:'عضو هيئة تجريبي', email:'faculty.demo@alasala.edu.sa', dept:'القانون', createdAt:new Date().toISOString()});
     saveJSON(UKEY, users);
   }

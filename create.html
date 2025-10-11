@@ -6,14 +6,7 @@
 <link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <script defer src="assets/common.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-.builder{display:grid;gap:12px}
-.qcard{border:1px solid #eee;border-radius:12px;padding:12px;margin-top:8px;background:#fff}
-.qheader{display:flex;gap:8px;align-items:center;justify-content:space-between}
-small.mono{font-family:ui-monospace,monospace;color:#6b7280}
-.opt{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:8px}
-.rem{background:#fee2e2;border:1px solid #fecaca}
-</style>
+<style>.frame{height:900px;border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff}.grid{display:grid;gap:10px;grid-template-columns:1fr auto}</style>
 </head>
 <body>
 <header class="header">
@@ -23,139 +16,44 @@ small.mono{font-family:ui-monospace,monospace;color:#6b7280}
 </header>
 <main class="container">
   <div class="card">
-    <h2>إنشاء اختبار داخل المنصة</h2>
-    <form id="meta" class="builder">
-      <div class="form-grid">
-        <label>عنوان الاختبار</label>
-        <input name="title" class="input" required>
-        <label>وصف (اختياري)</label>
-        <textarea name="desc" rows="3" class="input"></textarea>
-      </div>
-      <div class="form-grid">
-        <label>الزمن لكل سؤال (بالثواني)</label>
-        <input name="perQ" type="number" class="input" value="60" min="5">
-        <label>عدد المحاولات المسموح بها</label>
-        <input name="attempts" type="number" class="input" value="1" min="1">
+    <h2>منصة إنشاء الاختبار</h2>
+    <p class="note">تُعرض أدناه المنصة الخارجية. بعد إنشاء الاختبار انسخ رابط الاختبار ثم خزّنه وولّد له باركود من الأدوات أسفل الإطار.</p>
+    <div class="frame"><iframe src="https://secure-quiz-asala-1.onrender.com" width="100%" height="100%" style="border:0"></iframe></div>
+  </div>
+  <div class="card">
+    <h3>حفظ بيانات الاختبار وتوليد الباركود</h3>
+    <form id="qf" class="form-grid">
+      <label>عنوان الاختبار</label>
+      <input name="title" class="input" required>
+      <label>رابط الاختبار (انسخه من المنصة بالأعلى)</label>
+      <div class="grid">
+        <input name="link" class="input" placeholder="https://...">
+        <button id="saveBtn" class="btn btn-primary" type="submit">حفظ</button>
       </div>
     </form>
-  </div>
-
-  <div class="card">
-    <div class="qheader">
-      <h3>الأسئلة</h3>
-      <div class="actions" style="justify-content:flex-start">
-        <button class="btn btn-ghost" id="addMCQ">إضافة اختيار من متعدد</button>
-        <button class="btn btn-ghost" id="addTF">إضافة صح/خطأ</button>
-        <button class="btn btn-ghost" id="addShort">إضافة سؤال قصير</button>
-      </div>
+    <div id="qrBox" style="margin-top:12px;display:none">
+      <h4>الباركود</h4>
+      <div id="qrcode"></div>
+      <p class="note">يمكنك حفظ الصورة وطباعتها.</p>
     </div>
-    <div id="qlist"></div>
-  </div>
-
-  <div class="card">
-    <h3>حفظ ومشاركة</h3>
-    <div class="form-grid">
-      <button id="save" class="btn btn-primary">حفظ الاختبار</button>
-      <div id="share" style="display:none">
-        <p>رابط الطلاب:</p>
-        <input id="link" class="input" readonly>
-        <div id="qrcode" style="margin-top:10px"></div>
-      </div>
-    </div>
-    <p class="note">بعد الحفظ يمكنك مشاركة الرابط مع الطلاب، وستُعرض النتائج التفصيلية في صفحة <a href="results.html">نتائج الطلاب</a>.</p>
   </div>
 </main>
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-
 <script>
 const uid = localStorage.getItem('asala_current_user'); if(!uid){ location.href='auth.html'; }
-const qlist = document.getElementById('qlist');
-let questions = []; let counter=1;
-
-function render(){
-  qlist.innerHTML = questions.map((q,i)=>{
-    return `<div class="qcard" data-id="${q.id}">
-      <div class="qheader"><div><b>س${i+1}:</b> <small class="mono">(${q.type})</small></div>
-      <button class="btn rem" data-action="del">حذف</button></div>
-      <div class="form-grid" style="margin-top:8px">
-        <label>نص السؤال</label><textarea class="input" data-field="text" rows="3">${q.text||''}</textarea>
-        ${q.type==='mcq'?`
-          <label>الخيارات</label>
-          <div>
-            ${q.options.map((opt,idx)=>`
-              <div class="opt">
-                <input class="input" data-field="opt" data-idx="${idx}" value="${opt}">
-                <button class="btn btn-ghost" data-action="rmopt" data-idx="${idx}">حذف</button>
-              </div>
-            `).join('')}
-            <button class="btn btn-ghost" data-action="addopt">إضافة خيار</button>
-          </div>
-          <label>الإجابة الصحيحة (اكتب النص المطابق لأحد الخيارات)</label>
-          <input class="input" data-field="answer" value="${q.answer||''}">
-        `: q.type==='tf'?`
-          <label>الإجابة الصحيحة</label>
-          <select class="input" data-field="answer">
-            <option ${q.answer==='صحيح'?'selected':''}>صحيح</option>
-            <option ${q.answer==='خطأ'?'selected':''}>خطأ</option>
-          </select>
-        `:`
-          <label>الإجابة الصحيحة</label>
-          <input class="input" data-field="answer" value="${q.answer||''}">
-        `}
-      </div>
-    </div>`;
-  }).join('') || '<p class="note">لا توجد أسئلة بعد.</p>';
-}
-
-function addQuestion(type){
-  const id='q'+(Date.now())+(counter++);
-  const q={id, type, text:'', answer:''};
-  if(type==='mcq') q.options=['خيار 1','خيار 2'];
-  questions.push(q); render();
-}
-
-qlist.addEventListener('click', (e)=>{
-  const card = e.target.closest('.qcard'); if(!card) return;
-  const id = card.getAttribute('data-id');
-  const q = questions.find(x=>x.id===id);
-  if(e.target.dataset.action==='del'){
-    questions = questions.filter(x=>x.id!==id); render();
-  }else if(e.target.dataset.action==='addopt'){
-    q.options.push('خيار جديد'); render();
-  }else if(e.target.dataset.action==='rmopt'){
-    const idx = +e.target.dataset.idx; q.options.splice(idx,1); render();
-  }
-});
-
-qlist.addEventListener('input', (e)=>{
-  const card = e.target.closest('.qcard'); if(!card) return;
-  const id = card.getAttribute('data-id');
-  const q = questions.find(x=>x.id===id);
-  const field = e.target.dataset.field;
-  if(field==='text') q.text = e.target.value;
-  else if(field==='answer') q.answer = e.target.value;
-  else if(field==='opt'){ const idx=+e.target.dataset.idx; q.options[idx]=e.target.value; }
-});
-
-document.getElementById('addMCQ').onclick=()=>addQuestion('mcq');
-document.getElementById('addTF').onclick=()=>addQuestion('tf');
-document.getElementById('addShort').onclick=()=>addQuestion('short');
-
-document.getElementById('save').onclick=(e)=>{
+const form = document.getElementById('qf'); const qrBox=document.getElementById('qrBox');
+form.addEventListener('submit',(e)=>{
   e.preventDefault();
-  const fd=new FormData(document.getElementById('meta'));
-  const title=fd.get('title').trim();
-  if(!title){ alert('أدخل عنوان الاختبار'); return; }
-  if(questions.length===0){ alert('أضف سؤالًا واحدًا على الأقل'); return; }
-  const perQ = Math.max(5, parseInt(fd.get('perQ')||60,10));
-  const attempts = Math.max(1, parseInt(fd.get('attempts')||1,10));
-  const quiz = { id:'q_'+Date.now(), owner:uid, title, desc:fd.get('desc').trim(), settings:{perQ, attempts}, questions, createdAt:new Date().toISOString() };
-  saveQuiz(quiz);
-  const link = location.origin + location.pathname.replace('create.html','take.html') + '?quiz='+encodeURIComponent(quiz.id);
-  const linkInput = document.getElementById('link'); linkInput.value = link;
-  document.getElementById('share').style.display='block';
-  const qr = document.getElementById('qrcode'); qr.innerHTML=''; new QRCode(qr, {text: link, width: 220, height: 220});
-  alert('تم حفظ الاختبار ورابط الطلاب جاهز.');
-};
+  const fd=new FormData(form);
+  const title=fd.get('title').trim(), link=fd.get('link').trim();
+  if(!/^https?:\/\//.test(link)){ alert('فضلاً أدخل رابطًا صحيحًا يبدأ بـ https://'); return; }
+  const q={id:'q_'+Date.now(), owner:uid, title, link, createdAt:new Date().toISOString()};
+  saveQuiz(q);
+  // Generate QR
+  qrBox.style.display='block';
+  document.getElementById('qrcode').innerHTML='';
+  new QRCode(document.getElementById('qrcode'), {text: link, width: 220, height: 220});
+  alert('تم حفظ بيانات الاختبار.');
+});
 </script>
 </body></html>

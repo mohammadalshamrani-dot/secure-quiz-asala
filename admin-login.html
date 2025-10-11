@@ -1,0 +1,35 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>تسجيل دخول الأدمن – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
+<body>
+<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
+<main class="container">
+  <div class="card" style="max-width:560px;margin:0 auto">
+    <h2>دخول الأدمن</h2>
+    <form id="af" class="form-grid">
+      <label>البريد الإلكتروني</label>
+      <input name="email" type="email" class="input" required value="mohammad.alshamrani@alasala.edu.sa">
+      <label>كلمة المرور</label>
+      <input name="password" type="password" class="input" required value="AaBbCc123">
+      <button class="btn btn-primary">دخول</button>
+    </form>
+  </div>
+</main>
+<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+<script>
+af.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const fd = new FormData(af);
+  const email = fd.get('email').trim();
+  const pass = fd.get('password');
+  const admin = getUserByEmail(email);
+  if(!admin || admin.role!=='admin' || admin.password!==pass){ alert('بيانات الدخول غير صحيحة'); return; }
+  localStorage.setItem('asala_admin_session','active');
+  location.href='admin.html';
+});
+</script>
+</body></html>

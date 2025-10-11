@@ -54,3 +54,13 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"
   box-shadow:0 6px 18px rgba(0,0,0,.06);
 }
 .btn-back-fixed:hover{ background:#f9fafb }
+
+
+/* === v5.3.2 title underline removal === */
+.title, .subtitle, .site-title, .brand, .brand * {
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.hero h1, .hero .lead { border: none !important; }
+.header { border-bottom: 1px solid #eee; } /* keep only header rule */

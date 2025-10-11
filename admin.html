@@ -21,6 +21,8 @@
 <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
 <script>
+if(localStorage.getItem('asala_admin_session')!=='active'){ location.href='admin-login.html'; }
+
 document.querySelectorAll('.tabs a').forEach(a=>a.onclick=(e)=>{e.preventDefault();document.querySelectorAll('.tabs a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelector(a.getAttribute('href')).classList.add('active');});
 function h(s){return (s||'').toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function t(rows,cols){ if(!rows.length)return '<p class="note">لا توجد بيانات بعد.</p>'; return '<table class="table"><thead><tr>'+cols.map(c=>`<th>${c[1]||c[0]}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>`<tr data-id="${r.id}">`+cols.map(c=>`<td>${h(r[c[0]])}</td>`).join('')+`</tr>`).join('')+'</tbody></table>'; }
