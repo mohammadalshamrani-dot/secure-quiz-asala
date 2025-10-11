@@ -49,18 +49,14 @@ async function ensureEmailJS(){
 async function sendEmail(to, subject, message){
   if(await ensureEmailJS()){
     try{
-      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: to,
-        subject: subject,
-        message: message
-      });
-      return {ok:true, via:"emailjs"};
-    }catch(e){ console.warn("EmailJS failed", e); }
+      const resp = await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: to, subject: subject, message: message });
+      return {ok:true, via:"emailjs", resp};
+    }catch(e){ console.warn("EmailJS failed", e); return {ok:false, via:"emailjs", error: e?.text || e?.message || String(e)}; }
   }
   try{
     window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
     return {ok:true, via:"mailto"};
-  }catch(e){ return {ok:false}; }
+  }catch(e){ return {ok:false, error: String(e)}; }
 }
 
 // Complaints local store
