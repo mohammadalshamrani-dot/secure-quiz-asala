@@ -1,27 +1,13 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>إنشاء اختبار – كليات الأصالة</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <script defer src="assets/common.js"></script>
-</head>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>إنشاء اختبار – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl">
-  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
-    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-    <div>
-      <div class="title">كليات الأصالة – كلية القانون</div>
-      <div class="subtitle">منصة الاختبارات القصيرة</div>
-    </div>
-  </a>
-</header>
-
+<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
-  <img src="assets/asala-logo.jpg" alt="الأصالة" class="logo-corner" />
-
+  <img src="assets/asala-logo.jpg" alt="الأصالة" class="logo-corner"/>
   <div class="card">
     <h2 class="section-title">إنشاء اختبار جديد</h2>
     <div class="iframe-box iframe-wrap">
@@ -30,56 +16,30 @@
     </div>
     <p class="note small center">بعد إنشاء الاختبار انسخ رابط الطلاب أدناه لتوليد الباركود.</p>
   </div>
-
   <div class="card" style="margin-top:14px">
     <h3 class="section-title">توليد الرابط والباركود للطلاب</h3>
     <div class="flex">
-      <input id="studentUrl" class="input" placeholder="ألصق هنا رابط الطلاب..." />
+      <input id="studentUrl" class="input" placeholder="ألصق هنا رابط الطلاب..."/>
       <button class="btn btn-primary" id="makeQR">توليد</button>
       <button class="btn btn-ghost" id="copyLink">نسخ الرابط</button>
       <a class="btn btn-ghost" id="openLink" target="_blank" rel="noopener">فتح الرابط</a>
     </div>
     <div id="qrBox" class="qr-wrap" style="display:none;margin-top:12px">
-      <img id="qrImg" alt="QR" />
+      <img id="qrImg" alt="QR"/>
       <a id="qrLink" target="_blank" rel="noopener">رابط الطلاب</a>
     </div>
   </div>
 </main>
-
-<footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
-  <div class="note">© جميع الحقوق محفوظة</div>
-</footer>
-
-<a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
+<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
+<a class="admin-fab" href="admin.html">⚙️</a>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-
 <script>
-if(localStorage.getItem('asala_session')!=='active') window.location.href='index.html';
-
-const urlInput = document.getElementById('studentUrl');
-const makeQR = () => {
-  const url = urlInput.value.trim();
-  if(!/^https?:\/\//.test(url)) { alert('الرجاء إدخال رابط صحيح يبدأ بـ http/https'); return; }
-  const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
-  document.getElementById('qrImg').src = qr;
-  document.getElementById('qrLink').href = url;
-  document.getElementById('qrLink').textContent = url;
-  document.getElementById('openLink').href = url;
-  document.getElementById('qrBox').style.display = 'flex';
-};
-
-document.getElementById('makeQR').onclick = makeQR;
-urlInput.addEventListener('input', ()=>{ if(/^https?:\/\//.test(urlInput.value.trim())) makeQR(); });
-document.getElementById('copyLink').onclick = async () => {
-  const url = urlInput.value.trim();
-  if(!url) return alert('لا يوجد رابط لنسخه');
-  try { await navigator.clipboard.writeText(url); alert('تم نسخ الرابط'); }
-  catch(e) { alert('تعذّر نسخ الرابط تلقائيًا؛ انسخه يدويًا من الحقل.'); }
-};
-const params = new URLSearchParams(window.location.search);
-const pre = params.get('studentUrl');
-if(pre) { urlInput.value = pre; makeQR(); }
+if(localStorage.getItem('asala_session')!=='active') location.href='index.html';
+const urlInput=document.getElementById('studentUrl');
+const makeQR=()=>{const url=urlInput.value.trim();if(!/^https?:\/\//.test(url)){alert('الرجاء إدخال رابط صحيح يبدأ بـ http/https');return;}const qr='https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(url);document.getElementById('qrImg').src=qr;document.getElementById('qrLink').href=url;document.getElementById('qrLink').textContent=url;document.getElementById('openLink').href=url;document.getElementById('qrBox').style.display='flex';};
+document.getElementById('makeQR').onclick=makeQR;
+urlInput.addEventListener('input',()=>{if(/^https?:\/\//.test(urlInput.value.trim())) makeQR();});
+document.getElementById('copyLink').onclick=async()=>{const url=urlInput.value.trim();if(!url) return alert('لا يوجد رابط لنسخه');try{await navigator.clipboard.writeText(url);alert('تم نسخ الرابط');}catch(e){alert('تعذّر نسخ الرابط تلقائيًا؛ انسخه يدويًا.');}};
+const params=new URLSearchParams(location.search);const pre=params.get('studentUrl');if(pre){urlInput.value=pre;makeQR();}
 </script>
-</body>
-</html>
+</body></html>

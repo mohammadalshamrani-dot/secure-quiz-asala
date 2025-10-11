@@ -1,58 +1,39 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>استعادة كلمة المرور – كليات الأصالة</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <script defer src="assets/common.js"></script>
-</head>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>استعادة كلمة المرور (OTP) – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl">
-  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
-    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-    <div>
-      <div class="title">كليات الأصالة – كلية القانون</div>
-      <div class="subtitle">منصة الاختبارات القصيرة</div>
-    </div>
-  </a>
-</header>
-
+<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
   <div class="card">
-    <h2 class="section-title">استعادة كلمة المرور</h2>
-    <form id="resetForm" class="form-grid">
-      <label>البريد الجامعي</label>
-      <input required type="email" name="email" class="input" placeholder="name@alasala.edu.sa">
-      <button type="submit" class="btn btn-primary">إرسال رابط الاستعادة</button>
+    <h2 class="section-title">استعادة كلمة المرور (رمز تحقق عبر البريد)</h2>
+    <div id="emailStatus" class="note" style="margin-bottom:10px"></div>
+    <form id="step1" class="form-grid">
+      <label>البريد الجامعي</label><input required type="email" name="email" class="input" placeholder="name@alasala.edu.sa">
+      <button type="submit" class="btn btn-primary">إرسال رمز التحقق</button>
     </form>
-    <p class="note">سيصلك رابط إعادة التعيين إلى بريدك (وعند توفّر خادم سيتم تفعيل التعيين تلقائيًا).</p>
+    <form id="step2" class="form-grid" style="display:none">
+      <label>أدخل رمز التحقق (6 أرقام)</label><input required name="otp" class="input" inputmode="numeric" pattern="\d{6}" maxlength="6" placeholder="______">
+      <button type="submit" class="btn btn-primary">تحقق</button>
+      <button type="button" class="btn btn-ghost" id="resend">إرسال رمز جديد</button>
+    </form>
+    <form id="step3" class="form-grid" style="display:none">
+      <label>كلمة المرور الجديدة</label><input required type="password" name="password" class="input" minlength="6">
+      <button type="submit" class="btn btn-primary">تعيين كلمة المرور</button>
+    </form>
+    <p class="note small">يتطلب إرسال رمز التحقق تفعيل إعدادات البريد (EmailJS). الرمز صالح 10 دقائق.</p>
   </div>
 </main>
-
-<footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
-  <div class="note">© جميع الحقوق محفوظة</div>
-</footer>
-
-<a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
+<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-
 <script>
-document.getElementById('resetForm').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const email = e.target.email.value.trim();
-  const token = Math.random().toString(36).slice(2);
-  const base = location.origin + location.pathname.replace(/[^\/]+$/, '');
-  const link = `${base}reset.html?email=${encodeURIComponent(email)}&token=${token}`;
-  await sendEmail(email, 'استعادة كلمة المرور – منصة الاختبارات', 'اضغط الرابط التالي لإعادة التعيين:\n'+link);
-  await sendEmail(ADMIN_EMAIL, 'طلب استعادة كلمة المرور', 'طُلب استعادة كلمة المرور للحساب:\n'+email);
-  try{
-    await fetch('/api/auth/request-reset', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email})});
-  }catch(e){}
-  alert('إن وُجد بريد صالح تم إرسال رسالة استعادة إليه.');
-});
+const OTP_KEY='asala_otp_records';function hashCode(c){let h=0;for(let i=0;i<c.length;i++){h=((h<<5)-h)+c.charCodeAt(i);h|=0;}return String(h);}function loadOTPs(){try{return JSON.parse(localStorage.getItem(OTP_KEY)||'[]');}catch(e){return []}}function saveOTPs(a){localStorage.setItem(OTP_KEY,JSON.stringify(a))}function upsertOTP(email,code,ttlMin=10){const a=loadOTPs();const now=Date.now();const exp=now+ttlMin*60*1000;const code_hash=hashCode(code);const rec={email,code_hash,exp,attempts:0,createdAt:new Date(now).toISOString()};const i=a.findIndex(r=>r.email===email);if(i>=0)a[i]=rec;else a.push(rec);saveOTPs(a)}function verifyOTP(email,code){const a=loadOTPs();const i=a.findIndex(r=>r.email===email);if(i<0)return{ok:false,err:'لا يوجد رمز مُرسل لهذا البريد.'};const r=a[i];const now=Date.now();if(now>r.exp)return{ok:false,err:'انتهت صلاحية الرمز. أرسل رمزًا جديدًا.'};if(r.attempts>=5)return{ok:false,err:'تم بلوغ الحد الأقصى للمحاولات.'};if(r.code_hash!==hashCode(code)){r.attempts++;saveOTPs(a);return{ok:false,err:`رمز غير صحيح. تبقى ${5-r.attempts} محاولات.`};}a.splice(i,1);saveOTPs(a);return{ok:true}}const s1=document.getElementById('step1'),s2=document.getElementById('step2'),s3=document.getElementById('step3');let currentEmail='';(function(){const s=getEmailConfigStatus();document.getElementById('emailStatus').textContent=s.ready?'سيتم إرسال رمز التحقق مباشرة إلى بريدك.':'لم تُضبط مفاتيح EmailJS بعد؛ لا يمكن إرسال الرمز.';})();function genCode(){return String(Math.floor(100000+Math.random()*900000));}async function sendOTP(email){const code=genCode();upsertOTP(email,code,10);const subject='رمز التحقق – منصة الاختبارات (10 دقائق)';const body='رمز التحقق الخاص بك هو: '+code+'\nصالح لمدة 10 دقائق.';const r=await sendEmail(email,subject,body);return r&&r.ok}s1.addEventListener('submit',async(e)=>{e.preventDefault();const email=e.target.email.value.trim();currentEmail=email;const ok=await sendOTP(email);if(!ok){alert('تعذر إرسال الرمز. تحقق من إعدادات البريد من لوحة الأدمن.');return;}alert('تم إرسال رمز التحقق إلى بريدك.');s1.style.display='none';s2.style.display='grid';});document.getElementById('resend').addEventListener('click',async()=>{if(!currentEmail)return;const ok=await sendOTP(currentEmail);alert(ok?'تم إرسال رمز جديد.':'تعذر إرسال الرمز.');});s2.addEventListener('submit',(e)=>{e.preventDefault();const code=e.target.otp.value.trim();const v=verifyOTP(currentEmail,code);if(!v.ok){alert(v.err);return;}s2.style.display='none';s3.style.display='grid';});s3.addEventListener('submit',async(e)=>{e.preventDefault();const password=e.target.password.value;try{const res=await fetch('/api/auth/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:currentEmail,password})});if(!res.ok) throw 0;alert('تم تعيين كلمة المرور بنجاح.');location.href='index.html';}catch(e){alert('تم التحقق وإدخال كلمة المرور الجديدة. لربطها فعليًا يلزم تفعيل /api/auth/reset بالخادم.');
+    if(currentEmail === (window.__asala_auth && window.__asala_auth.adminEmail)){
+      try { window.__asala_auth.setAdminPassword(password); } catch(e) {}
+    }
+    location.href='index.html';}});
+
 </script>
-</body>
-</html>
+</body></html>

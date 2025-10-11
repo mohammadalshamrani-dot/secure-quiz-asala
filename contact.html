@@ -1,65 +1,37 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>التواصل مع الإدارة – كليات الأصالة</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <script defer src="assets/common.js"></script>
-</head>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>التواصل مع الإدارة – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl">
-  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
-    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-    <div>
-      <div class="title">كليات الأصالة – كلية القانون</div>
-      <div class="subtitle">منصة الاختبارات القصيرة</div>
-    </div>
-  </a>
-</header>
-
+<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
   <div class="card">
     <h2 class="section-title">التواصل مع الإدارة</h2>
-    <p class="note">أرسل شكوى/مشكلة/اقتراح، وستصل إلى بريد الأدمن مباشرة.</p>
     <form id="mailtoForm" class="form-grid" onsubmit="sendContact(event)">
-      <label>الاسم</label>
-      <input required name="name" class="input" placeholder="اسمك الكامل">
-      <label>البريد الإلكتروني</label>
-      <input required type="email" name="email" class="input" placeholder="example@domain.com">
-      <label>النوع</label>
-      <select name="type" class="input">
-        <option>شكوى</option><option>مشكلة</option><option>اقتراح</option>
-      </select>
-      <label>النص</label>
-      <textarea required name="message" rows="6" class="input" placeholder="اكتب رسالتك هنا"></textarea>
+      <label>الاسم</label><input required name="name" class="input" placeholder="اسمك الكامل">
+      <label>البريد الإلكتروني</label><input required type="email" name="email" class="input" placeholder="example@domain.com">
+      <label>النوع</label><select name="type" class="input"><option>شكوى</option><option>مشكلة</option><option>اقتراح</option></select>
+      <label>النص</label><textarea required name="message" rows="6" class="input" placeholder="اكتب رسالتك هنا"></textarea>
       <button type="submit" class="btn btn-primary">إرسال</button>
     </form>
   </div>
 </main>
-
-<footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
-  <div class="note">© جميع الحقوق محفوظة</div>
-</footer>
-
-<a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
+<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
+<a class="admin-fab" href="admin.html">⚙️</a>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-
 <script>
 async function sendContact(e){
   e.preventDefault();
-  const f = document.getElementById('mailtoForm');
-  const data = {name:f.name.value.trim(), email:f.email.value.trim(), type:f.type.value, message:f.message.value.trim()};
-  const subject = `[منصة الاختبارات] ${data.type} من ${data.name}`;
-  const body = `الاسم: ${data.name}\nالبريد: ${data.email}\nالنوع: ${data.type}\n\nالرسالة:\n${data.message}`;
+  const f=document.getElementById('mailtoForm');
+  const data={name:f.name.value.trim(),email:f.email.value.trim(),type:f.type.value,message:f.message.value.trim()};
+  const subject=`[منصة الاختبارات] ${data.type} من ${data.name}`;
+  const body=`الاسم: ${data.name}\nالبريد: ${data.email}\nالنوع: ${data.type}\n\nالرسالة:\n${data.message}`;
   saveComplaintLocally(data);
-  const r = await sendEmail(ADMIN_EMAIL, subject, body);
-  if(r.ok) alert('تم الإرسال بنجاح. شكرًا لتواصلك.');
-  else alert('تعذر الإرسال، حاول لاحقًا.');
+  const r=await sendEmail(ADMIN_EMAIL, subject, body);
+  alert(r.ok ? 'تم الإرسال بنجاح.' : 'تعذر الإرسال، حاول لاحقًا.');
   f.reset();
 }
 </script>
-</body>
-</html>
+</body></html>

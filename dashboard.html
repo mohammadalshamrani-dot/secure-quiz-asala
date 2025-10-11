@@ -1,28 +1,14 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>لوحة التحكم – كليات الأصالة</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <script defer src="assets/common.js"></script>
-</head>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>لوحة التحكم – كليات الأصالة</title>
+<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script defer src="assets/common.js"></script></head>
 <body>
-<header class="header" dir="rtl">
-  <a href="index.html" class="brand" aria-label="العودة للصفحة الرئيسية">
-    <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-    <div>
-      <div class="title">كليات الأصالة – كلية القانون</div>
-      <div class="subtitle">منصة الاختبارات القصيرة</div>
-    </div>
-  </a>
-</header>
-
+<header class="header" dir="rtl"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
 <main class="container">
   <div class="card">
     <h2 class="section-title">لوحة التحكم</h2>
-    <p class="note">اختر أحد الخيارات التالية:</p>
     <div class="actions">
       <a class="btn btn-primary" href="create.html">إنشاء اختبار</a>
       <a class="btn btn-primary" href="results.html">نتائج الطلاب</a>
@@ -31,17 +17,8 @@
     </div>
   </div>
 </main>
-
-<footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
-  <div class="note">© جميع الحقوق محفوظة</div>
-</footer>
-
-<a class="admin-fab" href="admin.html" title="لوحة تحكم الأدمن">⚙️</a>
+<footer class="footer" dir="rtl"><div class="credit">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div><div class="note">© جميع الحقوق محفوظة</div></footer>
+<a class="admin-fab" href="admin.html">⚙️</a>
 <button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
-
-<script>
-if(localStorage.getItem('asala_session')!=='active') window.location.href='index.html';
-</script>
-</body>
-</html>
+<script>if(localStorage.getItem('asala_session')!=='active') location.href='index.html';</script>
+</body></html>
