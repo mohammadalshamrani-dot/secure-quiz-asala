@@ -1,0 +1,152 @@
+/* ====== الإعدادات العامة ====== */
+:root{
+  --brand-gold:#c8ad6a;   /* الذهبي الرسمي */
+  --brand-maroon:#a10f2b; /* العنّابي */
+  --ink:#222; 
+  --muted:#666;
+  --bg:#f6f7f9;
+  --card:#ffffff;
+  --border:#e6e7eb;
+  --shadow:0 8px 22px rgba(0,0,0,.06), 0 2px 6px rgba(0,0,0,.04);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  direction: rtl;
+  margin:0;
+  font-family:"Noto Kufi Arabic", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.65;
+}
+
+/* ====== الروابط والأزرار ====== */
+a{color:var(--ink); text-decoration:none}
+a:hover{color:var(--brand-maroon)}
+button{
+  cursor:pointer;
+  border:1px solid var(--border);
+  background:#fff;
+  padding:.55rem .9rem;
+  border-radius:12px;
+  font-weight:600;
+  transition:transform .06s ease, box-shadow .2s ease, border-color .2s ease;
+}
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+  border-color:#d8dae0;
+}
+
+/* ====== الهيدر (مطابق للنسخة السابقة مع ظل وخلفية) ====== */
+.main-header{
+  position:sticky; top:0; z-index:20;
+  background:linear-gradient(180deg,#fff 0%, #fff 65%, rgba(255,255,255,.96) 100%);
+  box-shadow:var(--shadow);
+}
+.header-content{
+  max-width:1180px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px; padding:14px 18px;
+}
+.logo-section{display:flex; flex-direction:column; align-items:flex-start; gap:4px}
+.asal-logo{
+  height:56px; width:auto; object-fit:contain; display:block;
+  user-select:none; -webkit-user-drag:none;
+}
+.platform-subtitle{
+  margin:0; margin-top:2px;
+  font-size:.95rem; font-weight:700; letter-spacing:.2px;
+  color:var(--brand-maroon);
+  border-right:4px solid var(--brand-gold);
+  padding-right:10px;
+}
+
+/* تنقّل */
+nav{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+nav a{
+  padding:8px 12px; border-radius:10px; font-weight:600; color:var(--muted);
+  border:1px solid transparent;
+}
+nav a:hover{color:var(--ink); background:#fff; border-color:var(--border)}
+nav a.active{color:#fff; background:var(--brand-maroon); border-color:var(--brand-maroon)}
+
+/* ====== الحاوية الرئيسية ====== */
+.results-container{
+  max-width:1180px; margin:26px auto; padding:0 18px;
+}
+.results-container h2{
+  margin:0 0 16px 0; font-size:1.35rem; font-weight:800; color:var(--ink);
+}
+
+/* ====== بطاقات/جداول النتائج ====== */
+.quiz-list{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
+}
+
+/* جدول عام */
+.results-table, .details-table{
+  width:100%; border-collapse:separate; border-spacing:0;
+  font-size:.95rem;
+}
+.results-table thead th, .details-table thead th{
+  background:#fafbfc; color:#333; text-align:right;
+  padding:14px 12px; border-bottom:1px solid var(--border);
+  white-space:nowrap; font-weight:800;
+}
+.results-table tbody td, .details-table tbody td{
+  padding:13px 12px; border-bottom:1px solid var(--border); vertical-align:middle;
+}
+.results-table tbody tr:nth-child(even),
+.details-table tbody tr:nth-child(even){background:#fcfcfd}
+.results-table tbody tr:hover,
+.details-table tbody tr:hover{background:#f9fafb}
+
+/* خلية الباركود */
+.qr-code{display:inline-block; width:80px; height:80px}
+
+/* ====== النافذة المنبثقة للتفاصيل ====== */
+.modal{
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.35);
+  backdrop-filter:saturate(1.1) blur(1.5px); z-index:40;
+}
+.modal-content{
+  background:#fff; width:min(100%, 980px); margin:6vh auto; padding:20px 18px;
+  border-radius:16px; box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.modal-content h3{
+  margin:0 0 12px 0; font-size:1.15rem; font-weight:800; color:var(--brand-maroon);
+}
+.close{
+  float:left; font-size:26px; line-height:1; cursor:pointer; color:#999; padding:2px 6px;
+}
+.close:hover{color:#000}
+
+/* ====== عناصر مساعدة ====== */
+.table-actions{display:flex; align-items:center; gap:8px}
+.badge{
+  display:inline-block; padding:.2rem .5rem; border-radius:999px; font-size:.8rem; font-weight:700;
+  border:1px solid var(--border); background:#fff; color:var(--muted);
+}
+.badge.success{color:#0a8f4a; border-color:#bfe8d0; background:#f1fbf5}
+.badge.fail{color:#b10e2b; border-color:#f3c7cf; background:#fff5f7}
+
+/* ====== استجابة الشاشات الصغيرة ====== */
+@media (max-width: 720px){
+  .asal-logo{height:48px}
+  .header-content{gap:14px; padding:12px 12px}
+  nav{gap:8px}
+  nav a{padding:7px 10px; font-size:.9rem}
+  .modal-content{margin:5vh 10px; padding:16px 12px}
+  .results-table, .details-table{font-size:.9rem}
+}
+
+/* طباعة (لو احتجت تصدير PDF من المتصفح) */
+@media print{
+  .main-header, .modal{display:none !important}
+  body{background:#fff}
+  .results-container{margin:0; padding:0}
+  .quiz-list{box-shadow:none; border:none}
+}
