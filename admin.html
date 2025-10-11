@@ -1,80 +1,107 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>لوحة التحكم – منصة الاختبارات القصيرة</title>
-<link rel="stylesheet" href="./style.css">
-<script defer src="./site.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة التحكم</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./app.js"></script>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <img src="./alasala-logo.jpg" alt="شعار الأصالة">
-        <div class="title">كليات الأصالة – كلية القانون</div>
-      </div>
+  <header class="container">
+    <div class="header">
+      <img src="./assets/logo.svg" alt="شعار الأصالة">
       <nav>
-        <a href="./index.html">الرئيسية</a>
+        <a class="btn secondary" href="./help.html">التعليمات</a>
+        <a class="btn secondary" href="./contact.html">التواصل</a>
       </nav>
-    </header>
-
-    <section class="card" id="loginCard">
-      <h1>تسجيل دخول الأدمن</h1>
-      <form id="loginForm" class="form" style="max-width:420px">
-        <input class="input" name="username" placeholder="اسم المستخدم" value="admin" required>
-        <input class="input" name="password" type="password" placeholder="كلمة المرور" required>
-        <button class="btn btn-primary" type="submit">دخول</button>
-        <div class="small-muted">افتراضيًا: admin / AaBbCc123</div>
-        <div id="loginErr" class="notice" style="display:none">بيانات الدخول غير صحيحة.</div>
-      </form>
-    </section>
-
-    <section class="card" id="panel" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <h1>لوحة التحكم</h1>
-        <div>
-          <button class="btn btn-ghost" id="logoutBtn">تسجيل الخروج</button>
-        </div>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card" id="login">
+      <h3>تسجيل الدخول</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label class="label">اسم المستخدم</label><input class="input" id="u" value="admin"></div>
+        <div><label class="label">كلمة المرور</label><input class="input" id="p" type="password" value="AaBbCc123"></div>
       </div>
-
-      <div class="tabbar">
-        <button class="active" data-tab="inbox">الوارد</button>
-        <button data-tab="compose">الرد على رسالة</button>
-        <button data-tab="password">تغيير كلمة المرور</button>
+      <div style="margin-top:10px">
+        <button class="btn" id="go">دخول</button>
+        <span id="ls" class="small"></span>
       </div>
+    </div>
 
-      <div id="tab-inbox">
-        <table class="table">
-          <thead><tr>
-            <th>التاريخ</th><th>الحالة</th><th>المرسل</th><th>الفئة</th><th>الموضوع</th>
-          </tr></thead>
-          <tbody id="rows"></tbody>
+    <div id="panel" style="display:none">
+      <div class="card">
+        <h3>الوارد من نموذج التواصل</h3>
+        <table class="table" id="inbox">
+          <thead><tr><th>المرسل</th><th>الفئة</th><th>الصفة</th><th>الحالة</th><th>إجراء</th></tr></thead>
+          <tbody></tbody>
         </table>
       </div>
 
-      <div id="tab-compose" style="display:none">
-        <form id="replyForm" class="form" style="max-width:700px">
-          <select class="input" name="ticketId" id="ticketSelect"></select>
-          <textarea name="reply" rows="6" placeholder="اكتب ردك..." class="input" required></textarea>
-          <button class="btn btn-primary" type="submit">إرسال الرد</button>
-          <div id="replyOk" class="notice" style="display:none">تم إرسال الرد وحفظه.</div>
-        </form>
+      <div class="card">
+        <h3>الرد على رسالة</h3>
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px">
+          <div><label class="label">رقم الرسالة</label><input class="input" id="rid"></div>
+          <div><label class="label">نص الرد</label><textarea class="input" id="rtext" rows="4"></textarea></div>
+        </div>
+        <div style="margin-top:10px"><button class="btn" id="send">إرسال الرد</button> <span id="rs" class="small"></span></div>
       </div>
 
-      <div id="tab-password" style="display:none">
-        <form id="passForm" class="form" style="max-width:420px">
-          <input class="input" name="old" type="password" placeholder="كلمة المرور الحالية" required>
-          <input class="input" name="new" type="password" placeholder="كلمة المرور الجديدة" required>
-          <button class="btn btn-primary" type="submit">تحديث</button>
-          <div id="passOk" class="notice" style="display:none">تم تحديث كلمة المرور.</div>
-          <div id="passErr" class="notice" style="display:none">كلمة المرور الحالية غير صحيحة.</div>
-        </form>
+      <div class="card">
+        <h3>تغيير كلمة المرور للأدمن</h3>
+        <div style="display:flex;gap:10px">
+          <input class="input" id="np" type="password" placeholder="كلمة مرور جديدة (6 أحرف على الأقل)">
+          <button class="btn" id="chg">تحديث</button>
+        </div>
+        <div class="small">الافتراضية: AaBbCc123</div>
       </div>
-    </section>
+    </div>
+  </main>
 
-    <footer>تم تطوير المنصّة بواسطة: د.محمد الشمراني – 2025</footer>
-  </div>
+  <script>
+    const go = document.getElementById('go');
+    const login = document.getElementById('login');
+    const panel = document.getElementById('panel');
+    const ls = document.getElementById('ls');
+
+    go.addEventListener('click', ()=>{
+      const u = document.getElementById('u').value.trim();
+      const p = document.getElementById('p').value;
+      if(adminLogin(u,p)){
+        login.style.display='none'; panel.style.display='block'; renderInbox();
+      }else{ ls.textContent='بيانات الدخول غير صحيحة'; }
+    });
+
+    function renderInbox(){
+      const tb = document.querySelector('#inbox tbody');
+      tb.innerHTML='';
+      for(const m of listInbox()){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${m.name}<div class="small">${m.email}</div></td>
+                        <td>${m.category}</td><td>${m.role}</td>
+                        <td>${m.status}</td>
+                        <td><button class="btn secondary" data-id="${m.id}">كمقروء</button></td>`;
+        tb.appendChild(tr);
+      }
+      tb.querySelectorAll('button').forEach(b=>{
+        b.addEventListener('click', ()=>{ setMessageStatus(b.dataset.id,'read'); renderInbox(); });
+      });
+    }
+
+    document.getElementById('send').addEventListener('click', ()=>{
+      const id = document.getElementById('rid').value.trim();
+      const txt = document.getElementById('rtext').value.trim();
+      const rs = document.getElementById('rs');
+      if(!id || !txt){ rs.textContent='أدخل رقم الرسالة والنص.'; return; }
+      addReply(id, txt); rs.textContent='✓ تم تسجيل الرد.'; renderInbox();
+    });
+
+    document.getElementById('chg').addEventListener('click', ()=>{
+      const np = document.getElementById('np').value;
+      if(np && np.length>=6){ adminChangePassword(np); alert('تم تحديث كلمة المرور.'); }
+      else alert('أدخل كلمة مرور لا تقل عن 6 أحرف.');
+    });
+  </script>
 </body>
 </html>
