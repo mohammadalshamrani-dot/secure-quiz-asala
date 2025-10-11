@@ -5,49 +5,62 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>منصة الاختبارات القصيرة – كلية القانون</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
-  <meta name="color-scheme" content="light only">
 </head>
 <body>
   <div class="wrapper">
-    <section class="header-card">
+    <div class="headerbar">
       <div class="brand">
-        <img src="https://raw.githubusercontent.com/mohammadalshamrani-dot/secure-quiz-asala-assets/main/al-asala-logo.png" alt="ALASALA" onerror="this.style.display='none'">
-        <div class="name">ALASALA</div>
-      </div>
-      <h1>منصة الاختبارات القصيرة – كلية القانون</h1>
-      <p class="sub">اختبارات آمنة، توقيت لكل سؤال، ومنع للغش، مع نتائج فورية ورسوم بيانية.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="./create-quiz-simple.html">دخول الأعضاء وإنشاء اختبار</a>
-        <a class="btn btn-ghost" href="./students.html">نتائج الطلاب</a>
-      </div>
-    </section>
-
-    <div class="columns">
-      <div class="card">
-        <h3 style="margin:4px 0 12px">لمحة سريعة</h3>
-        <p style="margin:0; color:#4b5b73">ابدأ فورًا: أنشئ الاختبار داخل الصفحة، انسخ رابط الطلاب، ثم الصقه لنولّد رابطًا داخليًا ثابتًا وباركود جاهز للمشاركة.</p>
-        <p class="notice">للنتائج المباشرة، تأكد من تفعيل الباك‑إند في Render على <code>/webhooks/quiz-result</code> و <code>/api/results</code>.</p>
-      </div>
-
-      <div class="card">
-        <h3 style="margin:4px 0 12px">مميزات المنصة</h3>
-        <ul class="features">
-          <li><span class="dot"></span><div>توقيت لكل سؤال وإمكانية منع الرجوع</div></li>
-          <li><span class="dot"></span><div>إغلاق الاختبار عند ترك الصفحة (اختياري)</div></li>
-          <li><span class="dot"></span><div>عشوائية ترتيب الأسئلة والخيارات</div></li>
-          <li><span class="dot"></span><div>نتائج فورية ورسوم بيانية</div></li>
-          <li><span class="dot"></span><div>توليد باركود لمشاركة رابط الاختبار</div></li>
-        </ul>
+        <img class="logo" src="./logo-alasala.png" alt="ALASALA">
+        <div class="school">كليات الأصالة – كلية القانون</div>
       </div>
     </div>
 
-    <footer class="footer">
-      تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025
-    </footer>
+    <section class="hero">
+      <h1 class="title">منصة الاختبارات القصيرة</h1>
+      <p class="sub">بدون تسجيل دخول — اختبارات بسيطة بنتائج فورية قابلة للالتقاط كصورة شاشة وإرسالها لعضو هيئة التدريس.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="./result.html">إنهاء اختبار / توليد النتيجة (التقاط صورة)</a>
+        <a class="btn btn-ghost" href="#fast">تعليمات سريعة</a>
+      </div>
+    </section>
+
+    <div class="columns" id="fast">
+      <div class="card">
+        <h3 style="margin:4px 0 12px; color:var(--accent)">تعليمات سريعة</h3>
+        <ol style="margin-top:0; padding-right:18px; color:#4b5563; line-height:1.9">
+          <li>يؤدي الطالب الاختبار بأي وسيلة.</li>
+          <li>بعد الانتهاء، يفتح صفحة <b>إنهاء اختبار / توليد النتيجة</b> ويعبّئ بياناته والدرجة.</li>
+          <li>تُنشأ بطاقة نتيجة تحتوي على ختم الوقت، متصفح الجهاز، ورمز تحقق، و(اختياريًا) باركود لرابط التحقق.</li>
+          <li>يضغط <b>التقاط صورة</b> ويحفظ الصورة ويرسلها لعضو هيئة التدريس.</li>
+        </ol>
+        <p class="notice">لا حاجة لتسجيل الدخول أو إنشاء صفحات للأعضاء.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:4px 0 12px; color:var(--accent)">مميزات</h3>
+        <div class="pills">
+          <div class="pill">
+            <h4>توقيت لكل سؤال</h4>
+            <div class="muted">زمن مضبوط ومنع الرجوع (اختياري في منصة الاختبار)</div>
+          </div>
+          <div class="pill">
+            <h4>قفل عند مغادرة الصفحة</h4>
+            <div class="muted">منع الغش (اختياري)</div>
+          </div>
+          <div class="pill">
+            <h4>تقارير فورية</h4>
+            <div class="muted">نتيجة فورية مع ختم وقت ورمز تحقق</div>
+          </div>
+          <div class="pill">
+            <h4>باركود للمشاركة</h4>
+            <div class="muted">إن توفر رابط تحقق رسمي</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</div>
   </div>
 </body>
 </html>
