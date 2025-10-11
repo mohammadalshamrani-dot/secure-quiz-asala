@@ -1,39 +1,53 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تعليمات سريعة – كليات الأصالة</title>
-  <link rel="stylesheet" href="css/style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>التعليمات السريعة – أعضاء هيئة التدريس</title>
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<header class="header" dir="rtl">
-  <img src="assets/asala-logo.jpg" alt="شعار كليات الأصالة" class="logo" />
-  <div class="brand">
-    <div class="title">كليات الأصالة – كلية القانون</div>
-    <div class="subtitle">منصة الاختبارات القصيرة</div>
-  </div>
-</header>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="./alasala-logo.jpg" alt="شعار الأصالة">
+        <div class="title">كليات الأصالة – كلية القانون</div>
+      </div>
+      <nav>
+        <a href="./index.html">الرئيسية</a>
+        <a href="./admin.html">لوحة التحكم</a>
+      </nav>
+    </header>
 
-  <main class="container">
-    <div class="card">
-      <h2 class="section-title">تعليمات سريعة</h2>
+    <section class="card prose">
+      <span class="badge">التعليمات السريعة – لأعضاء هيئة التدريس</span>
+      <h2>طريقة إنشاء الاختبار</h2>
       <ol>
-        <li>من الصفحة الرئيسية اضغط <b>دخول أعضاء هيئة التدريس</b> ➜ سيتم تفعيل جلسة دخول خفيفة.</li>
-        <li>اختر من لوحة التحكم: <b>إنشاء اختبار</b> أو <b>نتائج الطلاب</b>.</li>
-        <li>بعد إنشاء الاختبار في النظام القديم، انسخ <b>رابط الطلاب</b> ثم الصقه في خانة الرابط داخل صفحة الإنشاء لتوليد <b>الباركود</b>.</li>
-        <li>استخدم أزرار <b>نسخ الرابط</b> أو <b>فتح الرابط</b> للمشاركة السريعة.</li>
+        <li>من الصفحة الرئيسية اضغط <b>إنشاء اختبار قصير</b> لفتح المنصّة.</li>
+        <li>أدخل عنوان الاختبار، وقت كل سؤال، ونوع الأسئلة (اختياري/صح-خطأ/نصي).</li>
+        <li>انسخ رابط الاختبار الناتج وشاركه مع الطلاب.</li>
       </ol>
-      <p class="note">في حال احتجنا حماية أقوى يمكن ربط الجلسة بباك-إند لاحقًا (JWT/Session).</p>
-    </div>
-  </main>
-  
-<footer class="footer" dir="rtl">
-  <div class="credit">تم تطوير المنصة بواسطة د. محمد الشمراني</div>
-  <div class="note">© جميع الحقوق محفوظة</div>
-</footer>
+      <h2>آلية أداء الطالب</h2>
+      <ul>
+        <li>لا يحتاج تسجيل دخول.</li>
+        <li>الخروج من الصفحة أثناء الاختبار قد يُلغي المحاولة (حسب إعدادك).</li>
+        <li>بعد الإنهاء تظهر النتيجة فورًا مع <b>رمز تحقّق</b> وتاريخ/وقت.</li>
+      </ul>
+      <h2>إثبات المحاولة</h2>
+      <ul>
+        <li>يُطلب من الطالب <b>التقاط صورة شاشة للنتيجة</b> وإرسالها لعضو هيئة التدريس قبل الإغلاق.</li>
+        <li>يمكن التحقق من الصورة بمطابقة <b>رمز التحقّق</b> مع سجل المنصة.</li>
+      </ul>
+      <h2>أفضل الممارسات</h2>
+      <ul>
+        <li>حدّد زمنًا مناسبًا لكل سؤال.</li>
+        <li>فعّل الأسئلة العشوائية إن وُجدت لتقليل التشابه بين المحاولات.</li>
+        <li>استخدم الاختبارات القصيرة للتحفيز المستمر وليس التقييم النهائي.</li>
+      </ul>
+    </section>
 
+    <footer>تم تطوير المنصّة بواسطة: د.محمد الشمراني – 2025</footer>
+  </div>
 </body>
 </html>

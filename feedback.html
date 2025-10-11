@@ -1,0 +1,55 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تواصل مع الإدارة – ملاحظات واقتراحات</title>
+<link rel="stylesheet" href="./style.css">
+<script defer src="./site.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="./alasala-logo.jpg" alt="شعار الأصالة">
+        <div class="title">كليات الأصالة – كلية القانون</div>
+      </div>
+      <nav>
+        <a href="./index.html">الرئيسية</a>
+        <a href="./admin.html">لوحة التحكم</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <h1>تواصل مع الإدارة</h1>
+      <p class="lead">أرسل ملاحظاتك أو اقتراحاتك أو الشكاوى – وستصل مباشرة إلى لوحة تحكم الأدمن.</p>
+
+      <form id="feedbackForm" class="form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <input class="input" name="name" placeholder="الاسم" required>
+          <select class="input" name="role">
+            <option value="طالب">طالب</option>
+            <option value="عضو هيئة تدريس">عضو هيئة تدريس</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+        <input class="input" name="email" type="email" placeholder="البريد (اختياري)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <select class="input" name="category">
+            <option value="ملاحظة">ملاحظة</option>
+            <option value="اقتراح">اقتراح</option>
+            <option value="شكوى">شكوى</option>
+          </select>
+          <input class="input" name="subject" placeholder="الموضوع" required>
+        </div>
+        <textarea class="" name="message" rows="6" placeholder="اكتب رسالتك هنا" required></textarea>
+        <button class="btn btn-primary" type="submit">إرسال</button>
+        <div id="success" class="notice" style="display:none">تم الإرسال بنجاح. شكراً لك!</div>
+      </form>
+    </section>
+
+    <footer>تم تطوير المنصّة بواسطة: د.محمد الشمراني – 2025</footer>
+  </div>
+</body>
+</html>
