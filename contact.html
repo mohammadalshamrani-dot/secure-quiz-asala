@@ -1,36 +1,81 @@
 
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>التواصل مع الإدارة – كليات الأصالة</title>
-<link rel="stylesheet" href="css/style.css"/><link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-<script defer src="assets/common.js"></script></head>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>التواصل مع الإدارة – منصة الاختبارات القصيرة</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
 <body>
-<header class="header"><a href="index.html" class="brand"><img src="assets/asala-logo.jpg" class="logo"><div><div class="title">كليات الأصالة – كلية القانون</div><div class="subtitle">منصة الاختبارات القصيرة</div></div></a></header>
-<main class="container">
-  <div class="card" style="max-width:820px;margin:0 auto">
-    <h2>التواصل مع الإدارة</h2>
-    <form id="f" class="form-grid">
-      <label>الاسم</label><input name="name" class="input" required>
-      <label>البريد الإلكتروني</label><input name="email" type="email" class="input" required>
-      <label>نوع الرسالة</label>
-      <select name="type" class="input">
-        <option>شكوى</option><option>مشكلة</option><option>اقتراح</option><option>طلب كلمة المرور</option>
-      </select>
-      <label>نص الرسالة</label><textarea name="message" rows="6" class="input" placeholder="اكتب تفاصيل الرسالة..."></textarea>
-      <button class="btn btn-primary">إرسال</button>
-    </form>
-    <p class="note">سيتم حفظ الرسالة داخليًا لتظهر في لوحة الأدمن ضمن "الطلبات الواردة".</p>
-  </div>
-</main>
-<footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
-<button class="btn-back-bottom" onclick="goBack()">↩︎ رجوع</button>
+  <header class="header">
+    <div class="brand">
+      <img class="logo" src="./assets/logo-alasala.png" alt="ALASALA">
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav class="nav">
+      <a class="navlink" href="./index.html">الصفحة الرئيسية</a>
+      <a class="navlink" href="./contact.html">التواصل مع الإدارة</a>
+    </nav>
+  </header>
+
+  <main class="wrapper">
+    <section class="hero-card center">
+      <h1>التواصل مع الإدارة</h1>
+      <p class="sub">يمكنك إرسال <b>شكوى</b> أو <b>اقتراح</b> أو <b>استفسار</b>. هذا النموذج يفتح برنامج البريد لديك ويُجهّز رسالة تلقائيًا.</p>
+    </section>
+
+    <section class="form-card">
+      <div class="row">
+        <div class="grow"><label>الاسم</label><input id="name"></div>
+        <div class="grow"><label>البريد الإلكتروني</label><input id="email"></div>
+      </div>
+      <div class="row">
+        <div class="grow">
+          <label>نوع الرسالة</label>
+          <select id="type">
+            <option>اقتراح</option>
+            <option>شكوى</option>
+            <option>استفسار</option>
+          </select>
+        </div>
+        <div class="grow">
+          <label>الموضوع</label>
+          <input id="subject" placeholder="موضوع مختصر">
+        </div>
+      </div>
+      <div><label>الرسالة</label><textarea id="body" placeholder="اكتب رسالتك هنا..."></textarea></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn btn-prim" onclick="sendMail()">إرسال</button>
+        <a class="btn btn-ghost" href="./index.html">العودة للصفحة الرئيسية</a>
+      </div>
+    </section>
+
+    <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025</footer>
+  </main>
+
 <script>
-f.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const fd=new FormData(f); const data={name:fd.get('name').trim(),email:fd.get('email').trim(),kind:fd.get('type'),message:fd.get('message').trim()};
-  addRequest(data); alert('تم استلام رسالتك، وسيتم الرد عبر الإدارة.');
-  f.reset();
-});
+  // غيّر بريد الإدارة هنا
+  const ADMIN_MAIL = "admin@example.com";
+
+  function sendMail(){
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const typ = document.getElementById('type').value;
+    const subject = document.getElementById('subject').value.trim() || 'مراسلة من منصة الاختبارات القصيرة';
+    const body = document.getElementById('body').value.trim();
+
+    const full = [
+      `الاسم: ${name || '—'}`,
+      `البريد: ${email || '—'}`,
+      `النوع: ${typ}`,
+      '',
+      body || ''
+    ].join('\n');
+
+    const link = `mailto:${ADMIN_MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(full)}`;
+    window.location.href = link;
+  }
 </script>
-</body></html>
+</body>
+</html>
