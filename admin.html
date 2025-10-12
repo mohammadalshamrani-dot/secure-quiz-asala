@@ -1,109 +1,60 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>لوحة التحكم</title>
-  <link rel="stylesheet" href="./style.css">
-  <script defer src="./app.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة التحكم</title>
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header class="container">
-    <div class="header">
-      <img src="./assets/logo.svg" alt="شعار الأصالة">
-      <nav>
-        <a class="btn secondary" href="./help.html">التعليمات</a>
-        <a class="btn secondary" href="./contact.html">التواصل</a>
-      </nav>
+<header class="container">
+  <div class="header">
+    <img src="./logo.svg" alt="شعار الأصالة" style="height:44px">
+    <nav style="margin-inline-start:auto;display:flex;gap:12px">
+      <a class="btn" href="./index.html">الصفحة الرئيسية</a>
+    </nav>
+  </div>
+</header>
+<main class="container">
+  <div class="card" id="loginCard">
+    <h2>تسجيل الدخول</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><label class="label">اسم المستخدم</label><input class="input" id="u" value="admin"></div>
+      <div><label class="label">كلمة المرور</label><input class="input" id="p" type="password" value="AaBbCc123"></div>
     </div>
-  </header>
-  <main class="container">
-    <div class="card" id="login">
-      <h3>تسجيل الدخول</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div><label class="label">اسم المستخدم</label><input class="input" id="u" value="admin"></div>
-        <div><label class="label">كلمة المرور</label><input class="input" id="p" type="password" value="AaBbCc123"></div>
-      </div>
-      <div style="margin-top:10px">
-        <button class="btn" id="go">دخول</button>
-        <span id="ls" class="small"></span>
-      </div>
+    <div style="margin-top:10px"><button class="btn" id="loginBtn">دخول</button><span id="loginStatus" class="small"></span></div>
+  </div>
+  <div id="panel" style="display:none">
+    <div class="card">
+      <h2>الوارد من نموذج التواصل</h2>
+      <table class="table" style="width:100%" id="inboxTable">
+        <thead><tr><th>المرسل</th><th>الفئة</th><th>الصفة</th><th>الحالة</th><th>إجراء</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
-
-    <div id="panel" style="display:none">
-      <div class="card">
-        <h3>الوارد من نموذج التواصل</h3>
-        <table class="table" id="inbox">
-          <thead><tr><th>المرسل</th><th>الفئة</th><th>الصفة</th><th>الحالة</th><th>إجراء</th></tr></thead>
-          <tbody></tbody>
-        </table>
+    <div class="card">
+      <h2>الرد على رسالة</h2>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px">
+        <div><label class="label">رقم الرسالة</label><input class="input" id="rid"></div>
+        <div><label class="label">نص الرد</label><textarea class="input" id="rtext" rows="4"></textarea></div>
       </div>
-
-      <div class="card">
-        <h3>الرد على رسالة</h3>
-        <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px">
-          <div><label class="label">رقم الرسالة</label><input class="input" id="rid"></div>
-          <div><label class="label">نص الرد</label><textarea class="input" id="rtext" rows="4"></textarea></div>
-        </div>
-        <div style="margin-top:10px"><button class="btn" id="send">إرسال الرد</button> <span id="rs" class="small"></span></div>
-      </div>
-
-      <div class="card">
-        <h3>تغيير كلمة المرور للأدمن</h3>
-        <div style="display:flex;gap:10px">
-          <input class="input" id="np" type="password" placeholder="كلمة مرور جديدة (6 أحرف على الأقل)">
-          <button class="btn" id="chg">تحديث</button>
-        </div>
-        <div class="small">الافتراضية: AaBbCc123</div>
-      </div>
+      <div style="margin-top:10px"><button class="btn" id="sendReply">إرسال الرد</button><span id="replyStatus" class="small"></span></div>
     </div>
-  </main>
-
-  <footer class="footer">&copy; 2025 منصّة الاختبارات – كلية الحقوق (الأصالة)</footer>
-
-  <script>
-    const go = document.getElementById('go');
-    const login = document.getElementById('login');
-    const panel = document.getElementById('panel');
-    const ls = document.getElementById('ls');
-
-    go.addEventListener('click', ()=>{
-      const u = document.getElementById('u').value.trim();
-      const p = document.getElementById('p').value;
-      if(adminLogin(u,p)){
-        login.style.display='none'; panel.style.display='block'; renderInbox();
-      }else{ ls.textContent='بيانات الدخول غير صحيحة'; }
-    });
-
-    function renderInbox(){
-      const tb = document.querySelector('#inbox tbody');
-      tb.innerHTML='';
-      for(const m of listInbox()){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${m.name}<div class="small">${m.email}</div></td>
-                        <td>${m.category}</td><td>${m.role}</td>
-                        <td>${m.status}</td>
-                        <td><button class="btn secondary" data-id="${m.id}">كمقروء</button></td>`;
-        tb.appendChild(tr);
-      }
-      tb.querySelectorAll('button').forEach(b=>{
-        b.addEventListener('click', ()=>{ setMessageStatus(b.dataset.id,'read'); renderInbox(); });
-      });
-    }
-
-    document.getElementById('send').addEventListener('click', ()=>{
-      const id = document.getElementById('rid').value.trim();
-      const txt = document.getElementById('rtext').value.trim();
-      const rs = document.getElementById('rs');
-      if(!id || !txt){ rs.textContent='أدخل رقم الرسالة والنص.'; return; }
-      addReply(id, txt); rs.textContent='✓ تم تسجيل الرد.'; renderInbox();
-    });
-
-    document.getElementById('chg').addEventListener('click', ()=>{
-      const np = document.getElementById('np').value;
-      if(np && np.length>=6){ adminChangePassword(np); alert('تم تحديث كلمة المرور.'); }
-      else alert('أدخل كلمة مرور لا تقل عن 6 أحرف.');
-    });
-  </script>
-</body>
-</html>
+    <div class="card">
+      <h2>إعدادات الأدمن</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input class="input" id="newPass" type="password" placeholder="كلمة مرور جديدة (6 أحرف على الأقل)" style="max-width:320px">
+        <button class="btn" id="changePass">تحديث كلمة المرور</button>
+      </div>
+      <div class="small" style="margin-top:6px">الافتراضية: <code>AaBbCc123</code></div>
+    </div>
+  </div>
+</main>
+<script src="./app.js"></script>
+<script>
+const loginBtn=document.getElementById('loginBtn'),loginCard=document.getElementById('loginCard'),panel=document.getElementById('panel'),loginStatus=document.getElementById('loginStatus');
+loginBtn.addEventListener('click',()=>{const u=document.getElementById('u').value.trim();const p=document.getElementById('p').value;if(adminLogin(u,p)){loginCard.style.display='none';panel.style.display='block';renderInbox();}else{loginStatus.textContent='بيانات الدخول غير صحيحة';}});
+function renderInbox(){const tb=document.querySelector('#inboxTable tbody');tb.innerHTML='';for(const m of listInbox()){const tr=document.createElement('tr');tr.innerHTML=`<td>${m.name}<div class='small'>${m.email}</div></td><td>${m.category}</td><td>${m.role}</td><td>${m.status}</td><td><button class='btn secondary' data-id='${m.id}'>كمقروء</button></td>`;tb.appendChild(tr);}tb.querySelectorAll('button').forEach(b=>{b.addEventListener('click',()=>{setMessageStatus(b.dataset.id,'read');renderInbox();});});}
+document.getElementById('sendReply').addEventListener('click',()=>{const id=document.getElementById('rid').value.trim();const txt=document.getElementById('rtext').value.trim();const rs=document.getElementById('replyStatus');if(!id||!txt){rs.textContent='أدخل رقم الرسالة ونص الرد.';return;}addReply(id,txt);rs.textContent='✓ تم تسجيل الرد.';renderInbox();});
+document.getElementById('changePass').addEventListener('click',()=>{const np=document.getElementById('newPass').value;if(np&&np.length>=6){adminChangePassword(np);alert('تم تحديث كلمة المرور.');}else alert('أدخل كلمة مرور لا تقل عن 6 أحرف.');});
+</script>
+</body></html>
