@@ -3,40 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>التعليمات السريعة</title>
-  <link rel="stylesheet" href="./style.css">
+  <title>التعليمات السريعة — منصة الاختبارات القصيرة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
 </head>
-<body>
-  <header class="container">
-    <div class="header">
-      <img src="./assets/logo.svg" alt="شعار الأصالة">
-      <nav>
-        <a class="btn secondary" href="./contact.html">التواصل مع الإدارة</a>
-        <a class="btn" href="./admin.html">لوحة التحكم</a>
-      </nav>
+<body class="sq-page">
+  <div class="sq-container">
+    <div class="sq-topbar">
+      <div><a href="./index.html">العودة للواجهة</a></div>
+      <div class="sq-badge">التعليمات السريعة</div>
     </div>
-  </header>
-  <main class="container">
-    <div class="card">
-      <h3>تعليمات لأعضاء هيئة التدريس</h3>
-      <ol>
-        <li>أنشئ الاختبار في منصّة الإنشاء المعتمدة لديك ثم شارك الرابط مع الطلاب (أو أنشئ QR).</li>
-        <li>حدّد عدد المحاولات المناسبة للمقرر.</li>
-        <li>تابع الملاحظات والاقتراحات عبر لوحة التحكم.</li>
-        <li>وجّه الطلاب عند ظهور النتيجة إلى تصوير الشاشة وإرسالها قبل إغلاق الصفحة.</li>
-      </ol>
+
+    <div class="sq-card">
+      <h1 class="sq-title">دليل سريع لأعضاء هيئة التدريس والطلاب</h1>
+      <p class="sq-subtitle">هذه الصفحة تشرح طريقة استخدام المنصة بشكل مختصر.</p>
+      <div class="sq-grid sq-grid-2">
+        <div>
+          <h3>لأعضاء هيئة التدريس</h3>
+          <ol>
+            <li>من <b>إنشاء اختبار</b> يتم تحويلك لمنصة إعداد الاختبار.</li>
+            <li>اختر: مدة السؤال، ترتيب عشوائي للإجابات، ومحاولة واحدة فقط عند الحاجة.</li>
+            <li>انسخ <b>رابط الاختبار</b> وشاركه مع الطلاب، ويمكن توليد <b>باركود</b>.</li>
+            <li>تابع النتائج من قسم <b>نتائج الطلاب</b> مع الرسوم البيانية التفصيلية.</li>
+            <li>للاقتراحات والملاحظات: استخدم <a href="./contact.html">التواصل مع الإدارة</a>.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>للطلاب</h3>
+          <ol>
+            <li>ادخل على رابط الاختبار من الأستاذ.</li>
+            <li>اقرأ التعليمات جيدًا. قد تكون الإجابات <b>عشوائية الترتيب</b>.</li>
+            <li>الخروج من الصفحة قد يُنهي الاختبار مباشرة.</li>
+            <li>عند ظهور النتيجة: <b>التقط صورة للشاشة</b> وارسِلها لأستاذ المقرر قبل إغلاق النافذة.</li>
+            <li>لأي مشكلة تقنية: استخدم <a href="./contact.html">التواصل مع الإدارة</a>.</li>
+          </ol>
+        </div>
+      </div>
     </div>
-    <div class="card">
-      <h3>تعليمات للطلاب</h3>
-      <ul>
-        <li>ادخل عبر الرابط المرسل من المدرّس، واتّبع التعليمات الظاهرة على الشاشة.</li>
-        <li>التزم بالوقت المحدد لكل سؤال ولا تعُد تحميل الصفحة أثناء الاختبار.</li>
-        <li>قد تُحتسب محاولة عند الخروج من الصفحة بناءً على إعدادات المقرر.</li>
-        <li>بعد ظهور النتيجة: صوّر الشاشة وأرسلها للمدرّس مباشرة.</li>
-      </ul>
-      <div class="notice"><strong>معلومة:</strong> ترتيب الإجابات يكون عشوائيًا لكل طالب (هذا طبيعي).</div>
-    </div>
-  </main>
-  <footer class="footer">&copy; 2025 منصّة الاختبارات – كلية الحقوق (الأصالة)</footer>
+  </div>
 </body>
 </html>

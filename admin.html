@@ -1,60 +1,163 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>لوحة التحكم</title>
-<link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة التحكم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
 </head>
-<body>
-<header class="container">
-  <div class="header">
-    <img src="./logo.svg" alt="شعار الأصالة" style="height:44px">
-    <nav style="margin-inline-start:auto;display:flex;gap:12px">
-      <a class="btn" href="./index.html">الصفحة الرئيسية</a>
-    </nav>
-  </div>
-</header>
-<main class="container">
-  <div class="card" id="loginCard">
-    <h2>تسجيل الدخول</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div><label class="label">اسم المستخدم</label><input class="input" id="u" value="admin"></div>
-      <div><label class="label">كلمة المرور</label><input class="input" id="p" type="password" value="AaBbCc123"></div>
-    </div>
-    <div style="margin-top:10px"><button class="btn" id="loginBtn">دخول</button><span id="loginStatus" class="small"></span></div>
-  </div>
-  <div id="panel" style="display:none">
-    <div class="card">
-      <h2>الوارد من نموذج التواصل</h2>
-      <table class="table" style="width:100%" id="inboxTable">
-        <thead><tr><th>المرسل</th><th>الفئة</th><th>الصفة</th><th>الحالة</th><th>إجراء</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h2>الرد على رسالة</h2>
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px">
-        <div><label class="label">رقم الرسالة</label><input class="input" id="rid"></div>
-        <div><label class="label">نص الرد</label><textarea class="input" id="rtext" rows="4"></textarea></div>
+<body class="sq-page">
+  <div class="sq-container">
+    <div class="sq-topbar">
+      <div class="sq-inline">
+        <a href="./index.html">العودة للواجهة</a>
+        <span class="sq-badge">لوحة التحكم</span>
       </div>
-      <div style="margin-top:10px"><button class="btn" id="sendReply">إرسال الرد</button><span id="replyStatus" class="small"></span></div>
-    </div>
-    <div class="card">
-      <h2>إعدادات الأدمن</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <input class="input" id="newPass" type="password" placeholder="كلمة مرور جديدة (6 أحرف على الأقل)" style="max-width:320px">
-        <button class="btn" id="changePass">تحديث كلمة المرور</button>
+      <div class="sq-inline">
+        <span id="loginStatus" class="sq-muted"></span>
       </div>
-      <div class="small" style="margin-top:6px">الافتراضية: <code>AaBbCc123</code></div>
+    </div>
+
+    <div id="loginCard" class="sq-card">
+      <h1 class="sq-title">تسجيل الدخول</h1>
+      <p class="sq-subtitle">اسم المستخدم: <b>admin</b> — كلمة المرور الافتراضية: <b>AaBbCc123</b></p>
+      <form id="loginForm" class="sq-grid sq-grid-2">
+        <div>
+          <label>اسم المستخدم</label>
+          <input class="sq-input" name="username" required value="admin">
+        </div>
+        <div>
+          <label>كلمة المرور</label>
+          <input class="sq-input" name="password" required type="password">
+        </div>
+        <div class="sq-inline">
+          <button class="sq-btn sq-btn-primary" type="submit">دخول</button>
+          <span id="loginMsg" class="sq-muted"></span>
+        </div>
+      </form>
+    </div>
+
+    <div id="panel" class="sq-card" style="display:none">
+      <div class="sq-grid">
+        <div class="sq-inline">
+          <h2 class="sq-title" style="margin:0">البريد الوارد من نموذج التواصل</h2>
+          <span class="sq-badge" id="countBadge">0</span>
+        </div>
+
+        <div class="sq-grid sq-grid-2">
+          <div>
+            <h3>تغيير كلمة المرور</h3>
+            <form id="pwForm" class="sq-grid">
+              <input class="sq-input" name="oldpass" placeholder="كلمة المرور الحالية" type="password" required>
+              <input class="sq-input" name="newpass" placeholder="كلمة المرور الجديدة" type="password" required>
+              <button class="sq-btn" type="submit">تحديث كلمة المرور</button>
+              <span id="pwMsg" class="sq-muted"></span>
+            </form>
+          </div>
+          <div class="sq-muted">
+            <p>يمكنك استعراض الرسائل، وضع حالة (جديد/قيد المعالجة/مغلق)، وإضافة رد داخلي.</p>
+          </div>
+        </div>
+
+        <div style="overflow:auto">
+          <table class="sq-table" id="msgTable">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>المرسل</th>
+                <th>الموضوع</th>
+                <th>التفاصيل</th>
+                <th>الحالة / الرد</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="sq-footer">
+      للتذكير: هذه نسخة ثابتة. يتم الحفظ محليًا في المتصفح باستخدام localStorage. للنشر المؤسسي مع بريد حقيقي يُفضّل ربط Backend (مثل Google Forms/Webhook أو خادم بريد).
     </div>
   </div>
-</main>
-<script src="./app.js"></script>
-<script>
-const loginBtn=document.getElementById('loginBtn'),loginCard=document.getElementById('loginCard'),panel=document.getElementById('panel'),loginStatus=document.getElementById('loginStatus');
-loginBtn.addEventListener('click',()=>{const u=document.getElementById('u').value.trim();const p=document.getElementById('p').value;if(adminLogin(u,p)){loginCard.style.display='none';panel.style.display='block';renderInbox();}else{loginStatus.textContent='بيانات الدخول غير صحيحة';}});
-function renderInbox(){const tb=document.querySelector('#inboxTable tbody');tb.innerHTML='';for(const m of listInbox()){const tr=document.createElement('tr');tr.innerHTML=`<td>${m.name}<div class='small'>${m.email}</div></td><td>${m.category}</td><td>${m.role}</td><td>${m.status}</td><td><button class='btn secondary' data-id='${m.id}'>كمقروء</button></td>`;tb.appendChild(tr);}tb.querySelectorAll('button').forEach(b=>{b.addEventListener('click',()=>{setMessageStatus(b.dataset.id,'read');renderInbox();});});}
-document.getElementById('sendReply').addEventListener('click',()=>{const id=document.getElementById('rid').value.trim();const txt=document.getElementById('rtext').value.trim();const rs=document.getElementById('replyStatus');if(!id||!txt){rs.textContent='أدخل رقم الرسالة ونص الرد.';return;}addReply(id,txt);rs.textContent='✓ تم تسجيل الرد.';renderInbox();});
-document.getElementById('changePass').addEventListener('click',()=>{const np=document.getElementById('newPass').value;if(np&&np.length>=6){adminChangePassword(np);alert('تم تحديث كلمة المرور.');}else alert('أدخل كلمة مرور لا تقل عن 6 أحرف.');});
-</script>
-</body></html>
+
+  <script src="./assets/storage.js"></script>
+  <script>
+    SQStore.ensureAdmin();
+    const loginCard = document.getElementById('loginCard');
+    const panel = document.getElementById('panel');
+    const loginMsg = document.getElementById('loginMsg');
+    const loginStatus = document.getElementById('loginStatus');
+    const countBadge = document.getElementById('countBadge');
+    const tbody = document.querySelector('#msgTable tbody');
+
+    function render(){
+      const arr = SQStore.getMessages();
+      countBadge.textContent = arr.length;
+      tbody.innerHTML = '';
+      for (const m of arr) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="white-space:nowrap">${new Date(m.createdAt).toLocaleString('ar-SA')}</td>
+          <td><div><b>${m.name||'-'}</b> <span class="sq-badge">${m.role||''}</span></div><div class="sq-muted">${m.email||''}</div></td>
+          <td>${m.subject||'-'}</td>
+          <td>${(m.body||'').replace(/\n/g,'<br>')}</td>
+          <td>
+            <div class="sq-grid">
+              <select class="sq-select statusSel">
+                <option ${m.status==='new'?'selected':''}>new</option>
+                <option ${m.status==='in_progress'?'selected':''} value="in_progress">in_progress</option>
+                <option ${m.status==='closed'?'selected':''} value="closed">closed</option>
+              </select>
+              <textarea class="sq-textarea replyBox" placeholder="رد داخلي...">${m.reply||''}</textarea>
+            </div>
+          </td>
+          <td class="sq-row-actions">
+            <button class="sq-btn saveBtn">حفظ</button>
+            <button class="sq-btn" style="background:#2b3a62" onclick="location.href='mailto:'+${JSON.stringify(m.email)}+'?subject='+encodeURIComponent('Re: '+(m.subject||''))">رد عبر البريد</button>
+            <button class="sq-btn" style="background:#5a2730" data-del="1">حذف</button>
+          </td>
+        `;
+        // Wire actions
+        tr.querySelector('.saveBtn').addEventListener('click', ()=>{
+          const status = tr.querySelector('.statusSel').value;
+          const reply  = tr.querySelector('.replyBox').value;
+          SQStore.updateMessage(m.id, { status, reply });
+        });
+        tr.querySelector('[data-del="1"]').addEventListener('click', ()=>{
+          if (confirm('تأكيد حذف الرسالة؟')) { SQStore.deleteMessage(m.id); render(); }
+        });
+        tbody.appendChild(tr);
+      }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.currentTarget);
+      const ok = await SQStore.login(fd.get('username'), fd.get('password'));
+      if (ok) {
+        loginCard.style.display = 'none';
+        panel.style.display = '';
+        loginStatus.textContent = '✅ تم تسجيل الدخول';
+        render();
+      } else {
+        loginMsg.textContent = '❌ بيانات الدخول غير صحيحة';
+        setTimeout(()=> loginMsg.textContent = '', 3000);
+      }
+    });
+
+    document.getElementById('pwForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.currentTarget);
+      const ok = await SQStore.changePassword(fd.get('oldpass'), fd.get('newpass'));
+      const msg = document.getElementById('pwMsg');
+      if (ok) { msg.textContent = '✅ تم تحديث كلمة المرور'; e.currentTarget.reset(); }
+      else { msg.textContent = '❌ كلمة المرور الحالية غير صحيحة'; }
+      setTimeout(()=> msg.textContent = '', 3000);
+    });
+  </script>
+</body>
+</html>

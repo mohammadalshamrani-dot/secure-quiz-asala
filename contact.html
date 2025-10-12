@@ -1,47 +1,82 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>التواصل مع الإدارة</title>
-<link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>التواصل مع الإدارة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
 </head>
-<body>
-<header class="container">
-  <div class="header">
-    <img src="./logo.svg" alt="شعار الأصالة" style="height:44px">
-    <nav style="margin-inline-start:auto;display:flex;gap:12px">
-      <a class="btn" href="./index.html">الصفحة الرئيسية</a>
-    </nav>
+<body class="sq-page">
+  <div class="sq-container">
+    <div class="sq-topbar">
+      <div><a href="./index.html" class="sq-inline">العودة للواجهة</a></div>
+      <div class="sq-badge">التواصل مع الإدارة</div>
+    </div>
+
+    <div class="sq-card">
+      <h1 class="sq-title">نموذج إرسال ملاحظة / اقتراح / شكوى</h1>
+      <p class="sq-subtitle sq-muted">
+        يُرسل هذا النموذج مباشرة إلى لوحة التحكم (محلية على جهازك ضمن الموقع التجريبي). لن يتم إرسال أي بريد حقيقي بحكم أن الموقع يعمل من صفحات ثابتة.
+      </p>
+
+      <form id="contactForm" class="sq-grid">
+        <div class="sq-grid sq-grid-2">
+          <div>
+            <label>الاسم</label>
+            <input type="text" class="sq-input" name="name" required>
+          </div>
+          <div>
+            <label>الصفة</label>
+            <select class="sq-select" name="role" required>
+              <option value="">اختر</option>
+              <option>طالب/ـة</option>
+              <option>عضو/ة هيئة تدريس</option>
+              <option>إداري/ـة</option>
+              <option>أخرى</option>
+            </select>
+          </div>
+        </div>
+        <div class="sq-grid sq-grid-2">
+          <div>
+            <label>البريد الإلكتروني</label>
+            <input type="email" class="sq-input" name="email" required>
+          </div>
+          <div>
+            <label>الموضوع</label>
+            <input type="text" class="sq-input" name="subject" required>
+          </div>
+        </div>
+        <div>
+          <label>التفاصيل</label>
+          <textarea class="sq-textarea" name="body" placeholder="اكتب رسالتك هنا..." required></textarea>
+        </div>
+        <div class="sq-inline">
+          <button class="sq-btn sq-btn-primary" type="submit">إرسال</button>
+          <span id="status" class="sq-muted"></span>
+        </div>
+      </form>
+
+      <div class="sq-footer">
+        ملاحظة: لحماية الخصوصية على النسخة العامة (GitHub Pages)، يتم حفظ الرسائل محليًا في المتصفح فقط (localStorage). يمكن للإدارة الاطلاع عليها من <a href="./admin.html">لوحة التحكم</a>.
+      </div>
+    </div>
   </div>
-</header>
-<main class="container">
-  <div class="card">
-    <form id="contactForm">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div><label class="label">الاسم</label><input class="input" name="name" required></div>
-        <div><label class="label">البريد الإلكتروني</label><input class="input" type="email" name="email" required></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-        <div><label class="label">الفئة</label><select class="input" name="category"><option>اقتراح</option><option>شكوى</option><option>استفسار</option></select></div>
-        <div><label class="label">الصفة</label><select class="input" name="role"><option>طالب/ـة</option><option>عضو هيئة تدريس</option><option>إداري</option></select></div>
-      </div>
-      <div style="margin-top:12px"><label class="label">الرسالة</label><textarea class="input" name="message" rows="6" minlength="5" required></textarea></div>
-      <div style="margin-top:14px;display:flex;gap:10px">
-        <button class="btn" type="submit">إرسال</button>
-        <button class="btn secondary" type="reset">مسح</button>
-      </div>
-      <p id="status" class="small" style="margin-top:8px"></p>
-    </form>
-  </div>
-</main>
-<script src="./app.js"></script>
-<script>
-const form=document.getElementById('contactForm'),s=document.getElementById('status');
-form.addEventListener('submit',e=>{
- e.preventDefault();
- const fd=new FormData(form);
- const id=submitContact({name:fd.get('name'),email:fd.get('email'),category:fd.get('category'),role:fd.get('role'),message:fd.get('message')});
- s.textContent='✓ تم الإرسال. رقم المتابعة: '+id.slice(0,8);form.reset();
-});
-</script>
-</body></html>
+
+  <script src="./assets/storage.js"></script>
+  <script>
+    SQStore.ensureAdmin();
+    const f = document.getElementById('contactForm');
+    const st = document.getElementById('status');
+    f.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(f).entries());
+      SQStore.addMessage(data);
+      f.reset();
+      st.textContent = '✅ تم الإرسال بنجاح — ستظهر رسالتك في لوحة التحكم.';
+      setTimeout(()=> st.textContent = '', 4000);
+    });
+  </script>
+</body>
+</html>
