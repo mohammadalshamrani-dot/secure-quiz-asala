@@ -36,12 +36,11 @@
       <div id="ok" class="success" style="display:none">تم إنشاء الحساب. يمكنك الآن تسجيل الدخول.</div>
     </div>
   </main>
-  
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
   <script>
     function reg(){
       const u=ru.value.trim(), e=re.value.trim(), p=rp.value;
+      if(u==='admin'){ alert('لا يمكن استخدام اسم المستخدم هذا'); return; }
       const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
       if(users.some(x=>x.username===u)){ alert('اسم المستخدم مستخدم مسبقًا'); return; }
       users.push({username:u, email:e, pass:p});

@@ -34,16 +34,14 @@
         <a class="btn outline" href="contact.html?why=forgot">نسيت كلمة المرور</a>
       </div>
       <div id="msg" class="warning" style="display:none"></div>
+      <div class="notice">دخول الإدارة يتم فقط عبر زر <b>الإدارة</b> في الهيدر.</div>
     </div>
   </main>
-  
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
   <script>
-    const ADMIN={user:'admin', pass:'AaBbCc123'};
     function login(){
       const u=document.getElementById('u').value.trim(), p=document.getElementById('p').value;
-      if(u===ADMIN.user && p===ADMIN.pass){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'admin'})); location.href='profile.html'; return; }
+      if(u==='admin'){ msg.style.display='block'; msg.innerText='دخول الإدارة يتم فقط من صفحة الإدارة.'; return; }
       const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
       const hit=users.find(x=>x.username===u && x.pass===p);
       if(hit){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'})); location.href='profile.html'; }

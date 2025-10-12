@@ -39,9 +39,7 @@
     <div id="quizBox" style="display:none"></div>
     <div id="resultBox" style="display:none" class="card"></div>
   </main>
-  
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
   <script>
     const params=new URLSearchParams(location.search); const id=params.get('id');
     const quizzes=JSON.parse(localStorage.getItem('quizzes')||'[]'); const quiz=quizzes.find(q=>q.id===id);

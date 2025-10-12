@@ -44,12 +44,10 @@
       </div>
     </div>
   </main>
-  
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
   <script>
     const me=JSON.parse(localStorage.getItem('currentUser')||'null'); if(!me) location.href='login.html';
-    who.innerText='مرحبًا، '+me.username+(me.role==='admin'?' (إدمن)':'');
+    who.innerText='مرحبًا، '+me.username;
     function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
   </script>
 </body></html>

@@ -25,7 +25,17 @@
 
   <main class="container">
     <h2>لوحة الإدارة</h2>
-    <div id="guard" class="warning" style="display:none">هذه الصفحة للإدمن فقط. يرجى تسجيل الدخول بحساب الإدمن.</div>
+    <div id="gate" class="card" style="display:none">
+      <h3>تسجيل دخول الإدارة</h3>
+      <label>اسم المستخدم</label><input id="au" placeholder="admin">
+      <label>كلمة المرور</label><input id="ap" type="password" placeholder="••••••••">
+      <div class="actions">
+        <button class="btn" onclick="adminLogin()">دخول</button>
+        <a class="btn outline" href="index.html">الرئيسية</a>
+      </div>
+      <div id="amsg" class="warning" style="display:none"></div>
+    </div>
+
     <div id="content" style="display:none">
       <div class="card">
         <h3>الوارد من نموذج التواصل</h3>
@@ -33,22 +43,34 @@
       </div>
     </div>
   </main>
-  
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
   <script>
+    const ADMIN={user:'admin', pass:'AaBbCc123'};
     const me = JSON.parse(localStorage.getItem('currentUser')||'null');
-    if(!me || me.role!=='admin'){ document.getElementById('guard').style.display='block'; }
-    else {
-      document.getElementById('content').style.display='block';
+    function renderInbox(){
       const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
       const wrap = document.getElementById('inboxWrap');
-      if(inbox.length===0) wrap.innerHTML='<div class="notice">لا توجد رسائل</div>';
-      else {
-        let html='<table class="table"><tr><th>التاريخ</th><th>المرسل</th><th>الموضوع</th><th>الرسالة</th></tr>';
-        inbox.forEach(m=>{ html += `<tr><td>${new Date(m.ts).toLocaleString('ar-SA')}</td><td>${m.name}<br>${m.email}</td><td>${m.subject}</td><td style="text-align:right">${m.body}</td></tr>`; });
-        html+='</table>'; wrap.innerHTML=html;
+      if(inbox.length===0){ wrap.innerHTML='<div class="notice">لا توجد رسائل</div>'; return; }
+      let html='<table class="table"><tr><th>التاريخ</th><th>المرسل</th><th>الموضوع</th><th>الرسالة</th></tr>';
+      inbox.forEach(m=>{ html += `<tr><td>${new Date(m.ts).toLocaleString('ar-SA')}</td><td>${m.name}<br>${m.email}</td><td>${m.subject}</td><td style="text-align:right">${m.body}</td></tr>`; });
+      html+='</table>'; wrap.innerHTML=html;
+    }
+    function adminLogin(){
+      if(au.value.trim()===ADMIN.user && ap.value===ADMIN.pass){
+        localStorage.setItem('currentUser', JSON.stringify({username:'admin', role:'admin'}));
+        document.getElementById('gate').style.display='none';
+        document.getElementById('content').style.display='block';
+        renderInbox();
+      }else{
+        amsg.style.display='block'; amsg.innerText='بيانات الدخول غير صحيحة';
       }
+    }
+    // Gate logic: only allow admin from here
+    if(!me || me.role!=='admin'){
+      document.getElementById('gate').style.display='block';
+    } else {
+      document.getElementById('content').style.display='block';
+      renderInbox();
     }
   </script>
 </body></html>

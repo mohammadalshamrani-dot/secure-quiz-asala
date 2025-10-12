@@ -42,6 +42,7 @@
       <div class="card">
         <div class="actions">
           <button class="btn" onclick="saveQuiz()">حفظ وتوليد رابط الطالب</button>
+          <button class="btn outline" id="copyBtn" style="display:none" onclick="copyLink()">نسخ الرابط</button>
           <a class="btn outline" href="profile.html">عودة للملف الشخصي</a>
         </div>
         <div id="linkBox" class="success" style="display:none"></div>
@@ -57,22 +58,15 @@
       </div>
     </div>
   </main>
-  
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
   <script>
     const me=JSON.parse(localStorage.getItem('currentUser')||'null');
     if(!me) location.href='login.html'; else{ document.getElementById('wrap').style.display='block'; }
 
-    let items=[];
-    function addMCQ(){
-      items.push({type:'mcq', q:'', options:['','','',''], correct:0});
-      render();
-    }
-    function addTF(){
-      items.push({type:'tf', q:'', correct:true});
-      render();
-    }
+    let items=[], lastLink='';
+    function addMCQ(){ items.push({type:'mcq', q:'', options:['','','',''], correct:0}); render(); }
+    function addTF(){ items.push({type:'tf', q:'', correct:true}); render(); }
+
     function render(){
       const holder=document.getElementById('items'); holder.innerHTML='';
       items.forEach((it,i)=>{
@@ -120,9 +114,14 @@
       const quiz={id, owner:me.username, title, perSec, limitOnce, items};
       quizzes.push(quiz); localStorage.setItem('quizzes', JSON.stringify(quizzes));
       const base = location.origin + location.pathname.replace('builder.html','');
-      const link = base + 'student.html?id='+id;
+      lastLink = base + 'student.html?id='+id;
       const lb=document.getElementById('linkBox'); lb.style.display='block';
-      lb.innerHTML='رابط الطالب: <a href="'+link+'" target="_blank">'+link+'</a>';
+      lb.innerHTML='رابط الطالب: <a href="'+lastLink+'" target="_blank">'+lastLink+'</a>';
+      document.getElementById('copyBtn').style.display='inline-block';
+    }
+    function copyLink(){
+      if(!lastLink){ alert('لا يوجد رابط بعد. احفظ الاختبار أولًا.'); return; }
+      navigator.clipboard.writeText(lastLink).then(()=>{ alert('تم نسخ الرابط!'); });
     }
   </script>
 </body></html>
