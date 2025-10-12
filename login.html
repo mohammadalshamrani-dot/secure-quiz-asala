@@ -1,6 +1,6 @@
-
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
+<html lang="ar" dir="rtl">
+<head>
   <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>دخول أعضاء هيئة التدريس</title>
   <link rel="stylesheet" href="style.css"/>
@@ -23,29 +23,33 @@
   </div>
 </header>
 
-  <main class="container form">
-    <h2>دخول أعضاء هيئة التدريس</h2>
-    <div class="card">
-      <label>اسم المستخدم</label><input id="u" placeholder="example"/>
-      <label>كلمة المرور</label><input id="p" type="password" placeholder="••••••••"/>
-      <div class="actions">
-        <button class="btn" onclick="login()">دخول</button>
-        <a class="btn outline" href="register.html">تسجيل جديد</a>
-        <a class="btn outline" href="contact.html?why=forgot">نسيت كلمة المرور</a>
-      </div>
-      <div id="msg" class="warning" style="display:none"></div>
-      <div class="notice">دخول الإدارة يتم فقط عبر زر <b>الإدارة</b> في الهيدر.</div>
+  
+<main class="container form">
+  <h2>دخول أعضاء هيئة التدريس</h2>
+  <div class="card">
+    <label>اسم المستخدم</label><input id="u" placeholder="example"/>
+    <label>كلمة المرور</label><input id="p" type="password" placeholder="••••••••"/>
+    <div class="actions">
+      <button class="btn" onclick="login()">دخول</button>
+      <a class="btn outline" href="register.html">تسجيل جديد</a>
+      <a class="btn outline" href="contact.html?why=forgot">نسيت كلمة المرور</a>
     </div>
-  </main>
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-  <script>
-    function login(){
-      const u=document.getElementById('u').value.trim(), p=document.getElementById('p').value;
-      if(u==='admin'){ msg.style.display='block'; msg.innerText='دخول الإدارة يتم فقط من صفحة الإدارة.'; return; }
-      const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
-      const hit=users.find(x=>x.username===u && x.pass===p);
-      if(hit){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'})); location.href='profile.html'; }
-      else{ msg.style.display='block'; msg.innerText='بيانات الدخول غير صحيحة'; }
-    }
-  </script>
+    <div id="msg" class="warning" style="display:none"></div>
+    <div class="notice">دخول الإدارة يتم فقط عبر زر <b>الإدارة</b> في الهيدر.</div>
+  </div>
+</main>
+
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
+  
+<script>
+  function login(){
+    const u=document.getElementById('u').value.trim(), p=document.getElementById('p').value;
+    if(u==='admin'){ msg.style.display='block'; msg.innerText='دخول الإدارة يتم فقط من صفحة الإدارة.'; return; }
+    const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
+    const hit=users.find(x=>x.username===u && x.pass===p);
+    if(hit){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'})); location.href='profile.html'; }
+    else{ msg.style.display='block'; msg.innerText='بيانات الدخول غير صحيحة'; }
+  }
+</script>
+
 </body></html>

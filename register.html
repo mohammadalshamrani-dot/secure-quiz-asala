@@ -1,6 +1,6 @@
-
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
+<html lang="ar" dir="rtl">
+<head>
   <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>تسجيل عضو هيئة التدريس</title>
   <link rel="stylesheet" href="style.css"/>
@@ -23,29 +23,33 @@
   </div>
 </header>
 
-  <main class="container form">
-    <h2>تسجيل جديد</h2>
-    <div class="card">
-      <label>اسم المستخدم</label><input id="ru"/>
-      <label>البريد الجامعي</label><input id="re" type="email"/>
-      <label>كلمة المرور</label><input id="rp" type="password"/>
-      <div class="actions">
-        <button class="btn" onclick="reg()">إنشاء حساب</button>
-        <a class="btn outline" href="login.html">عودة لتسجيل الدخول</a>
-      </div>
-      <div id="ok" class="success" style="display:none">تم إنشاء الحساب. يمكنك الآن تسجيل الدخول.</div>
+  
+<main class="container form">
+  <h2>تسجيل جديد</h2>
+  <div class="card">
+    <label>اسم المستخدم</label><input id="ru"/>
+    <label>البريد الجامعي</label><input id="re" type="email"/>
+    <label>كلمة المرور</label><input id="rp" type="password"/>
+    <div class="actions">
+      <button class="btn" onclick="reg()">إنشاء حساب</button>
+      <a class="btn outline" href="login.html">عودة لتسجيل الدخول</a>
     </div>
-  </main>
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-  <script>
-    function reg(){
-      const u=ru.value.trim(), e=re.value.trim(), p=rp.value;
-      if(u==='admin'){ alert('لا يمكن استخدام اسم المستخدم هذا'); return; }
-      const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
-      if(users.some(x=>x.username===u)){ alert('اسم المستخدم مستخدم مسبقًا'); return; }
-      users.push({username:u, email:e, pass:p});
-      localStorage.setItem('facultyUsers', JSON.stringify(users));
-      ok.style.display='block';
-    }
-  </script>
+    <div id="ok" class="success" style="display:none">تم إنشاء الحساب. يمكنك الآن تسجيل الدخول.</div>
+  </div>
+</main>
+
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
+  
+<script>
+  function reg(){
+    const u=ru.value.trim(), e=re.value.trim(), p=rp.value;
+    if(u==='admin'){ alert('لا يمكن استخدام اسم المستخدم هذا'); return; }
+    const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
+    if(users.some(x=>x.username===u)){ alert('اسم المستخدم مستخدم مسبقًا'); return; }
+    users.push({username:u, email:e, pass:p});
+    localStorage.setItem('facultyUsers', JSON.stringify(users));
+    ok.style.display='block';
+  }
+</script>
+
 </body></html>

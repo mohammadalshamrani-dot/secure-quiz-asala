@@ -1,6 +1,6 @@
-
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
+<html lang="ar" dir="rtl">
+<head>
   <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>ملفي</title>
   <link rel="stylesheet" href="style.css"/>
@@ -23,31 +23,35 @@
   </div>
 </header>
 
-  <main class="container">
-    <h2>الملف الشخصي</h2>
-    <div id="who" class="notice"></div>
-    <div class="profile-grid">
-      <div class="card">
-        <h3>منصة إنشاء الاختبارات (داخلية)</h3>
-        <p>أنشئ اختبارًا واحصل على رابط للطلاب.</p>
-        <a class="btn" href="builder.html">فتح منصة الإنشاء</a>
-      </div>
-      <div class="card">
-        <h3>نتائج الطلاب</h3>
-        <p>استعرض نتائج الاختبارات الخاصة بك مباشرة.</p>
-        <a class="btn" href="results.html">عرض النتائج</a>
-      </div>
-      <div class="card">
-        <h3>خروج</h3>
-        <p>تسجيل الخروج والعودة للرئيسية.</p>
-        <a class="btn outline" href="#" onclick="logout()">تسجيل الخروج</a>
-      </div>
+  
+<main class="container">
+  <h2>الملف الشخصي</h2>
+  <div id="who" class="notice"></div>
+  <div class="profile-grid">
+    <div class="card">
+      <h3>منصة إنشاء الاختبارات (داخلية)</h3>
+      <p>أنشئ اختبارًا واحصل على رابط للطلاب.</p>
+      <a class="btn" href="builder.html">فتح منصة الإنشاء</a>
     </div>
-  </main>
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
-  <script>
-    const me=JSON.parse(localStorage.getItem('currentUser')||'null'); if(!me) location.href='login.html';
-    who.innerText='مرحبًا، '+me.username;
-    function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
-  </script>
+    <div class="card">
+      <h3>نتائج الطلاب</h3>
+      <p>استعرض نتائج الاختبارات الخاصة بك مباشرة.</p>
+      <a class="btn" href="results.html">عرض النتائج</a>
+    </div>
+    <div class="card">
+      <h3>خروج</h3>
+      <p>تسجيل الخروج والعودة للرئيسية.</p>
+      <a class="btn outline" href="#" onclick="logout()">تسجيل الخروج</a>
+    </div>
+  </div>
+</main>
+
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
+  
+<script>
+  const me=JSON.parse(localStorage.getItem('currentUser')||'null'); if(!me) location.href='login.html';
+  who.innerText='مرحبًا، '+me.username;
+  function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
+</script>
+
 </body></html>
