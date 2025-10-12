@@ -1,60 +1,59 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>نتائج الطلاب</title>
-  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="container">
-  <header class="space-between">
-    <h1>نتائج الطلاب</h1>
-    <a class="link" href="index.html">الصفحة الرئيسية</a>
-  </header>
+<body>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
+  </div>
+</header>
 
-  <section class="card">
-    <label>رقم الاختبار (quizId)
-      <input id="quizId" placeholder="مثال: QZ123">
-    </label>
-    <button id="load" class="btn">تحميل النتائج</button>
-  </section>
+  <main class="container">
+    <h2>نتائج الطلاب</h2>
+    <p>هذه الصفحة تعرض نتائج الاختبارات المخزنة محليًا (تجريبية). عند استخدام منصة الإنشاء الفعلية يمكن الربط لاحقًا بقاعدة البيانات.</p>
+    <div id="wrap"></div>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
 
-  <section class="card">
-    <h2>الملخص</h2>
-    <div id="summary"></div>
-    <canvas id="gradesChart" height="120"></canvas>
-  </section>
-
-  <script src="src/js/config.js"></script>
-  <script src="src/js/auth.js"></script>
-  <script src="src/js/api.js"></script>
   <script>
-    function getParam(name){ const u=new URLSearchParams(location.search); return u.get(name) || ''; }
-    const quizInput = document.getElementById('quizId');
-    quizInput.value = getParam('quiz') || '';
-
-    document.getElementById('load').onclick = async () => {
-      if(!Auth.ensureAuthOrRedirect()) return;
-      const id = quizInput.value.trim();
-      if(!id){ alert('أدخل رقم الاختبار'); return; }
-      try{
-        const data = await API.request('/api/results?quiz='+encodeURIComponent(id), { method:'GET', auth:true });
-        document.getElementById('summary').innerHTML =
-          'المشاركون: '+data.participants+' — نسبة النجاح: '+Math.round(data.successRate*100)+'% — المتوسط: '+data.average.toFixed(2);
-
-        const ctx = document.getElementById('gradesChart').getContext('2d');
+    const data = JSON.parse(localStorage.getItem('studentResults')||'[]');
+    const wrap = document.getElementById('wrap');
+    if(data.length===0) {
+      wrap.innerHTML='<div class="notice">لا توجد نتائج حتى الآن.</div>';
+    } else {
+      data.forEach((r,i)=>{
+        const card = document.createElement('div'); card.className='card';
+        card.innerHTML = `
+          <h3>الطالب: ${r.student.name} – الرقم: ${r.student.id}</h3>
+          <div>الاختبار: ${r.quizTitle} | الدرجة: <b>${r.score}%</b></div>
+          <canvas id="chart${i}" height="120"></canvas>
+          <div class="notice">ملاحظة للطالب: يرجى التقاط صورة للشاشة وإرسالها لمدرّس المقرر قبل إغلاق النافذة.</div>
+        `;
+        wrap.appendChild(card);
+        const ctx = card.querySelector('canvas').getContext('2d');
         new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: data.histogram.map(x=>x.label),
-            datasets: [{ label:'عدد الطلاب', data: data.histogram.map(x=>x.count) }]
-          }
+          type:'bar',
+          data:{labels:['صحيحة','خاطئة'], datasets:[{label:'عدد الأسئلة', data:[r.correct,r.total-r.correct]}]},
+          options:{responsive:true, plugins:{legend:{display:false}}}
         });
-      }catch(err){
-        alert('تعذر تحميل النتائج: '+err.message);
-      }
-    };
+      });
+    }
   </script>
-</body>
-</html>
+</body></html>

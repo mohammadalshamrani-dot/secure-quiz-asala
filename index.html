@@ -1,429 +1,67 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>منصّة الاختبارات القصيرة – كليات الأصالة</title>
-<style>
-:root{--primary:#b91c1c;--bg:#f9fafb;--card:#ffffff;--text:#111827;--muted:#6b7280;--shadow:0 10px 25px rgba(0,0,0,.08);--radius:18px}
-*{box-sizing:border-box}
-html{direction:rtl}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Kufi Arabic","Amiri",Tahoma,Arial,sans-serif;background:radial-gradient(1200px 600px at 50% -20%,#fdecec,transparent),var(--bg);color:var(--text)}
-.container{max-width:1100px;margin:0 auto;padding:24px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{height:36px;width:auto;display:block;border-radius:4px}
-.brand .title{font-weight:700;font-size:14px;color:var(--muted)}
-nav a, nav button{color:var(--muted);text-decoration:none;font-weight:700;margin-inline:8px;background:transparent;border:none;cursor:pointer;padding:6px 10px;border-radius:8px}
-nav a:hover, nav button:hover{background:#f3f4f6;color:#111827}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
-h1{font-size:32px;margin:0 0 6px}
-.lead{color:var(--muted);margin:0 0 18px;line-height:1.8}
-.btn{appearance:none;border:none;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-ghost{background:#f3f4f6;color:#111827}
-.grid{display:grid;gap:12px}
-/* Features under CTA: side-by-side on desktop */
-.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
-.feature{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;color:#374151}
-@media(max-width:860px){.features{grid-template-columns:1fr}}
-label{font-weight:700;color:#374151}
-.input, select, textarea{width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
-.row{display:grid;grid-template-columns:2fr 1fr;gap:12px}
-.q{border:1px solid #e5e7eb;border-radius:12px;padding:14px;background:#f9fafb}
-.kv{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:14px}
-.small-muted{color:#6b7280;font-size:12px}
-footer{color:#9ca3af;text-align:center;padding:30px 12px;margin-top:18px}
-.badge{display:inline-flex;align-items:center;gap:8px;background:#f3f4f6;color:#111827;padding:8px 12px;border-radius:999px;font-weight:700}
-.timer{font-variant-numeric:tabular-nums;font-weight:800}
-.notice{margin-top:12px;padding:12px;border:1px dashed #f59e0b;background:#fffbeb;border-radius:12px;color:#92400e}
-hr.sep{border:none;height:1px;background:#eee;margin:14px 0}
-.options{display:grid;gap:8px;margin-top:10px}
-.option{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px;cursor:pointer}
-.option input{margin:0}
-.progress{height:8px;background:#f3f4f6;border-radius:999px;overflow:hidden;margin:10px 0}
-.progress > span{display:block;height:100%;background:var(--primary);width:0%}
-.result-badge{display:inline-flex;align-items:center;gap:8px;background:#f3f4f6;color:#111827;padding:8px 12px;border-radius:999px;font-weight:700}
-.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
-.copy{padding:10px 14px;border-radius:10px;background:#111827;color:white;border:none;cursor:pointer;font-weight:700}
-.screenshot-tip{background:#fee2e2;color:#7f1d1d;border:1px solid #fecaca;padding:12px;border-radius:12px;margin-top:10px;font-weight:700}
-.hidden{display:none}
-.center{text-align:center}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>منصة الاختبارات القصيرة – الرئيسية</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<div class="container">
- <header>
-  <div class="brand">
-  <img src="logo.png" alt="شعار المنصة" />
-  <div class="title">كليات الأصالة – كلية القانون</div>
-</div>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="instructions.html">التعليمات السريعة</a>
-    <a href="contact.html">التواصل مع الإدارة</a>
-    <a href="admin.html">لوحة التحكم</a>
-  </nav>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
+  </div>
 </header>
 
-  <!-- HOME -->
-  <section id="home" class="card center">
-    <h1>منصّة الاختبارات القصيرة</h1>
-    <p class="lead">اختبارات قصيرة بزمن محدد – نتيجة فورية – رمز تحقّق – تنبيه التقاط الشاشة.</p>
-    <div style="display:flex;justify-content:center">
-      <button class="btn btn-primary" onclick="App.route('build')">إنشاء اختبار قصير</button>
-    </div>
-    <div class="features">
-      <div class="feature"><b>(1) إنشاء الاختبار</b><div class="small-muted">أدخل العنوان والأسئلة وزمن كل سؤال</div></div>
-      <div class="feature"><b>(2) مشاركة الرابط</b><div class="small-muted">انسخ رابط الطالب وارسله لهم</div></div>
-      <div class="feature"><b>(3) أداء الاختبار</b><div class="small-muted">عداد وقت، وسياسة منع الخروج</div></div>
-      <div class="feature"><b>(4) نتيجة فورية</b><div class="small-muted">مع رمز تحقّق وتذكير بالتقاط الشاشة</div></div>
-    </div>
-  </section>
-
-  <!-- BUILDER -->
-  <section id="build" class="card hidden">
-    <span class="badge">منشئ الاختبار (بدون باكند)</span>
-    <div class="grid" style="margin-top:12px">
-      <div class="row">
-        <div>
-          <label>عنوان الاختبار</label>
-          <input id="title" class="input" placeholder="مثال: اختبار تجريبي – مبادئ القانون">
-        </div>
-        <div>
-          <label>زمن كل سؤال (ثوان)</label>
-          <input id="perq" class="input" type="number" min="5" value="60">
-        </div>
+  <main class="container">
+    <section class="hero">
+      <h1>منصة الاختبارات القصيرة</h1>
+      <p>تتيح المنصة إجراء اختبارات قصيرة بتقنيات آمنـة عالية، تشمل مؤقّتًا زمنيًا لكل سؤال، ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.</p>
+      <div class="actions">
+        <a class="btn" href="login.html">دخول أعضاء هيئة التدريس</a>
+        <a class="btn outline" href="instructions.html">تعليمات سريعة</a>
       </div>
-      <div class="row">
-        <div>
-          <label>محاولات الاختبار</label>
-          <select id="attempts" class="input">
-            <option value="one">محاولة واحدة فقط</option>
-            <option value="multi">يسمح بمحاولات متعددة</option>
-          </select>
-          <div class="small-muted">إذا اخترت "محاولة واحدة"، فسيُمنع الطالب من إعادة الاختبار لو خرج من الصفحة.</div>
-        </div>
-        <div>
-          <label>ترتيب الإجابات</label>
-          <select id="shuffleMode" class="input">
-            <option value="perStudent">عشوائي لكل طالب</option>
-            <option value="fixed">ثابت (بدون عشوائية)</option>
-          </select>
-        </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>توقيت لكل سؤال</h3>
+        <span class="badge">زمن مضبوط</span>
       </div>
-
-      <div id="qs"></div>
-      <button class="btn btn-ghost" id="addQ">+ إضافة سؤال</button>
-
-      <hr class="sep">
-      <div class="grid">
-        <label>رابط الطالب</label>
-        <input id="share" class="input" readonly placeholder="اضغط توليد الرابط">
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-primary" id="gen">توليد الرابط</button>
-          <button class="btn" id="copy">نسخ</button>
-          <button class="btn btn-ghost" id="preview">معاينة</button>
-        </div>
-        <div class="small-muted">الرابط يحمل بيانات الاختبار مشفّرة داخل العنوان.</div>
+      <div class="card">
+        <h3>قفل عند مغادرة الصفحة</h3>
+        <span class="badge">منع الغش</span>
       </div>
-    </div>
-  </section>
-
-  <!-- TAKE -->
-  <section id="take" class="card hidden">
-    <h1 id="examTitle">اختبار قصير</h1>
-    <div class="grid">
-      <div class="row">
-        <div>
-          <label>اسم/رقم الطالب</label>
-          <input class="input" id="student" placeholder="مثال: 22200000 – أحمد">
-        </div>
-        <div>
-          <label>زمن كل سؤال</label>
-          <div class="kv"><span class="timer" id="perqShow">--</span> ثانية</div>
-        </div>
+      <div class="card">
+        <h3>محاولات محدودة</h3>
+        <span class="badge">تحكم كامل</span>
       </div>
-      <div class="notice">التزم بالبقاء في صفحة الاختبار. <b>الخروج أو التبديل</b> قد يُنهي الاختبار مباشرة.</div>
-      <button class="btn btn-primary" id="startBtn">ابدأ الآن</button>
-    </div>
-    <div id="exam" class="hidden" style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <div><span class="badge">السؤال <span id="qIdx">1</span>/<span id="qTotal">1</span></span></div>
-        <div>الوقت: <span class="timer" id="time">00:00</span></div>
+      <div class="card">
+        <h3>تقارير فورية</h3>
+        <span class="badge">نتائج مباشرة</span>
       </div>
-      <div class="progress"><span id="bar"></span></div>
-      <div id="qText" style="font-weight:800;margin-top:6px"></div>
-      <div id="qOpts" class="options"></div>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button class="btn btn-primary" id="nextBtn">التالي</button>
-        <button class="btn btn-ghost" id="submitBtn">إنهاء</button>
-      </div>
-    </div>
-    <div id="result" class="hidden" style="margin-top:12px">
-      <div class="result-badge">نتيجة الاختبار</div>
-      <div class="result-grid">
-        <div class="kv"><b>اسم الاختبار</b><span id="rExam">–</span></div>
-        <div class="kv"><b>رقم/اسم الطالب</b><span id="rStudent">–</span></div>
-        <div class="kv"><b>الدرجة</b><span id="rScore">–</span></div>
-        <div class="kv"><b>التاريخ والوقت</b><span id="rDT">–</span></div>
-        <div class="kv"><b>رمز التحقّق</b>
-          <div style="display:flex;gap:8px;align-items:center">
-            <span id="rCode" style="font-family:ui-monospace;font-weight:800"></span>
-            <button class="copy" id="copyCode">نسخ</button>
-          </div>
-          <div class="small-muted">للاستخدام عند التحقق من الصورة.</div>
-        </div>
-      </div>
-      <div class="notice"><b>مهم:</b> خذ صورة شاشة الآن وأرسلها لمدرّسك قبل إغلاق النافذة.</div>
-      <div class="screenshot-tip">تلميح: في الماك ⌘+Shift+4، في الويندوز Win+Shift+S.</div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FEEDBACK / ADMIN placeholders to keep navbar working -->
-  <section id="feedback" class="card hidden">
-    <h1>تواصل مع الإدارة</h1>
-    <p class="lead">هذه صفحة مختصرة لإبقاء الروابط تعمل كما هي.</p>
-  </section>
-  <section id="admin" class="card hidden">
-    <h1>لوحة التحكم</h1>
-    <p class="lead">هذه صفحة مختصرة لإبقاء الروابط تعمل كما هي.</p>
-  </section>
+    <p style="margin-top:18px;color:#666">لأعضاء هيئة التدريس فقط. بعد الدخول يمكن إنشاء الاختبار، ومشاركة رابط الطالب وباركوده، والاطلاع على النتائج.</p>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
 
-  <footer>تم تطوير المنصّة بواسطة: د.محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
-</div>
 
-<script>
-// ---- Router to ensure top navbar works ----
-const App = (function(){
-  const sections = ['home','build','take','feedback','admin'];
-  function show(id){
-    sections.forEach(x=>document.getElementById(x).classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-  }
-  function route(name){
-    if (!sections.includes(name)) name = 'home';
-    show(name);
-    if (['home','build','feedback','admin'].includes(name)) location.hash = name;
-  }
-  window.App = { route }; return window.App;
-})();
-
-// ---- Builder logic ----
-(function(){
-  const qs = document.getElementById('qs');
-  const addQ = document.getElementById('addQ');
-  const title = document.getElementById('title');
-  const perq = document.getElementById('perq');
-  const attempts = document.getElementById('attempts');
-  const shuffleMode = document.getElementById('shuffleMode');
-  const gen = document.getElementById('gen');
-  const share = document.getElementById('share');
-  const copy = document.getElementById('copy');
-  const preview = document.getElementById('preview');
-
-  function newQ(i){
-    const wrap = document.createElement('div'); wrap.className='q';
-    wrap.innerHTML = `
-      <div class="grid">
-        <label>السؤال ${i+1}</label>
-        <input class="input qtext" placeholder="نص السؤال">
-        <div class="grid">
-          <div class="row">
-            <input class="input opt" placeholder="خيار 1">
-            <input class="input opt" placeholder="خيار 2">
-          </div>
-          <div class="row">
-            <input class="input opt" placeholder="خيار 3 (اختياري)">
-            <input class="input opt" placeholder="خيار 4 (اختياري)">
-          </div>
-        </div>
-        <label>الإجابة الصحيحة</label>
-        <select class="input correct">
-          <option value="0">خيار 1</option>
-          <option value="1">خيار 2</option>
-          <option value="2">خيار 3</option>
-          <option value="3">خيار 4</option>
-        </select>
-      </div>`;
-    return wrap;
-  }
-  function gather(){
-    const items = Array.from(qs.querySelectorAll('.q')).map(q=>{
-      const t = q.querySelector('.qtext').value.trim();
-      const opts = Array.from(q.querySelectorAll('.opt')).map(x=>x.value.trim()).filter(Boolean);
-      const correct = parseInt(q.querySelector('.correct').value||'0',10);
-      return {t, opts, correct: Math.min(correct, Math.max(opts.length-1,0))};
-    }).filter(x=>x.t && x.opts.length>=2);
-    return {
-      v: 2,
-      title: title.value.trim()||'اختبار قصير',
-      perq: Math.max(5, parseInt(perq.value||'60',10)),
-      attempts: attempts.value, // 'one' or 'multi'
-      shuffle: shuffleMode.value, // 'perStudent' or 'fixed'
-      questions: items
-    };
-  }
-  function encodeData(obj){
-    const json = JSON.stringify(obj);
-    const b64 = btoa(unescape(encodeURIComponent(json)));
-    return b64;
-  }
-  function updateLink(){
-    const data = encodeData(gather());
-    const url = `${location.origin}${location.pathname}#take:${data}`;
-    share.value = url;
-  }
-
-  addQ.addEventListener('click', ()=>{ qs.appendChild(newQ(qs.children.length)); });
-  gen.addEventListener('click', updateLink);
-  copy.addEventListener('click', ()=>navigator.clipboard.writeText(share.value));
-  preview.addEventListener('click', ()=>{ if(share.value) location.href = share.value; });
-
-  // default two questions
-  qs.appendChild(newQ(0)); qs.appendChild(newQ(1));
-})();
-
-// ---- Take logic with per-student shuffle & single-attempt guard ----
-(function(){
-  function $(id){return document.getElementById(id);}
-  function pad(n){return n.toString().padStart(2,'0');}
-  function nowStr(){const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;}
-  function hash32(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){h^=s.charCodeAt(i); h=(h*16777619)>>>0;} return h>>>0; }
-  function hash8(s){ return (hash32(s)).toString(16).slice(0,8).toUpperCase(); }
-  // seeded RNG (mulberry32)
-  function rng(seed){ return function(){ seed |= 0; seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
-  function shuffleWithSeed(arr, seed){
-    const a = arr.map((v,i)=>({v,i}));
-    const rnd = rng(seed);
-    for (let i=a.length-1;i>0;i--){
-      const j = Math.floor(rnd()*(i+1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  function parseHash(){
-    const h = location.hash.slice(1);
-    if (!h) return null;
-    if (h.startsWith('take:')) {
-      const b64 = h.slice(5);
-      try{ const json = decodeURIComponent(escape(atob(b64))); return JSON.parse(json); }catch(e){ return null; }
-    }
-    return null;
-  }
-  function routeFromHash(){
-    const data = parseHash();
-    if (data){ App.route('take'); startTake(data); }
-  }
-  window.addEventListener('hashchange', routeFromHash);
-  document.addEventListener('DOMContentLoaded', () => {
-    const h = location.hash.slice(1);
-    if (['home','build','feedback','admin'].includes(h)) App.route(h);
-    else routeFromHash();
-  });
-
-  // exam state
-  let ended=false, idx=0, score=0, t=0, timer=null, data=null, qOrder=null;
-
-  function attemptKey(title, student){ return 'attempt:' + hash8(title+'|'+student); }
-
-  function startTake(d){
-    data = d;
-    $('examTitle').textContent=d.title;
-    $('perqShow').textContent=d.perq;
-    $('result').classList.add('hidden'); $('exam').classList.add('hidden');
-    ended=false; idx=0; score=0; t=0; if(timer) clearInterval(timer);
-
-    // anti-cheat handlers
-    document.onvisibilitychange = ()=>{ if(document.hidden) endEarly(); };
-    window.onblur = ()=>{ endEarly(); };
-    window.onbeforeunload = (e)=>{ if(!ended){ e.preventDefault(); e.returnValue=''; } };
-
-    $('startBtn').onclick = ()=>{
-      const stud = $('student').value.trim();
-      if (!stud){ $('student').focus(); return; }
-
-      // Single attempt guard
-      if (d.attempts === 'one'){
-        const key = attemptKey(d.title, stud);
-        if (localStorage.getItem(key) === 'done'){
-          alert('لقد أكملت هذا الاختبار مسبقًا. لا يُسمح بمحاولة أخرى.');
-          return;
-        }
-      }
-
-      // Per-student shuffle of options
-      qOrder = d.questions.map(q => {
-        const seed = hash32(d.title + '|' + stud + '|' + q.t);
-        if (d.shuffle === 'perStudent'){
-          const mapped = q.opts.map((opt, i)=>({opt, i}));
-          const shuffled = shuffleWithSeed(mapped, seed);
-          const newOpts = shuffled.map(x=>x.v);
-          const correctNewIndex = shuffled.findIndex(x=>x.i === q.correct);
-          return { t: q.t, opts: newOpts, correct: correctNewIndex };
-        } else {
-          return q;
-        }
-      });
-
-      $('exam').classList.remove('hidden');
-      renderQ();
-    };
-
-    $('nextBtn').onclick = ()=>{ captureAnswer(); next(); };
-    $('submitBtn').onclick = ()=>{ captureAnswer(); scoreExam(); };
-  }
-
-  function endEarly(){ if(ended) return; ended=true; scoreExam(); }
-  function renderQ(){
-    const q = qOrder[idx];
-    $('qIdx').textContent = (idx+1);
-    $('qText').textContent = q.t;
-    const box=$('qOpts'); box.innerHTML='';
-    q.opts.forEach((opt,i)=>{
-      const label=document.createElement('label'); label.className='option';
-      const input=document.createElement('input'); input.type='radio'; input.name='opt'; input.value=i;
-      label.appendChild(input); label.appendChild(document.createTextNode(opt));
-      box.appendChild(label);
-    });
-    t = data.perq; updateTimer(); if (timer) clearInterval(timer);
-    timer = setInterval(()=>{ t--; updateTimer(); if(t<=0){ captureAnswer(); next(); } }, 1000);
-  }
-  function updateTimer(){ $('time').textContent = '00:' + String(t).padStart(2,'0'); const pct=Math.max(0,Math.min(100,(t/data.perq)*100)); $('bar').style.width=pct+'%'; }
-  function captureAnswer(){
-    const sel = document.querySelector('input[name="opt"]:checked');
-    const ans = sel? parseInt(sel.value,10) : -1;
-    if (ans===qOrder[idx].correct) score++;
-  }
-  function next(){
-    if (timer) clearInterval(timer);
-    if (idx < qOrder.length-1){ idx++; renderQ(); }
-    else { scoreExam(); }
-  }
-  function scoreExam(){
-    if (timer) clearInterval(timer);
-    const stud = $('student').value.trim() || 'طالب';
-    const d = new Date(); const pad = n=>String(n).padStart(2,'0');
-    const dt = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-    const code = (hash8(data.title+'|'+stud+'|'+dt+'|'+score+'/'+qOrder.length));
-
-    // save single-attempt flag if needed
-    if (data.attempts === 'one'){
-      localStorage.setItem(attemptKey(data.title, stud), 'done');
-    }
-
-    document.getElementById('rExam').textContent=data.title;
-    document.getElementById('rStudent').textContent=stud;
-    document.getElementById('rScore').textContent= score + '/' + qOrder.length;
-    document.getElementById('rDT').textContent=dt;
-    document.getElementById('rCode').textContent=code;
-    document.getElementById('copyCode').onclick=()=>navigator.clipboard.writeText(code);
-    document.getElementById('exam').classList.add('hidden');
-    document.getElementById('result').classList.remove('hidden');
-    ended=true;
-  }
-})();
+  <script>
+    // Keep old site behavior if needed later
   </script>
 </body>
 </html>

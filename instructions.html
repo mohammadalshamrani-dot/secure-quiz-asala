@@ -1,53 +1,43 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>التعليمات السريعة</title>
-  <link rel="stylesheet" href="./style.css">
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>تعليمات سريعة</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <img src="logo.png" alt="شعار المنصة" onerror="this.onerror=null;this.src='assets/logo.png'">
-        <div class="title">كليات الأصالة – كلية القانون</div>
-      </div>
-      <nav>
-        <a href="index.html">الرئيسية</a>
-        <a href="instructions.html" aria-current="page">التعليمات السريعة</a>
-        <a href="contact.html">التواصل مع الإدارة</a>
-        <a href="admin.html">لوحة التحكم</a>
-      </nav>
-    </header>
-
-    <main>
-      <section class="card" style="padding: 16px;">
-        <h1>دليل سريع لأعضاء هيئة التدريس والطلاب</h1>
-        <div class="grid" style="display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-          <div class="card" style="padding:16px;">
-            <h2>لأعضاء هيئة التدريس</h2>
-            <ol>
-              <li>من <b>إنشاء اختبار</b> يتم تحويلك لمنصة إعداد الاختبار.</li>
-              <li>حدد مدة السؤال، <b>عشوائية ترتيب الإجابات</b>، ومحاولة واحدة عند الحاجة.</li>
-              <li>انسخ رابط الاختبار وشاركه مع الطلاب أو أنشئ <b>باركود</b>.</li>
-              <li>تابع النتائج من قسم <b>نتائج الطلاب</b> مع الرسوم البيانية.</li>
-              <li>للملاحظات: استخدم <a href="contact.html">التواصل مع الإدارة</a>.</li>
-            </ol>
-          </div>
-          <div class="card" style="padding:16px;">
-            <h2>للطلاب</h2>
-            <ol>
-              <li>ادخل على رابط الاختبار من الأستاذ.</li>
-              <li>اقرأ التعليمات. قد تكون الإجابات <b>عشوائية الترتيب</b>.</li>
-              <li>الخروج من الصفحة قد يُنهي الاختبار مباشرة.</li>
-              <li>عند ظهور النتيجة: <b>التقط صورة للشاشة</b> وارسِلها لأستاذ المقرر قبل إغلاق النافذة.</li>
-              <li>لأي مشكلة تقنية: استخدم <a href="contact.html">التواصل مع الإدارة</a>.</li>
-            </ol>
-          </div>
-        </div>
-      </section>
-    </main>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
   </div>
-</body>
-</html>
+</header>
+
+  <main class="container form">
+    <h2>تعليمات سريعة لأعضاء هيئة التدريس</h2>
+    <div class="card">
+      <ol>
+        <li>سجّل الدخول من زر <b>دخول أعضاء هيئة التدريس</b> أو أنشئ حسابًا جديدًا.</li>
+        <li>من صفحة الملف الشخصي اختر <b>إنشاء اختبار</b> للوصول إلى منصة الإنشاء.</li>
+        <li>انسخ <b>رابط الطالب</b> و/أو <b>الباركود</b> لمشاركته مع طلاب المقرر.</li>
+        <li>بعد انتهاء الطلاب تظهر النتائج في <b>نتائج الطلاب</b> بتفاصيل الطالب ورسوم بيانية.</li>
+        <li>في حال فقدان كلمة المرور استخدم <b>نسيت كلمة المرور</b> وسوف تُحوّل مباشرة لصفحة التواصل مع الإدارة.</li>
+      </ol>
+      <p class="notice">ملحوظة: عند ظهور النتيجة للطالب، يُطلب منه التقاط صورة للشاشة وإرسالها لمدرّس المقرر قبل إغلاق النافذة.</p>
+    </div>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
+
+</body></html>

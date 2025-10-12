@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>تسجيل عضو هيئة التدريس</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container form">
+    <h2>تسجيل جديد</h2>
+    <div class="card">
+      <label>اسم المستخدم</label>
+      <input id="ru"/>
+      <label>البريد الجامعي</label>
+      <input id="re" type="email"/>
+      <label>كلمة المرور</label>
+      <input id="rp" type="password"/>
+      <div class="actions">
+        <button class="btn" onclick="reg()">إنشاء حساب</button>
+        <a class="btn outline" href="login.html">عودة لتسجيل الدخول</a>
+      </div>
+      <div id="ok" class="success" style="display:none">تم إنشاء الحساب. يمكنك الآن تسجيل الدخول.</div>
+    </div>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
+
+  <script>
+    function reg(){
+      const u = document.getElementById('ru').value.trim();
+      const e = document.getElementById('re').value.trim();
+      const p = document.getElementById('rp').value;
+      const users = JSON.parse(localStorage.getItem('facultyUsers')||'[]');
+      if(users.some(x=>x.username===u)){ alert('اسم المستخدم مستخدم مسبقًا'); return; }
+      users.push({username:u, email:e, pass:p});
+      localStorage.setItem('facultyUsers', JSON.stringify(users));
+      document.getElementById('ok').style.display='block';
+    }
+  </script>
+</body></html>

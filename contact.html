@@ -1,87 +1,69 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>التواصل مع الإدارة</title>
-  <link rel="stylesheet" href="./style.css">
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>تواصل مع الإدارة</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <img src="logo.png" alt="شعار المنصة" onerror="this.onerror=null;this.src='assets/logo.png'">
-        <div class="title">كليات الأصالة – كلية القانون</div>
-      </div>
-      <nav>
-        <a href="index.html">الرئيسية</a>
-        <a href="instructions.html">التعليمات السريعة</a>
-        <a href="contact.html" aria-current="page">التواصل مع الإدارة</a>
-        <a href="admin.html">لوحة التحكم</a>
-      </nav>
-    </header>
-
-    <main>
-      <section class="card" style="padding:16px;">
-        <h1>نموذج إرسال ملاحظة / اقتراح / شكوى</h1>
-        <p>يتم حفظ الرسائل محليًا لأغراض الاختبار، وتظهر في <a href="admin.html">لوحة التحكم</a>.</p>
-
-        <form id="contactForm" style="display:grid; gap:12px; max-width:720px;">
-          <div style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-            <div>
-              <label>الاسم</label>
-              <input type="text" name="name" required class="input">
-            </div>
-            <div>
-              <label>الصفة</label>
-              <select name="role" required class="input">
-                <option value="">اختر</option>
-                <option>طالب/ـة</option>
-                <option>عضو/ة هيئة تدريس</option>
-                <option>إداري/ـة</option>
-                <option>أخرى</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-            <div>
-              <label>البريد الإلكتروني</label>
-              <input type="email" name="email" required class="input">
-            </div>
-            <div>
-              <label>الموضوع</label>
-              <input type="text" name="subject" required class="input">
-            </div>
-          </div>
-
-          <div>
-            <label>التفاصيل</label>
-            <textarea name="body" required class="input" style="min-height:140px;"></textarea>
-          </div>
-
-          <div>
-            <button type="submit" class="button">إرسال</button>
-            <span id="status" style="margin-right:8px;"></span>
-          </div>
-        </form>
-      </section>
-    </main>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
   </div>
+</header>
 
-  <script src="./assets/storage.js"></script>
+  <main class="container form">
+    <h2>تواصل مع الإدارة</h2>
+    <p>يصل هذا النموذج إلى صندوق وارد الإداري داخل لوحة التحكم.</p>
+    <div class="card">
+      <label>الاسم</label>
+      <input id="c_name" placeholder="الاسم الثلاثي"/>
+      <label>البريد الإلكتروني</label>
+      <input id="c_email" placeholder="example@domain.com" type="email"/>
+      <label>الموضوع</label>
+      <input id="c_subject" placeholder="موضوع الرسالة"/>
+      <label>الرسالة</label>
+      <textarea id="c_body" rows="6" placeholder="اكتب رسالتك هنا..."></textarea>
+      <div class="actions">
+        <button class="btn" onclick="send()">إرسال</button>
+        <a class="btn outline" href="index.html">الرئيسية</a>
+      </div>
+      <div id="ok" class="success" style="display:none">تم إرسال رسالتك بنجاح.</div>
+    </div>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
+
   <script>
-    SQStore.ensureAdmin();
-    const f = document.getElementById('contactForm');
-    const st = document.getElementById('status');
-    f.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(f).entries());
-      SQStore.addMessage(data);
-      f.reset();
-      st.textContent = 'تم الإرسال بنجاح — ستظهر الرسالة في لوحة التحكم.';
-      setTimeout(()=> st.textContent = '', 3500);
-    });
+    function send(){
+      const name = document.getElementById('c_name').value.trim();
+      const email = document.getElementById('c_email').value.trim();
+      const subject = document.getElementById('c_subject').value.trim() || 'رسالة من نموذج التواصل';
+      const body = document.getElementById('c_body').value.trim();
+      const msg = {id: Date.now(), name, email, subject, body, ts: new Date().toISOString()};
+      const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
+      inbox.unshift(msg);
+      localStorage.setItem('adminInbox', JSON.stringify(inbox));
+      document.getElementById('ok').style.display='block';
+      document.getElementById('c_body').value='';
+    }
+    // If redirected from "forgot"
+    const params = new URLSearchParams(location.search);
+    if(params.get('why')==='forgot') {
+      document.getElementById('c_subject').value = 'استعادة كلمة المرور';
+      document.getElementById('c_body').value = 'أرغب في استعادة كلمة مرور حساب عضو هيئة التدريس.';
+    }
   </script>
-</body>
-</html>
+</body></html>

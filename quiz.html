@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>اختبار الطالب</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container form">
+    <h2>اختبار تجريبي (يدعم صح/خطأ)</h2>
+    <div class="card">
+      <label>اسم الطالب</label><input id="sname">
+      <label>الرقم الجامعي</label><input id="sid">
+    </div>
+
+    <div class="card" id="qwrap"></div>
+    <div class="actions">
+      <button class="btn" onclick="submitQuiz()">إرسال الإجابات</button>
+      <a class="btn outline" href="index.html">الرئيسية</a>
+    </div>
+    <div id="done" class="success" style="display:none">تم تسجيل نتيجتك. ستظهر في صفحة نتائج الطلاب.</div>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
+
+  <script>
+    const quiz = {
+      title:'اختبار قصير – مثال',
+      items:[
+        {type:'mcq', q:'ما عاصمة المملكة العربية السعودية؟', options:['الرياض','جدة','مكة','الدمام'], correct:0},
+        {type:'tf',  q:'الشمس تدور حول الأرض.', correct:false},
+        {type:'tf',  q:'الماء يتجمد تحت 0° مئوية.', correct:true}
+      ]
+    };
+    function render(){
+      const el = document.getElementById('qwrap');
+      el.innerHTML='';
+      quiz.items.forEach((it,i)=>{
+        const box = document.createElement('div'); box.className='card';
+        if(it.type==='mcq'){
+          box.innerHTML = `<h3>${i+1}) ${it.q}</h3>` + it.options.map((o,idx)=>`<label><input type="radio" name="q${i}" value="${idx}"> ${o}</label>`).join('<br>');
+        } else {
+          box.innerHTML = `<h3>${i+1}) ${it.q}</h3>
+            <label><input type="radio" name="q${i}" value="true"> صح</label> &nbsp;&nbsp;
+            <label><input type="radio" name="q${i}" value="false"> خطأ</label>`;
+        }
+        el.appendChild(box);
+      });
+    }
+    render();
+    function submitQuiz(){
+      const name = document.getElementById('sname').value.trim();
+      const sid = document.getElementById('sid').value.trim();
+      if(!name || !sid){ alert('فضلاً أدخل بيانات الطالب'); return; }
+      let correct=0;
+      quiz.items.forEach((it,i)=>{
+        const chosen = (document.querySelector(`input[name="q${i}"]:checked`)||{}).value;
+        if(chosen==='') return;
+        if(it.type==='mcq') {
+          if(parseInt(chosen,10)===it.correct) correct++;
+        } else {
+          if(String(it.correct)===chosen) correct++;
+        }
+      });
+      const total = quiz.items.length;
+      const result = {
+        quizTitle: quiz.title,
+        correct, total,
+        score: Math.round(correct*100/total),
+        student:{name, id:sid},
+        at: new Date().toISOString()
+      };
+      const store = JSON.parse(localStorage.getItem('studentResults')||'[]');
+      store.unshift(result);
+      localStorage.setItem('studentResults', JSON.stringify(store));
+      document.getElementById('done').style.display='block';
+    }
+  </script>
+</body></html>

@@ -1,47 +1,66 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>تسجيل الدخول</title>
-  <link rel="stylesheet" href="styles/main.css">
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>دخول أعضاء هيئة التدريس</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body class="container small">
-  <h1>تسجيل الدخول</h1>
-  <form id="loginForm" class="card">
-    <label>البريد الجامعي
-      <input id="email" type="email" required>
-    </label>
-    <label>كلمة المرور
-      <input id="password" type="password" required>
-    </label>
-    <button class="btn" type="submit">دخول</button>
-  </form>
-  <script src="src/js/config.js"></script>
-  <script src="src/js/auth.js"></script>
-  <script src="src/js/api.js"></script>
+<body>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container form">
+    <h2>دخول أعضاء هيئة التدريس</h2>
+    <div class="card">
+      <label>اسم المستخدم</label>
+      <input id="u" placeholder="example"/>
+      <label>كلمة المرور</label>
+      <input id="p" type="password" placeholder="••••••••"/>
+      <div class="actions">
+        <button class="btn" onclick="login()">دخول</button>
+        <a class="btn outline" href="register.html">تسجيل جديد</a>
+        <a class="btn outline" href="contact.html?why=forgot">نسيت كلمة المرور</a>
+      </div>
+      <div id="msg" class="warning" style="display:none"></div>
+    </div>
+  </main>
+  
+<footer class="footer">
+  تم تطوير المنصة بواسطة د. محمد الشمراني
+</footer>
+
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      try {
-        const res = await API.request('/auth/login', {
-          method: 'POST',
-          body: { email, password },
-          auth: false
-        });
-        if(res && res.token){
-          Auth.saveToken(res.token);
-          alert('تم الدخول بنجاح');
-          window.location.href = 'create-quiz.html';
-        }else{
-          alert('بيانات الدخول غير صحيحة');
-        }
-      } catch(err){
-        alert('خطأ في الدخول: ' + err.message);
+    const ADMIN = {user:'admin', pass:'AaBbCc123'};
+    function login(){
+      const u = document.getElementById('u').value.trim();
+      const p = document.getElementById('p').value;
+      // Check admin first
+      if(u===ADMIN.user && p===ADMIN.pass){
+        localStorage.setItem('currentUser', JSON.stringify({username:u, role:'admin'}));
+        location.href='profile.html';
+        return;
       }
-    });
+      const users = JSON.parse(localStorage.getItem('facultyUsers')||'[]');
+      const hit = users.find(x=>x.username===u && x.pass===p);
+      if(hit){
+        localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'}));
+        location.href='profile.html';
+      }else{
+        document.getElementById('msg').style.display='block';
+        document.getElementById('msg').innerText='بيانات الدخول غير صحيحة';
+      }
+    }
   </script>
-</body>
-</html>
+</body></html>
