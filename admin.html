@@ -1,134 +1,54 @@
+
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>لوحة التحكم</title>
-  <link rel="stylesheet" href="./style.css">
+<html lang="ar" dir="rtl"><head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>لوحة الإدارة</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <img src="logo.png" alt="شعار المنصة" onerror="this.onerror=null;this.src='assets/logo.png'">
-        <div class="title">كليات الأصالة – كلية القانون</div>
-      </div>
-      <nav>
-        <a href="index.html">الرئيسية</a>
-        <a href="instructions.html">التعليمات السريعة</a>
-        <a href="contact.html">التواصل مع الإدارة</a>
-        <a href="admin.html" aria-current="page">لوحة التحكم</a>
-      </nav>
-    </header>
-
-    <main>
-      <section class="card" style="padding:16px;">
-        <h1>تسجيل الدخول</h1>
-        <p>اسم المستخدم: <b>admin</b> — كلمة المرور الافتراضية: <b>AaBbCc123</b></p>
-        <form id="loginForm" style="display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); max-width:720px;">
-          <input name="username" required value="admin" class="input" placeholder="اسم المستخدم">
-          <input name="password" required type="password" class="input" placeholder="كلمة المرور">
-          <button class="button" type="submit">دخول</button>
-          <span id="loginMsg"></span>
-        </form>
-      </section>
-
-      <section id="panel" class="card" style="padding:16px; display:none;">
-        <h2>البريد الوارد من نموذج التواصل</h2>
-        <div style="display:grid; gap:8px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); align-items:start;">
-          <div>
-            <h3 style="margin-top:0">تغيير كلمة المرور</h3>
-            <form id="pwForm" style="display:grid; gap:8px;">
-              <input name="oldpass" type="password" class="input" placeholder="كلمة المرور الحالية" required>
-              <input name="newpass" type="password" class="input" placeholder="كلمة المرور الجديدة" required>
-              <button class="button" type="submit">تحديث كلمة المرور</button>
-              <span id="pwMsg"></span>
-            </form>
-          </div>
-          <div>
-            <p>يمكنك استعراض الرسائل وتحديث حالتها وإضافة رد داخلي.</p>
-          </div>
-        </div>
-
-        <div style="overflow:auto; margin-top:12px;">
-          <table style="width:100%; border-collapse:collapse;">
-            <thead>
-              <tr>
-                <th style="text-align:right; border-bottom:1px solid #ccc; padding:8px;">التاريخ</th>
-                <th style="text-align:right; border-bottom:1px solid #ccc; padding:8px;">المرسل</th>
-                <th style="text-align:right; border-bottom:1px solid #ccc; padding:8px;">الموضوع</th>
-                <th style="text-align:right; border-bottom:1px solid #ccc; padding:8px;">التفاصيل</th>
-                <th style="text-align:right; border-bottom:1px solid #ccc; padding:8px;">الحالة / الرد</th>
-                <th style="text-align:right; border-bottom:1px solid #ccc; padding:8px;">إجراءات</th>
-              </tr>
-            </thead>
-            <tbody id="msgBody"></tbody>
-          </table>
-        </div>
-      </section>
-    </main>
+  
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+      <a href="admin.html">الإدارة</a>
+    </nav>
   </div>
+</header>
 
-  <script src="./assets/storage.js"></script>
+  <main class="container">
+    <h2>لوحة الإدارة</h2>
+    <div id="guard" class="warning" style="display:none">هذه الصفحة للإدمن فقط. يرجى تسجيل الدخول بحساب الإدمن.</div>
+    <div id="content" style="display:none">
+      <div class="card">
+        <h3>الوارد من نموذج التواصل</h3>
+        <div id="inboxWrap"></div>
+      </div>
+    </div>
+  </main>
+  
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
+
   <script>
-    SQStore.ensureAdmin();
-    const loginForm = document.getElementById('loginForm');
-    const loginMsg = document.getElementById('loginMsg');
-    const panel = document.getElementById('panel');
-    const msgBody = document.getElementById('msgBody');
-
-    function render(){
-      const arr = SQStore.getMessages();
-      msgBody.innerHTML = '';
-      for (const m of arr){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="padding:8px; border-bottom:1px solid #eee;">${new Date(m.createdAt).toLocaleString('ar-SA')}</td>
-          <td style="padding:8px; border-bottom:1px solid #eee;">
-            <div><b>${m.name||'-'}</b> — ${m.role||''}</div>
-            <div style="opacity:0.8">${m.email||''}</div>
-          </td>
-          <td style="padding:8px; border-bottom:1px solid #eee;">${m.subject||'-'}</td>
-          <td style="padding:8px; border-bottom:1px solid #eee;">${(m.body||'').replace(/\n/g,'<br>')}</td>
-          <td style="padding:8px; border-bottom:1px solid #eee;">
-            <select class="input statusSel">
-              <option ${m.status==='new'?'selected':''}>new</option>
-              <option value="in_progress" ${m.status==='in_progress'?'selected':''}>in_progress</option>
-              <option value="closed" ${m.status==='closed'?'selected':''}>closed</option>
-            </select>
-            <textarea class="input replyBox" placeholder="رد داخلي..." style="min-height:80px; margin-top:6px;">${m.reply||''}</textarea>
-          </td>
-          <td style="padding:8px; border-bottom:1px solid #eee;">
-            <button class="button saveBtn">حفظ</button>
-            <a class="button" href="mailto:${'${m.email}'}?subject=${'${encodeURIComponent(\'Re: \'+(m.subject||\'\'))}'}">رد بالبريد</a>
-            <button class="button delBtn" style="background:#c44; color:#fff;">حذف</button>
-          </td>
-        `;
-        tr.querySelector('.saveBtn').addEventListener('click', ()=>{
-          const status = tr.querySelector('.statusSel').value;
-          const reply  = tr.querySelector('.replyBox').value;
-          SQStore.updateMessage(m.id, { status, reply });
-        });
-        tr.querySelector('.delBtn').addEventListener('click', ()=>{
-          if (confirm('تأكيد حذف الرسالة؟')){ SQStore.deleteMessage(m.id); render(); }
-        });
-        msgBody.appendChild(tr);
+    const me = JSON.parse(localStorage.getItem('currentUser')||'null');
+    if(!me || me.role!=='admin'){ document.getElementById('guard').style.display='block'; }
+    else {
+      document.getElementById('content').style.display='block';
+      const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
+      const wrap = document.getElementById('inboxWrap');
+      if(inbox.length===0) wrap.innerHTML='<div class="notice">لا توجد رسائل</div>';
+      else {
+        let html='<table class="table"><tr><th>التاريخ</th><th>المرسل</th><th>الموضوع</th><th>الرسالة</th></tr>';
+        inbox.forEach(m=>{ html += `<tr><td>${new Date(m.ts).toLocaleString('ar-SA')}</td><td>${m.name}<br>${m.email}</td><td>${m.subject}</td><td style="text-align:right">${m.body}</td></tr>`; });
+        html+='</table>'; wrap.innerHTML=html;
       }
     }
-
-    loginForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const fd = new FormData(loginForm);
-      const ok = await SQStore.login(fd.get('username'), fd.get('password'));
-      if (ok){
-        loginForm.parentElement.style.display = 'none';
-        panel.style.display = '';
-        render();
-      } else {
-        loginMsg.textContent = 'بيانات الدخول غير صحيحة';
-        setTimeout(()=> loginMsg.textContent = '', 3000);
-      }
-    });
   </script>
-</body>
-</html>
+</body></html>

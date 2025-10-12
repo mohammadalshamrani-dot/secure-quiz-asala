@@ -1,12 +1,19 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>منصة الاختبارات القصيرة – الرئيسية</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+  <div id="splash">
+    <div class="splash-box">
+      <img src="logo.png" alt="شعار الأصالة">
+      <h2>منصة الاختبارات القصيرة</h2>
+      <p>المطور: د. محمد الشمراني</p>
+    </div>
+  </div>
   
 <header>
   <div class="container header-inner">
@@ -19,6 +26,7 @@
       <a href="instructions.html">تعليمات سريعة</a>
       <a href="contact.html">تواصل مع الإدارة</a>
       <a href="login.html">دخول أعضاء هيئة التدريس</a>
+      <a href="admin.html">الإدارة</a>
     </nav>
   </div>
 </header>
@@ -30,38 +38,20 @@
       <div class="actions">
         <a class="btn" href="login.html">دخول أعضاء هيئة التدريس</a>
         <a class="btn outline" href="instructions.html">تعليمات سريعة</a>
+        <a class="btn outline" href="admin.html">الإدارة</a>
       </div>
     </section>
-
     <section class="grid">
-      <div class="card">
-        <h3>توقيت لكل سؤال</h3>
-        <span class="badge">زمن مضبوط</span>
-      </div>
-      <div class="card">
-        <h3>قفل عند مغادرة الصفحة</h3>
-        <span class="badge">منع الغش</span>
-      </div>
-      <div class="card">
-        <h3>محاولات محدودة</h3>
-        <span class="badge">تحكم كامل</span>
-      </div>
-      <div class="card">
-        <h3>تقارير فورية</h3>
-        <span class="badge">نتائج مباشرة</span>
-      </div>
+      <div class="card"><h3>توقيت لكل سؤال</h3><span class="badge">زمن مضبوط</span></div>
+      <div class="card"><h3>قفل عند مغادرة الصفحة</h3><span class="badge">منع الغش</span></div>
+      <div class="card"><h3>محاولات محدودة</h3><span class="badge">تحكم كامل</span></div>
+      <div class="card"><h3>تقارير فورية</h3><span class="badge">نتائج مباشرة</span></div>
     </section>
-
-    <p style="margin-top:18px;color:#666">لأعضاء هيئة التدريس فقط. بعد الدخول يمكن إنشاء الاختبار، ومشاركة رابط الطالب وباركوده، والاطلاع على النتائج.</p>
+    <p style="margin-top:18px;color:#666">لأعضاء هيئة التدريس فقط. بعد الدخول يمكن إنشاء الاختبار ومشاركة رابط الطالب والاطلاع على النتائج.</p>
   </main>
   
-<footer class="footer">
-  تم تطوير المنصة بواسطة د. محمد الشمراني
-</footer>
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
 
-
-  <script>
-    // Keep old site behavior if needed later
-  </script>
+  <script>setTimeout(()=>{document.getElementById('splash').style.display='none';},5000);</script>
 </body>
 </html>

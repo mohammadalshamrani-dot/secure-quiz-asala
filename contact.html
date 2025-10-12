@@ -1,7 +1,7 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>تواصل مع الإدارة</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -18,52 +18,38 @@
       <a href="instructions.html">تعليمات سريعة</a>
       <a href="contact.html">تواصل مع الإدارة</a>
       <a href="login.html">دخول أعضاء هيئة التدريس</a>
+      <a href="admin.html">الإدارة</a>
     </nav>
   </div>
 </header>
 
   <main class="container form">
     <h2>تواصل مع الإدارة</h2>
-    <p>يصل هذا النموذج إلى صندوق وارد الإداري داخل لوحة التحكم.</p>
+    <p>تصل هذه الرسائل إلى لوحة الإدارة. الرجاء كتابة بيانات دقيقة لسهولة التواصل.</p>
     <div class="card">
-      <label>الاسم</label>
-      <input id="c_name" placeholder="الاسم الثلاثي"/>
-      <label>البريد الإلكتروني</label>
-      <input id="c_email" placeholder="example@domain.com" type="email"/>
-      <label>الموضوع</label>
-      <input id="c_subject" placeholder="موضوع الرسالة"/>
-      <label>الرسالة</label>
-      <textarea id="c_body" rows="6" placeholder="اكتب رسالتك هنا..."></textarea>
+      <label>الاسم</label><input id="c_name" placeholder="الاسم الثلاثي"/>
+      <label>البريد الإلكتروني</label><input id="c_email" type="email" placeholder="example@domain.com"/>
+      <label>الموضوع</label><input id="c_subject" placeholder="موضوع الرسالة"/>
+      <label>الرسالة</label><textarea id="c_body" rows="6" placeholder="اكتب رسالتك هنا..."></textarea>
       <div class="actions">
         <button class="btn" onclick="send()">إرسال</button>
         <a class="btn outline" href="index.html">الرئيسية</a>
       </div>
-      <div id="ok" class="success" style="display:none">تم إرسال رسالتك بنجاح.</div>
+      <div id="ok" class="success" style="display:none">تم إرسال رسالتك.</div>
     </div>
   </main>
   
-<footer class="footer">
-  تم تطوير المنصة بواسطة د. محمد الشمراني
-</footer>
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
 
   <script>
     function send(){
-      const name = document.getElementById('c_name').value.trim();
-      const email = document.getElementById('c_email').value.trim();
-      const subject = document.getElementById('c_subject').value.trim() || 'رسالة من نموذج التواصل';
-      const body = document.getElementById('c_body').value.trim();
-      const msg = {id: Date.now(), name, email, subject, body, ts: new Date().toISOString()};
-      const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
-      inbox.unshift(msg);
+      const name = c_name.value.trim(), email=c_email.value.trim(), subject=c_subject.value.trim()||'رسالة من نموذج التواصل', body=c_body.value.trim();
+      const msg={id:Date.now(), name, email, subject, body, ts:new Date().toISOString()};
+      const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]'); inbox.unshift(msg);
       localStorage.setItem('adminInbox', JSON.stringify(inbox));
-      document.getElementById('ok').style.display='block';
-      document.getElementById('c_body').value='';
+      ok.style.display='block'; c_body.value='';
     }
-    // If redirected from "forgot"
     const params = new URLSearchParams(location.search);
-    if(params.get('why')==='forgot') {
-      document.getElementById('c_subject').value = 'استعادة كلمة المرور';
-      document.getElementById('c_body').value = 'أرغب في استعادة كلمة مرور حساب عضو هيئة التدريس.';
-    }
+    if(params.get('why')==='forgot') { c_subject.value='استعادة كلمة المرور'; c_body.value='أرغب في استعادة كلمة المرور لحساب عضو هيئة التدريس.'; }
   </script>
 </body></html>

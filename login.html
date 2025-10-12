@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
   <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -17,6 +18,7 @@
       <a href="instructions.html">تعليمات سريعة</a>
       <a href="contact.html">تواصل مع الإدارة</a>
       <a href="login.html">دخول أعضاء هيئة التدريس</a>
+      <a href="admin.html">الإدارة</a>
     </nav>
   </div>
 </header>
@@ -24,10 +26,8 @@
   <main class="container form">
     <h2>دخول أعضاء هيئة التدريس</h2>
     <div class="card">
-      <label>اسم المستخدم</label>
-      <input id="u" placeholder="example"/>
-      <label>كلمة المرور</label>
-      <input id="p" type="password" placeholder="••••••••"/>
+      <label>اسم المستخدم</label><input id="u" placeholder="example"/>
+      <label>كلمة المرور</label><input id="p" type="password" placeholder="••••••••"/>
       <div class="actions">
         <button class="btn" onclick="login()">دخول</button>
         <a class="btn outline" href="register.html">تسجيل جديد</a>
@@ -37,30 +37,17 @@
     </div>
   </main>
   
-<footer class="footer">
-  تم تطوير المنصة بواسطة د. محمد الشمراني
-</footer>
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
 
   <script>
-    const ADMIN = {user:'admin', pass:'AaBbCc123'};
+    const ADMIN={user:'admin', pass:'AaBbCc123'};
     function login(){
-      const u = document.getElementById('u').value.trim();
-      const p = document.getElementById('p').value;
-      // Check admin first
-      if(u===ADMIN.user && p===ADMIN.pass){
-        localStorage.setItem('currentUser', JSON.stringify({username:u, role:'admin'}));
-        location.href='profile.html';
-        return;
-      }
-      const users = JSON.parse(localStorage.getItem('facultyUsers')||'[]');
-      const hit = users.find(x=>x.username===u && x.pass===p);
-      if(hit){
-        localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'}));
-        location.href='profile.html';
-      }else{
-        document.getElementById('msg').style.display='block';
-        document.getElementById('msg').innerText='بيانات الدخول غير صحيحة';
-      }
+      const u=document.getElementById('u').value.trim(), p=document.getElementById('p').value;
+      if(u===ADMIN.user && p===ADMIN.pass){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'admin'})); location.href='profile.html'; return; }
+      const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
+      const hit=users.find(x=>x.username===u && x.pass===p);
+      if(hit){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'})); location.href='profile.html'; }
+      else{ msg.style.display='block'; msg.innerText='بيانات الدخول غير صحيحة'; }
     }
   </script>
 </body></html>

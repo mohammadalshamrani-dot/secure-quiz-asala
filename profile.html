@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
   <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -17,6 +18,7 @@
       <a href="instructions.html">تعليمات سريعة</a>
       <a href="contact.html">تواصل مع الإدارة</a>
       <a href="login.html">دخول أعضاء هيئة التدريس</a>
+      <a href="admin.html">الإدارة</a>
     </nav>
   </div>
 </header>
@@ -26,20 +28,14 @@
     <div id="who" class="notice"></div>
     <div class="profile-grid">
       <div class="card">
-        <h3>إنشاء اختبار</h3>
-        <p>يحولك إلى منصة إنشاء الاختبار الحالية.</p>
-        <a class="btn" href="https://secure-quiz-asala-1.onrender.com" target="_blank">فتح منصة الإنشاء</a>
+        <h3>منصة إنشاء الاختبارات (داخلية)</h3>
+        <p>أنشئ اختبارًا واحصل على رابط للطلاب.</p>
+        <a class="btn" href="builder.html">فتح منصة الإنشاء</a>
       </div>
       <div class="card">
         <h3>نتائج الطلاب</h3>
-        <p>استعرض نتائج الطلاب المرتبطة بالاختبارات.</p>
+        <p>استعرض نتائج الاختبارات الخاصة بك مباشرة.</p>
         <a class="btn" href="results.html">عرض النتائج</a>
-      </div>
-      <div class="card">
-        <h3>الوارد (للإدمن)</h3>
-        <p>رسائل نموذج تواصل مع الإدارة.</p>
-        <a class="btn outline" href="#" onclick="openInbox()">فتح الوارد</a>
-        <div id="inboxWrap" style="margin-top:10px"></div>
       </div>
       <div class="card">
         <h3>خروج</h3>
@@ -49,33 +45,11 @@
     </div>
   </main>
   
-<footer class="footer">
-  تم تطوير المنصة بواسطة د. محمد الشمراني
-</footer>
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني</footer>
 
   <script>
-    const me = JSON.parse(localStorage.getItem('currentUser')||'null');
-    if(!me) location.href='login.html';
-    document.getElementById('who').innerText = 'مرحبًا، ' + me.username + (me.role==='admin' ? ' (إدمن)' : '');
-    function logout(){
-      localStorage.removeItem('currentUser'); location.href='index.html';
-    }
-    function openInbox(){
-      const wrap = document.getElementById('inboxWrap');
-      wrap.innerHTML='';
-      const me = JSON.parse(localStorage.getItem('currentUser')||'null');
-      if(me && me.role==='admin'){
-        const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
-        if(inbox.length===0){ wrap.innerHTML='<div class="notice">لا توجد رسائل</div>'; return; }
-        let html='<table class="table"><tr><th>التاريخ</th><th>المرسل</th><th>الموضوع</th><th>الرسالة</th></tr>';
-        inbox.forEach(m=>{
-          html += `<tr><td>${new Date(m.ts).toLocaleString('ar-SA')}</td><td>${m.name}<br>${m.email}</td><td>${m.subject}</td><td style="text-align:right">${m.body}</td></tr>`;
-        });
-        html+='</table>';
-        wrap.innerHTML = html;
-      } else {
-        wrap.innerHTML='<div class="warning">هذه الميزة للإدمن فقط.</div>';
-      }
-    }
+    const me=JSON.parse(localStorage.getItem('currentUser')||'null'); if(!me) location.href='login.html';
+    who.innerText='مرحبًا، '+me.username+(me.role==='admin'?' (إدمن)':'');
+    function logout(){ localStorage.removeItem('currentUser'); location.href='index.html'; }
   </script>
 </body></html>
