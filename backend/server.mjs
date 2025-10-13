@@ -31,6 +31,57 @@ app.options("*", cors(corsOptions)); // السماح بطلبات preflight
 app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+// ✅ فحص الصحة السريع
+app.get("/api/health", (req, res) => res.json({ ok: true, service: "secure-quiz-asala-1" }));
+
+// هيلبر: جرّب أكثر من اسم جدول لو ما عرفت الاسم الدقيق
+async function fetchQuizById(id) {
+  const tableList =
+    (process.env.QUIZ_TABLE ? process.env.QUIZ_TABLE.split(",") : null)
+      || ["quizzes", "exams", "quiz", "tests"]; // عدّلها لاحقًا إذا عرفت الاسم
+
+  for (const table of tableList) {
+    const { data, error } = await supabase
+      .from(table)
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (data) return data;               // لقيّنا الاختبار
+    if (error && error.code && error.code !== "PGRST116") {
+      // PGRST116 غالبًا "Row not found" — كمل على الجدول اللي بعده
+      console.warn(`[fetchQuizById] table=${table} error=`, error.message);
+    }
+  }
+  return null; // ما لقينا في أي جدول
+}
+
+// ✅ /api/quiz?id=XXXX
+app.get("/api/quiz", async (req, res) => {
+  try {
+    const id = String(req.query.id || "").trim();
+    if (!id) return res.status(400).json({ ok: false, error: "missing id" });
+
+    const quiz = await fetchQuizById(id);
+    if (!quiz) return res.status(404).json({ ok: false, error: "quiz not found" });
+
+    return res.json({ ok: true, quiz });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message || "server error" });
+  }
+});
+
+// ✅ /api/quiz/XXXX
+app.get("/api/quiz/:id", async (req, res) => {
+  try {
+    const id = String(req.params.id || "").trim();
+    const quiz = await fetchQuizById(id);
+    if (!quiz) return res.status(404).json({ ok: false, error: "quiz not found" });
+    return res.json({ ok: true, quiz });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message || "server error" });
+  }
+});
 
 app.get("/", (req,res)=> res.json({ ok:true, service:"asala-results-api" }));
 
