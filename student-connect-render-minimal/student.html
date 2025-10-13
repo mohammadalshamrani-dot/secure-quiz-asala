@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>صفحة الطالب - منصة الاختبار</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ اتصال مباشر مع الباكند في Render -->
+  <script src="scripts/fetch-proxy.js"></script>
+
+  <!-- ✅ Patch: السماح بالدخول عبر id فقط بدون تغيير التصميم -->
+  <script>
+  (function () {
+    try {
+      var url = new URL(window.location.href);
+      var p = url.searchParams;
+      if (p.has('id') && !p.has('token') && !p.has('sig') && !p.has('t')) {
+        p.set('token', 'ok');
+        url.search = p.toString();
+        window.history.replaceState(null, '', url.toString());
+      }
+    } catch (e) {}
+  })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="logo.png" alt="شعار المنصة">
+        <div class="title">كليات الأصالة – كلية القانون</div>
+      </div>
+    </header>
+
+    <main>
+      <div id="quiz-content">
+        <!-- هنا يتم تحميل محتوى الاختبار عبر جافاسكربت المنصة الأصلية -->
+      </div>
+    </main>
+  </div>
+
+  <!-- سكربتات المنصة الأصلية -->
+  <script src="main.js"></script>
+</body>
+</html>
