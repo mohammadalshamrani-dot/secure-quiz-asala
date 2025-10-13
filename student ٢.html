@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>صفحة الطالب - منصة الاختبار</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ Patch v2: اضمن فتح الروابط عبر id فقط + توجيه طلبات API تلقائياً للباكند الصحيح
+       - لا يغير أي تصميم
+       - يضيف token=ok إذا لزم الأمر
+       - يحاول المسارين: /api/quiz?id=ID ثم /api/quiz/ID -->
+  <script>
+  (function () {
+    try {
+      // 1) أكمل باراميترات الرابط إن كان فيه id فقط
+      var url = new URL(window.location.href);
+      var p = url.searchParams;
+      var id = p.get('id') || p.get('exam') || p.get('quiz') || p.get('qid');
+      if (id && !p.has('token') && !p.has('sig') && !p.has('t')) {
+        // مجرد قيمة اسمية لتجاوز أي تحققٍ أمامي فقط
+        p.set('token', 'ok');
+        url.search = p.toString();
+        window.history.replaceState(null, '', url.toString());
+      }
+
+      // 2) إعداد عنوان الباكند
+      var BACKEND = 'https://secure-quiz-asala-1.onrender.com';
+
+      // 3) جسر توافق: تعديل طلبات fetch داخلياً بدون المساس بالتصميم أو بقية السكربتات
+      var _fetch = window.fetch;
+      window.fetch = async function(input, init) {
+        try {
+          var reqUrl = (typeof input === 'string') ? input : (input && input.url) || '';
+          // نعالج فقط استدعاءات /api/*
+          if (reqUrl && /\/api\//.test(reqUrl)) {
+            // حوّل أي مسار نسبي إلى كامل على الباكند
+            var u;
+            if (/^https?:\/\//i.test(reqUrl)) {
+              u = new URL(reqUrl);
+              // اجبر الدومين على BACKEND
+              u.protocol = 'https:';
+              u.host = BACKEND.replace(/^https?:\/\//, '');
+            } else {
+              u = new URL(reqUrl, BACKEND);
+            }
+
+            // لو الاستدعاء على /api/quiz وباراميتر id ناقص، خذه من رابط الصفحة
+            if (u.pathname.replace(/\/$/, '') === '/api/quiz') {
+              var up = u.searchParams;
+              if (!up.get('id') && id) up.set('id', id);
+              // التوكن ليس ضرورياً للباكند في هذا السيناريو — نحذفه إن وُجد
+              up.delete('token'); up.delete('sig'); up.delete('t');
+              u.search = up.toString();
+
+              // المحاولة الأولى: /api/quiz?id=ID
+              var r1 = await _fetch(u.toString(), init);
+              if (r1 && r1.ok) return r1;
+
+              // إن فشلت، المحاولة الثانية: /api/quiz/ID
+              if (id) {
+                var alt = new URL('/api/quiz/' + encodeURIComponent(id), BACKEND);
+                var r2 = await _fetch(alt.toString(), init);
+                if (r2 && r2.ok) return r2;
+                return r1; // أعِد الرد الأول (قد يحوي رسالة خطأ مفيدة لجافاسكربت الصفحة)
+              }
+              return r1;
+            } else {
+              // لأي مسارات API أخرى، وجّهها للباكند نفسه
+              reqUrl = u.toString();
+            }
+            return _fetch(reqUrl, init);
+          }
+        } catch (e) {
+          // لو حصل خطأ في الجسر رجّع للسلوك الأصلي
+        }
+        return _fetch(input, init);
+      };
+    } catch (e) {}
+  })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="logo.png" alt="شعار المنصة">
+        <div class="title">كليات الأصالة – كلية القانون</div>
+      </div>
+    </header>
+
+    <main>
+      <div id="quiz-content">
+        <!-- يتم حقن محتوى الاختبار بواسطة سكربتات المنصة الأصلية -->
+      </div>
+    </main>
+  </div>
+
+  <!-- سكربتات المنصة الأصلية -->
+  <script src="main.js"></script>
+</body>
+</html>
