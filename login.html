@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>دخول أعضاء هيئة التدريس</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>دخول أعضاء هيئة التدريس</title>
+<link rel="stylesheet" href="style.css"/>
+</head><body>
+
 <header>
   <div class="container header-inner">
     <div class="brand">
@@ -23,7 +20,7 @@
   </div>
 </header>
 
-  
+
 <main class="container form">
   <h2>دخول أعضاء هيئة التدريس</h2>
   <div class="card">
@@ -35,21 +32,16 @@
       <a class="btn outline" href="contact.html?why=forgot">نسيت كلمة المرور</a>
     </div>
     <div id="msg" class="warning" style="display:none"></div>
-    <div class="notice">دخول الإدارة يتم فقط عبر زر <b>الإدارة</b> في الهيدر.</div>
+    <div class="notice">دخول الإدارة يتم فقط عبر زر <b>الإدارة</b>.</div>
   </div>
 </main>
 
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
-  
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9 (2025) – added Exam Access Guard (feature-flagged; default OFF) -->
+
 <script>
-  function login(){
-    const u=document.getElementById('u').value.trim(), p=document.getElementById('p').value;
-    if(u==='admin'){ msg.style.display='block'; msg.innerText='دخول الإدارة يتم فقط من صفحة الإدارة.'; return; }
-    const users=JSON.parse(localStorage.getItem('facultyUsers')||'[]');
-    const hit=users.find(x=>x.username===u && x.pass===p);
-    if(hit){ localStorage.setItem('currentUser', JSON.stringify({username:u, role:'faculty'})); location.href='profile.html'; }
-    else{ msg.style.display='block'; msg.innerText='بيانات الدخول غير صحيحة'; }
-  }
+function login(){
+  const u=u=>document.getElementById('u').value.trim();
+}
 </script>
 
 </body></html>

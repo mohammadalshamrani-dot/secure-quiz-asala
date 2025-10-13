@@ -1,0 +1,66 @@
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Exam Access Guard – QR</title>
+<link rel="stylesheet" href="style.css"/>
+</head><body>
+
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل مع الإدارة</a>
+      <a href="login.html">دخول أعضاء هيئة التدريس</a>
+      <a href="admin.html">الإدارة</a>
+    </nav>
+  </div>
+</header>
+
+
+<main class="container">
+  <h2>Exam Access Guard – QR</h2>
+  <div class="card">
+    <p>اختر الاختبار لعرض <b>رمز دخول</b> يتغير كل 60 ثانية. عند تفعيل الحارس من لوحة الإدارة، لن يبدأ الطالب إلا عبر رابط يحوي الرمز الحالي.</p>
+    <div class="actions">
+      <select id="quizSel"></select>
+      <button class="btn" onclick="refresh()">تحديث</button>
+      <button class="btn outline" onclick="toggle()">تفعيل/إيقاف الحارس</button>
+    </div>
+    <div class="notice" id="state"></div>
+  </div>
+  <div class="card">
+    <div id="codeBox" class="badge"></div>
+    <div id="linkOut" style="margin-top:10px"></div>
+  </div>
+</main>
+
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9 (2025) – added Exam Access Guard (feature-flagged; default OFF) -->
+
+<script>
+const quizzes=JSON.parse(localStorage.getItem('quizzes')||'[]');
+const sel=document.getElementById('quizSel');
+quizzes.forEach(q=>{ const o=document.createElement('option'); o.value=q.id; o.textContent=q.title; sel.appendChild(o); });
+function guardOn(){ return localStorage.getItem('examGuardOn')==='1'; }
+function toggle(){ localStorage.setItem('examGuardOn', guardOn()?'0':'1'); sync(); }
+function sync(){ state.innerHTML='Exam Access Guard: <b>'+(guardOn()?'مفعّل':'متوقف')+'</b>'; }
+function pad(n){ return n<10 ? '0'+n : ''+n; }
+function minuteKey(d){ return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+pad(d.getUTCHours())+pad(d.getUTCMinutes()); }
+function hashCode(s){ let h=0; for(let i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return Math.abs(h); }
+function codeFor(quizId){ const d=new Date(); const bucket=minuteKey(d); const h=(''+(hashCode(quizId+'::'+bucket))).padStart(8,'0'); return h.slice(-6); }
+function refresh(){
+  if(quizzes.length===0){ linkOut.innerHTML='<div class="warning">لا توجد اختبارات.</div>'; return; }
+  const qid=sel.value||quizzes[0].id;
+  const code=codeFor(qid);
+  codeBox.textContent='الرمز الحالي: '+code+' (يتجدد كل دقيقة)';
+  const base = location.origin + location.pathname.replace('guard.html','');
+  const link = base + 'student.html?id='+qid+'&token='+code;
+  linkOut.innerHTML = 'رابط الدخول اللحظي: <a target="_blank" href="'+link+'">'+link+'</a>';
+}
+sync(); refresh(); setInterval(refresh, 15000);
+</script>
+
+</body></html>

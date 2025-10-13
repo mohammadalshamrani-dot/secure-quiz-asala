@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>تواصل مع الإدارة</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>تواصل مع الإدارة</title>
+<link rel="stylesheet" href="style.css"/>
+</head><body>
+
 <header>
   <div class="container header-inner">
     <div class="brand">
@@ -23,15 +20,14 @@
   </div>
 </header>
 
-  
+
 <main class="container form">
   <h2>تواصل مع الإدارة</h2>
-  <p>تصل هذه الرسائل إلى لوحة الإدارة. الرجاء كتابة بيانات دقيقة لسهولة التواصل.</p>
   <div class="card">
-    <label>الاسم</label><input id="c_name" placeholder="الاسم الثلاثي"/>
-    <label>البريد الإلكتروني</label><input id="c_email" type="email" placeholder="example@domain.com"/>
-    <label>الموضوع</label><input id="c_subject" placeholder="موضوع الرسالة"/>
-    <label>الرسالة</label><textarea id="c_body" rows="6" placeholder="اكتب رسالتك هنا..."></textarea>
+    <label>الاسم</label><input id="c_name"/>
+    <label>البريد الإلكتروني</label><input id="c_email" type="email"/>
+    <label>الموضوع</label><input id="c_subject"/>
+    <label>الرسالة</label><textarea id="c_body" rows="6"></textarea>
     <div class="actions">
       <button class="btn" onclick="send()">إرسال</button>
       <a class="btn outline" href="index.html">الرئيسية</a>
@@ -40,18 +36,15 @@
   </div>
 </main>
 
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
-  
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9 (2025) – added Exam Access Guard (feature-flagged; default OFF) -->
+
 <script>
-  function send(){
-    const name = c_name.value.trim(), email=c_email.value.trim(), subject=c_subject.value.trim()||'رسالة من نموذج التواصل', body=c_body.value.trim();
-    const msg={id:Date.now(), name, email, subject, body, ts:new Date().toISOString()};
-    const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]'); inbox.unshift(msg);
-    localStorage.setItem('adminInbox', JSON.stringify(inbox));
-    ok.style.display='block'; c_body.value='';
-  }
-  const params = new URLSearchParams(location.search);
-  if(params.get('why')==='forgot') { c_subject.value='استعادة كلمة المرور'; c_body.value='أرغب في استعادة كلمة المرور لحساب عضو هيئة التدريس.'; }
+function send(){
+  const msg={id:Date.now(), name:c_name.value.trim(), email:c_email.value.trim(),
+  subject:c_subject.value.trim()||'رسالة من نموذج التواصل', body:c_body.value.trim(), ts:new Date().toISOString()};
+  const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]'); inbox.unshift(msg);
+  localStorage.setItem('adminInbox', JSON.stringify(inbox)); ok.style.display='block'; c_body.value='';
+}
 </script>
 
 </body></html>
