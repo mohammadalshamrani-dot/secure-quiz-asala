@@ -1,23 +1,41 @@
-// يوجّه استدعاءات /api/* تلقائيًا إلى باكند Render بدون تعديل بقية الأكواد
+// Proxy ذكي: يدعم /api/quiz?id=ID و /api/quiz/ID معاً
 (function () {
   var API_BASE = 'https://secure-quiz-asala-1.onrender.com';
   if (!window.fetch || !API_BASE) return;
-  try {
-    var origFetch = window.fetch;
-    window.fetch = function (input, init) {
-      try {
-        var url = (typeof input === 'string') ? input : (input && input.url);
-        if (url && /^\/api\//.test(url)) {
-          var newUrl = API_BASE + url;
-          if (typeof input === 'string') {
-            return origFetch(newUrl, init);
+
+  var origFetch = window.fetch;
+  window.fetch = async function (input, init) {
+    try {
+      var url = (typeof input === 'string') ? input : (input && input.url) || '';
+
+      // عالج فقط الطلبات التي تبدأ بـ /api/
+      if (url && /^\/api\//.test(url)) {
+        var target = url;
+
+        // ✅ تحويل /api/quiz?id=ID إلى /api/quiz/ID
+        if (/^\/api\/quiz(?:[/?]|$)/.test(url)) {
+          // اصنع URL مؤقت لقراءة باراميترات الاستعلام
+          var u = new URL(url, 'http://x');
+          var qid = u.searchParams.get('id');
+          if (qid) {
+            target = '/api/quiz/' + encodeURIComponent(qid);
           } else {
-            var req = new Request(newUrl, input);
-            return origFetch(req, init);
+            // إن لم يوجد id في الاستعلام، اتركه كما هو (يدعم /api/quiz/ID)
+            target = u.pathname + (u.search || '');
           }
         }
-      } catch (e) { /* ignore and fall back */ }
-      return origFetch(input, init);
-    };
-  } catch (e) {}
+
+        var full = API_BASE + target;
+        if (typeof input === 'string') {
+          return origFetch(full, init);
+        } else {
+          var req = new Request(full, input);
+          return origFetch(req, init);
+        }
+      }
+    } catch (e) {
+      // في حال أي خطأ نرجع للسلوك الأصلي
+    }
+    return origFetch(input, init);
+  };
 })();
