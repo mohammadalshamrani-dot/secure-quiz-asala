@@ -9,5 +9,7 @@
     "express": "^4.19.2"
   },
   "engines": { "node": ">=18" },
-  "scripts": { "start": "node server.mjs" }
+  "scripts": {
+    "start": "node server.mjs"
+  }
 }
