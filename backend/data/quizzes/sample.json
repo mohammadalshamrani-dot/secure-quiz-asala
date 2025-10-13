@@ -1,0 +1,15 @@
+{
+  "title": "Sample Quiz (fallback)",
+  "questions": [
+    {
+      "q": "Example?",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": 0
+    }
+  ]
+}

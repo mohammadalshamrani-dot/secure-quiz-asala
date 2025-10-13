@@ -1,4 +1,13 @@
-# Backend Placeholder (No Changes to Site)
+# Secure Quiz Asala – Backend (Public Restore Mode)
 
-This folder is intentionally empty so you can add your backend later.
-Uploading this does **not** modify your existing frontend or GitHub Pages site.
+Upload these files into your existing `backend/` folder.
+This enables public endpoints with **no JWT and no Supabase** so the student links open immediately.
+
+Render Settings:
+- Root Directory: backend
+- Build Command: npm install
+- Start Command: npm start
+
+Environment:
+- REMOVE: JWT_SECRET, PORT
+- Optional: CORS_ORIGIN=https://mohammadalshamrani-dot.github.io
