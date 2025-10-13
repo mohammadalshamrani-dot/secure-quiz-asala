@@ -3,7 +3,31 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
-app.use(cors());
+// السماح لأصل GitHub Pages باستخدام المنصة
+const allowedOrigins = [
+  "https://mohammadalshamrani-dot.github.io",
+  "https://mohammadalshamrani-dot.github.io/secure-quiz-asala"
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // السماح للطلبات بدون Origin (مثل Postman أو Render نفسه)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn("❌ CORS Blocked Request from:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false,
+};
+
+// استخدم هذا بدلاً من app.use(cors())
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // السماح بطلبات preflight
+
 app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
