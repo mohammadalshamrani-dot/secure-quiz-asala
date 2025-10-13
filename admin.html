@@ -1,9 +1,12 @@
-<!doctype html><html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>لوحة الإدارة</title>
-<link rel="stylesheet" href="style.css"/>
-</head><body>
-
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>لوحة الإدارة</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  
 <header>
   <div class="container header-inner">
     <div class="brand">
@@ -20,7 +23,7 @@
   </div>
 </header>
 
-
+  
 <main class="container">
   <h2>لوحة الإدارة</h2>
   <div id="gate" class="card" style="display:none">
@@ -38,39 +41,90 @@
     <div class="card">
       <h3>الوارد من نموذج التواصل</h3>
       <div id="inboxWrap"></div>
-      <div class="actions">
-        <button class="btn outline" onclick="toggleGuard()">تفعيل/إيقاف Exam Access Guard</button>
-        <a class="btn" href="guard.html" target="_blank">فتح شاشة QR</a>
+    </div>
+
+    <div class="card" id="adminMgmt">
+      <h3>إدارة مسؤولي النظام</h3>
+      <div class="grid">
+        <div>
+          <h4>إضافة أدمن</h4>
+          <label>اسم المستخدم</label><input id="newAdminU">
+          <label>كلمة المرور</label><input id="newAdminP" type="password">
+          <div class="actions"><button class="btn" onclick="addAdmin()">إضافة</button></div>
+        </div>
+        <div>
+          <h4>تغيير كلمة مرور الأدمن الحالي</h4>
+          <label>كلمة المرور الجديدة</label><input id="chgPass" type="password">
+          <div class="actions"><button class="btn outline" onclick="changePass()">تغيير</button></div>
+        </div>
       </div>
-      <div class="notice" id="guardState"></div>
+      <div class="notice">الحساب الافتراضي: admin / AaBbCc123 — يمكنك إضافة حسابات أخرى أو تغيير كلمة المرور الحالية.</div>
     </div>
   </div>
 </main>
 
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9 (2025) – added Exam Access Guard (feature-flagged; default OFF) -->
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9.2 (2025) – remove guard; add time column; admin user mgmt -->
+  
 <script>
-const ADMIN={user:'admin', pass:'AaBbCc123'};
-const me = JSON.parse(localStorage.getItem('currentUser')||'null');
-function renderInbox(){
-  const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
-  const wrap = document.getElementById('inboxWrap');
-  if(inbox.length===0){ wrap.innerHTML='<div class="notice">لا توجد رسائل</div>'; return; }
-  let html='<table class="table"><tr><th>التاريخ</th><th>المرسل</th><th>البريد</th><th>الموضوع</th><th>الرسالة</th></tr>';
-  inbox.forEach(m=>{ html += `<tr><td>${new Date(m.ts).toLocaleString('ar-SA')}</td><td>${m.name}</td><td>${m.email}</td><td>${m.subject}</td><td style="text-align:right">${m.body}</td></tr>`; });
-  html+='</table>'; wrap.innerHTML=html;
-}
-function adminLogin(){
-  if(au.value.trim()===ADMIN.user && ap.value===ADMIN.pass){
-    localStorage.setItem('currentUser', JSON.stringify({username:'admin', role:'admin'}));
-    document.getElementById('gate').style.display='none'; document.getElementById('content').style.display='block';
-    renderInbox(); syncGuardState();
-  }else{ amsg.style.display='block'; amsg.innerText='بيانات الدخول غير صحيحة'; }
-}
-if(!me || me.role!=='admin'){ document.getElementById('gate').style.display='block'; }
-else { document.getElementById('content').style.display='block'; renderInbox(); syncGuardState(); }
-function toggleGuard(){ const on = localStorage.getItem('examGuardOn')==='1'; localStorage.setItem('examGuardOn', on?'0':'1'); syncGuardState(); alert('Exam Access Guard: ' + (on?'OFF':'ON')); }
-function syncGuardState(){ const on = localStorage.getItem('examGuardOn')==='1'; guardState.innerHTML = 'Exam Access Guard: <b>' + (on?'مفعّل':'متوقف') + '</b> (افتراضيًا متوقف)'; }
+  // Admin users store
+  function getAdmins(){
+    const list = JSON.parse(localStorage.getItem('adminUsers')||'[]');
+    // ensure default exists
+    if(!list.some(a=>a.username==='admin')){
+      list.push({username:'admin', pass:'AaBbCc123'});
+      localStorage.setItem('adminUsers', JSON.stringify(list));
+    }
+    return JSON.parse(localStorage.getItem('adminUsers')||'[]');
+  }
+  function setAdmins(list){
+    localStorage.setItem('adminUsers', JSON.stringify(list));
+  }
+
+  function renderInbox(){
+    const inbox = JSON.parse(localStorage.getItem('adminInbox')||'[]');
+    const wrap = document.getElementById('inboxWrap');
+    if(inbox.length===0){ wrap.innerHTML='<div class="notice">لا توجد رسائل</div>'; return; }
+    let html='<table class="table"><tr><th>التاريخ</th><th>المرسل</th><th>البريد</th><th>الموضوع</th><th>الرسالة</th></tr>';
+    inbox.forEach(m=>{ html += `<tr><td>${new Date(m.ts).toLocaleString('ar-SA')}</td><td>${m.name}</td><td>${m.email}</td><td>${m.subject}</td><td style="text-align:right">${m.body}</td></tr>`; });
+    html+='</table>'; wrap.innerHTML=html;
+  }
+
+  function adminLogin(){
+    const u = (document.getElementById('au').value || '').trim();
+    const p = document.getElementById('ap').value;
+    const list = getAdmins();
+    const ok = list.find(a=>a.username===u && a.pass===p);
+    if(ok){
+      localStorage.setItem('currentUser', JSON.stringify({username:u, role:'admin'}));
+      document.getElementById('gate').style.display='none';
+      document.getElementById('content').style.display='block';
+      renderInbox();
+    }else{
+      const msg=document.getElementById('amsg'); msg.style.display='block'; msg.innerText='بيانات الدخول غير صحيحة';
+    }
+  }
+
+  function addAdmin(){
+    const u=(newAdminU.value||'').trim(), p=newAdminP.value;
+    if(!u || !p){ alert('يرجى إدخال اسم المستخدم وكلمة المرور'); return; }
+    const list=getAdmins();
+    if(list.some(a=>a.username===u)){ alert('اسم المستخدم موجود مسبقًا'); return; }
+    list.push({username:u, pass:p}); setAdmins(list);
+    alert('تمت إضافة حساب أدمن جديد');
+  }
+
+  function changePass(){
+    const me = JSON.parse(localStorage.getItem('currentUser')||'null');
+    if(!me || me.role!=='admin'){ alert('يلزم تسجيل الدخول كأدمن'); return; }
+    const np = chgPass.value; if(!np){ alert('يرجى إدخال كلمة مرور جديدة'); return; }
+    const list = getAdmins();
+    const i = list.findIndex(a=>a.username===me.username);
+    if(i>=0){ list[i].pass = np; setAdmins(list); alert('تم تغيير كلمة المرور'); chgPass.value=''; }
+  }
+
+  const me = JSON.parse(localStorage.getItem('currentUser')||'null');
+  if(!me || me.role!=='admin'){ document.getElementById('gate').style.display='block'; }
+  else { document.getElementById('content').style.display='block'; renderInbox(); }
 </script>
 
 </body></html>

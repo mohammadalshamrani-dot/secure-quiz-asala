@@ -1,9 +1,12 @@
-<!doctype html><html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>منصة إنشاء الاختبارات</title>
-<link rel="stylesheet" href="style.css"/>
-</head><body>
-
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>منصة إنشاء الاختبارات</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  
 <header>
   <div class="container header-inner">
     <div class="brand">
@@ -20,20 +23,22 @@
   </div>
 </header>
 
-
+  
 <main class="container form">
   <h2>منصة إنشاء الاختبارات (داخلية)</h2>
   <div id="wrap" style="display:none">
     <div class="card">
-      <label>عنوان الاختبار</label><input id="q_title"/>
+      <label>عنوان الاختبار</label><input id="q_title" placeholder="مثال: اختبار القانون الدستوري – كويز 1"/>
       <label>الزمن لكل سؤال (ثوانٍ)</label><input id="per_sec" type="number" value="30"/>
       <label><input type="checkbox" id="limit_once" checked> محاولة واحدة فقط للطالب</label>
     </div>
+
     <div class="card" id="items"></div>
     <div class="actions">
       <button class="btn" onclick="addMCQ()">إضافة سؤال اختيار من متعدد</button>
       <button class="btn outline" onclick="addTF()">إضافة سؤال صح/خطأ</button>
     </div>
+
     <div class="card">
       <div class="actions">
         <button class="btn" onclick="saveQuiz()">حفظ وتوليد رابط الطالب</button>
@@ -42,44 +47,85 @@
       </div>
       <div id="linkBox" class="success" style="display:none"></div>
     </div>
+
+    <div class="card notice">
+      <b>تعليمات للطلاب (تظهر قبل بدء الاختبار):</b>
+      <ul>
+        <li>لا تغادر الصفحة أثناء الاختبار (سيتم قفل الاختبار عند المغادرة).</li>
+        <li>هناك مؤقّت لكل سؤال. انتقل للسؤال التالي قبل انتهاء الزمن.</li>
+        <li>إذا كانت المحاولات محدودة، فلن تتمكن من الإعادة بعد إرسال الإجابات.</li>
+      </ul>
+    </div>
   </div>
 </main>
 
-<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9 (2025) – added Exam Access Guard (feature-flagged; default OFF) -->
-
+  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9.2 (2025) – remove guard; add time column; admin user mgmt -->
+  
 <script>
-const me=JSON.parse(localStorage.getItem('currentUser')||'null'); if(!me) location.href='login.html'; else{ document.getElementById('wrap').style.display='block'; }
-let items=[], lastLink='';
-function addMCQ(){ items.push({type:'mcq', q:'', options:['','','',''], correct:0}); render(); }
-function addTF(){ items.push({type:'tf', q:'', correct:true}); render(); }
-function render(){
-  const holder=document.getElementById('items'); holder.innerHTML='';
-  items.forEach((it,i)=>{
-    if(it.type==='mcq'){
-      holder.insertAdjacentHTML('beforeend', `<div class="card"><h3>سؤال ${i+1} (اختيار)</h3><label>نص</label><input onchange="items[${i}].q=this.value"><div class="grid">
-      <div><label>1</label><input onchange="items[${i}].options[0]=this.value"></div>
-      <div><label>2</label><input onchange="items[${i}].options[1]=this.value"></div>
-      <div><label>3</label><input onchange="items[${i}].options[2]=this.value"></div>
-      <div><label>4</label><input onchange="items[${i}].options[3]=this.value"></div></div>
-      <label>الصحيح</label><select onchange="items[${i}].correct=parseInt(this.value,10)"><option value="0">1</option><option value="1">2</option><option value="2">3</option><option value="3">4</option></select></div>`);
-    } else {
-      holder.insertAdjacentHTML('beforeend', `<div class="card"><h3>سؤال ${i+1} (صح/خطأ)</h3><label>نص</label><input onchange="items[${i}].q=this.value"><label>الإجابة الصحيحة</label><select onchange="items[${i}].correct=(this.value==='true')"><option value="true">صح</option><option value="false">خطأ</option></select></div>`);
-    }
-  });
-}
-function uid(){ return 'q'+Math.random().toString(36).slice(2,9); }
-function saveQuiz(){
-  const title=q_title.value.trim(); const perSec=parseInt(per_sec.value||'30',10); const limitOnce=limit_once.checked;
-  if(!title||items.length===0){ alert('يرجى إدخال عنوان الاختبار وإضافة أسئلة'); return; }
-  const quizzes=JSON.parse(localStorage.getItem('quizzes')||'[]');
-  const id=uid(); const quiz={id, owner:me.username, title, perSec, limitOnce, items};
-  quizzes.push(quiz); localStorage.setItem('quizzes', JSON.stringify(quizzes));
-  const base = location.origin + location.pathname.replace('builder.html','');
-  lastLink = base + 'student.html?id='+id;
-  linkBox.style.display='block'; linkBox.innerHTML='رابط الطالب: <a href="'+lastLink+'" target="_blank">'+lastLink+'</a>';
-  copyBtn.style.display='inline-block';
-}
-function copyLink(){ if(!lastLink){ alert('لا يوجد رابط بعد.'); return; } navigator.clipboard.writeText(lastLink).then(()=>alert('تم نسخ الرابط!')); }
+  const me=JSON.parse(localStorage.getItem('currentUser')||'null');
+  if(!me) location.href='login.html'; else{ document.getElementById('wrap').style.display='block'; }
+
+  let items=[], lastLink='';
+  function addMCQ(){ items.push({type:'mcq', q:'', options:['','','',''], correct:0}); render(); }
+  function addTF(){ items.push({type:'tf', q:'', correct:true}); render(); }
+
+  function render(){
+    const holder=document.getElementById('items'); holder.innerHTML='';
+    items.forEach((it,i)=>{
+      if(it.type==='mcq'){
+        holder.insertAdjacentHTML('beforeend', `
+          <div class="card" style="border-color:#e9d1d6">
+            <h3>سؤال ${i+1} (اختيار من متعدد)</h3>
+            <label>نص السؤال</label><input onchange="items[${i}].q=this.value" placeholder="اكتب السؤال">
+            <div class="grid">
+              <div><label>خيار 1</label><input onchange="items[${i}].options[0]=this.value"></div>
+              <div><label>خيار 2</label><input onchange="items[${i}].options[1]=this.value"></div>
+              <div><label>خيار 3</label><input onchange="items[${i}].options[2]=this.value"></div>
+              <div><label>خيار 4</label><input onchange="items[${i}].options[3]=this.value"></div>
+            </div>
+            <label>الإجابة الصحيحة</label>
+            <select onchange="items[${i}].correct=parseInt(this.value,10)">
+              <option value="0">الخيار 1</option>
+              <option value="1">الخيار 2</option>
+              <option value="2">الخيار 3</option>
+              <option value="3">الخيار 4</option>
+            </select>
+          </div>`);
+      } else {
+        holder.insertAdjacentHTML('beforeend', `
+          <div class="card" style="border-color:#e9د1د6">
+            <h3>سؤال ${i+1} (صح/خطأ)</h3>
+            <label>نص السؤال</label><input onchange="items[${i}].q=this.value" placeholder="اكتب السؤال">
+            <label>الإجابة الصحيحة</label>
+            <select onchange="items[${i}].correct=(this.value==='true')">
+              <option value="true">صح</option>
+              <option value="false">خطأ</option>
+            </select>
+          </div>`);
+      }
+    });
+  }
+  function uid(){ return 'q'+Math.random().toString(36).slice(2,9); }
+  function saveQuiz(){
+    const title=document.getElementById('q_title').value.trim();
+    const perSec=parseInt(document.getElementById('per_sec').value||'30',10);
+    const limitOnce=document.getElementById('limit_once').checked;
+    if(!title||items.length===0){ alert('يرجى إدخال عنوان الاختبار وإضافة أسئلة'); return; }
+    const quizzes=JSON.parse(localStorage.getItem('quizzes')||'[]');
+    const me=JSON.parse(localStorage.getItem('currentUser')||'null');
+    const id=uid();
+    const quiz={id, owner:me.username, title, perSec, limitOnce, items};
+    quizzes.push(quiz); localStorage.setItem('quizzes', JSON.stringify(quizzes));
+    const base = location.origin + location.pathname.replace('builder.html','');
+    lastLink = base + 'student.html?id='+id;
+    const lb=document.getElementById('linkBox'); lb.style.display='block';
+    lb.innerHTML='رابط الطالب: <a href="'+lastLink+'" target="_blank">'+lastLink+'</a>';
+    document.getElementById('copyBtn').style.display='inline-block';
+  }
+  function copyLink(){
+    if(!lastLink){ alert('لا يوجد رابط بعد. احفظ الاختبار أولًا.'); return; }
+    navigator.clipboard.writeText(lastLink).then(()=>{ alert('تم نسخ الرابط!'); });
+  }
 </script>
 
 </body></html>
