@@ -53,3 +53,9 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 10000;
 app.listen(port, () => console.log('API listening on', port));
+// ✅ دعم /api/quiz?id=ID (توافق مع الروابط الحالية)
+app.get('/api/quiz', (req, res) => {
+  const id = (req.query.id || '').toString().trim();
+  if (!id) return res.status(400).json({ ok:false, error:'missing_id' });
+  return res.redirect(302, `/api/quiz/${encodeURIComponent(id)}`);
+});
