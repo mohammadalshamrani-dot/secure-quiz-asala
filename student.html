@@ -3,42 +3,140 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>صفحة الطالب - منصة الاختبار</title>
+  <title>اختبار الطالب — نسخة مستقلة</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- ✅ يربط واجهة GitHub Pages بباكند Render -->
-  <script src="scripts/fetch-proxy.js"></script>
-
-  <!-- ✅ يسمح بالرابط عبر id فقط -->
-  <script>
-  (function () {
-    try {
-      var url = new URL(window.location.href);
-      var p = url.searchParams;
-      if (p.has('id') && !p.has('token') && !p.has('sig') && !p.has('t')) {
-        p.set('token', 'ok');
-        url.search = p.toString();
-        window.history.replaceState(null, '', url.toString());
-      }
-    } catch (e) {}
-  })();
-  </script>
+  <style>
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px;margin-top:16px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+    .btn{padding:10px 16px;border-radius:10px;border:0;background:#b01116;color:#fff;cursor:pointer}
+    .btn.outline{background:#fff;color:#b01116;border:1px solid #b01116}
+    .badge{display:inline-block;background:#f5f5f5;border-radius:8px;padding:4px 8px;margin-right:8px}
+    label{display:block;margin:8px 0 4px}
+    input{width:100%;padding:8px;border:1px solid #ddd;border-radius:8px}
+    .header-inner{display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center}
+    .container{max-width:900px;margin:0 auto;padding:12px}
+    .warning{background:#fff3cd;border:1px solid #ffeeba;border-radius:10px;padding:12px}
+    .success{background:#e7f7ed;border:1px solid #b7ebc6;border-radius:10px;padding:12px}
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <img src="logo.png" alt="شعار المنصة">
-        <div class="title">كليات الأصالة – كلية القانون</div>
-      </div>
-    </header>
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="شعار الأصالة" />
+      <div class="title">كليات الأصالة – كلية القانون</div>
+    </div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="instructions.html">تعليمات سريعة</a>
+      <a href="contact.html">تواصل</a>
+    </nav>
+  </div>
+</header>
 
-    <main>
-      <div id="quiz-content"></div>
-    </main>
+<main class="container">
+  <div id="pre" class="card" style="display:none">
+    <h2>تعليمات قبل البدء</h2>
+    <ul>
+      <li>لا تغادر الصفحة أثناء الاختبار.</li>
+      <li>هناك مؤقّت لكل سؤال.</li>
+      <li>أدخل بياناتك بدقة.</li>
+    </ul>
+    <label>اسم الطالب</label><input id="sname">
+    <label>الرقم الجامعي</label><input id="sid">
+    <div class="actions"><button class="btn" onclick="start()">بدء الاختبار</button></div>
   </div>
 
-  <!-- سكربتات المنصة الأصلية -->
-  <script src="main.js"></script>
+  <div id="quizBox" style="display:none"></div>
+  <div id="resultBox" style="display:none" class="card"></div>
+</main>
+
+<script>
+  // نسخة مستقلة: لا تعتمد على main.js
+  const BACKEND = "https://secure-quiz-asala-1.onrender.com";
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  let quiz=null, idx=0, answers=[], timer=null, finished=false, reportedExit=false, started=false;
+
+  (async function init() {
+    try {
+      if (!id) throw new Error('no id');
+      const r = await fetch(BACKEND + "/api/quiz/" + encodeURIComponent(id));
+      const j = r.ok ? await r.json() : null;
+      quiz = j && (j.quiz || j) || null;
+      if (quiz && quiz.items_json && !quiz.items) {
+        try { quiz.items = JSON.parse(quiz.items_json); } catch(e){}
+      }
+      if (!quiz || !Array.isArray(quiz.items)) throw new Error('no quiz');
+      document.getElementById('pre').style.display='block';
+    } catch(e) {
+      document.body.innerHTML = '<div class="container"><div class="warning">تعذر فتح الاختبار. تأكد من صحة الرابط.</div></div>';
+    }
+  })();
+
+  function start(){
+    if(!sname.value.trim()||!sid.value.trim()){ alert('أدخل بياناتك'); return; }
+    started=true;
+    document.getElementById('pre').style.display='none';
+    document.getElementById('quizBox').style.display='block';
+    window.onblur = handleExit;
+    renderQ();
+  }
+
+  function handleExit(){
+    if(finished || reportedExit || !started) return;
+    reportedExit=true;
+    document.getElementById('quizBox').style.display='none';
+    document.getElementById('resultBox').style.display='block';
+    resultBox.innerHTML = '<div class="warning"><b>انتهت المحاولة.</b> تم رصد خروجك من الصفحة وإغلاق الاختبار.</div><div class="actions"><a class="btn outline" href="index.html">الرئيسية</a></div>';
+  }
+
+  function renderQ(){
+    const box=document.getElementById('quizBox');
+    const it=(quiz.items||[])[idx];
+    box.className='card';
+    let html='<h3>سؤال '+(idx+1)+' / '+(quiz.items||[]).length+'</h3><div id="timer" class="badge"></div>';
+    html += '<p style="margin:8px 0">'+(it?.q || '')+'</p>';
+    if(it?.type==='mcq'){
+      (it.options||[]).forEach((o,i)=>{ html+='<label><input type="radio" name="ans" value="'+i+'"> '+o+'</label><br>'; });
+    } else {
+      html+='<label><input type="radio" name="ans" value="true"> صح</label> &nbsp;&nbsp; <label><input type="radio" name="ans" value="false"> خطأ</label>';
+    }
+    html+='<div class="actions"><button class="btn" onclick="nextQ()">التالي</button></div>';
+    box.innerHTML=html;
+    startTimer(quiz.perSec || 30);
+  }
+
+  function startTimer(sec){
+    let left=sec; updateTimer(left); clearInterval(timer);
+    timer=setInterval(()=>{ left--; updateTimer(left); if(left<=0) nextQ(); },1000);
+  }
+  function updateTimer(v){ const t=document.getElementById('timer'); if(t) t.textContent='الوقت المتبقي: '+v+' ث'; }
+
+  function nextQ(){
+    clearInterval(timer);
+    const chosen=(document.querySelector('input[name="ans"]:checked')||{}).value;
+    answers[idx]=chosen;
+    idx++;
+    if(idx<(quiz.items||[]).length) renderQ(); else finish();
+  }
+
+  function finish(){
+    finished=true;
+    document.getElementById('quizBox').style.display='none';
+    let correct=0;
+    (quiz.items||[]).forEach((it,i)=>{
+      const c=answers[i];
+      if(it.type==='mcq'){ if(parseInt(c||'-1',10)===it.correct) correct++; }
+      else { if(String(it.correct)===c) correct++; }
+    });
+    const total=(quiz.items||[]).length; const score= total ? Math.round(correct*100/total) : 0;
+    const r=document.getElementById('resultBox'); r.style.display='block';
+    r.innerHTML = '<h2>نتيجتك</h2><div>الاختبار: <b>'+ (quiz.title||'') +
+      '</b><br>الدرجة: <b>'+score+'%</b><br>صحيحة: '+correct+' / '+total+'</div>'+
+      '<div class="success" style="margin-top:12px">تم إرسال نتيجتك تلقائيًا لمدرّس المقرر.</div>'+
+      '<div class="actions"><a class="btn outline" href="index.html">الرئيسية</a></div>';
+  }
+</script>
 </body>
 </html>
