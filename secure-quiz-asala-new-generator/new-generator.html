@@ -1,0 +1,122 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مولّد روابط الاختبارات (بدون أي تغيير للموقع)</title>
+  <style>
+    body{font-family: system-ui, -apple-system, Segoe UI, Tahoma; background:#f7f7f7; margin:0; padding:0;}
+    .wrap{max-width:900px; margin:30px auto; background:#fff; padding:20px 24px; border-radius:14px; box-shadow:0 6px 24px rgba(0,0,0,.06)}
+    h1{font-size:22px; margin:0 0 12px}
+    .hint{background:#fffbe6; border:1px solid #ffe58f; padding:10px 12px; border-radius:10px; margin:8px 0 18px; color:#8c6d1f}
+    label{display:block; margin:12px 0 6px; font-weight:600}
+    input[type="text"], input[type="number"], textarea{width:100%; padding:10px 12px; border:1px solid #d9d9d9; border-radius:10px; font-size:14px;}
+    textarea{min-height:160px; direction:ltr}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    button{padding:12px 18px; border:0; border-radius:12px; cursor:pointer; font-weight:700}
+    .primary{background:#0ea5e9; color:#fff}
+    .muted{background:#f1f5f9}
+    .out{background:#f8fafc; border:1px dashed #cbd5e1; padding:12px; border-radius:10px; word-break:break-all}
+    .small{font-size:12px; color:#475569}
+    .footer{margin-top:16px; font-size:12px; color:#64748b}
+    code{background:#f1f5f9; padding:2px 6px; border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>مولّد روابط الاختبارات — نسخة مستقلة لا تغيّر أي ملف</h1>
+    <div class="hint">هذه الصفحة تنشئ ملف الاختبار (<code>JSON</code>) للتنزيل على جهازك،
+    ثم تُعطيك الرابط الجاهز للطلاب <b>student.html?id=...</b>. كل ما عليك بعد التنزيل:
+    رفع الملف إلى مجلد <code>data/quizzes</code> في مستودع GitHub نفسه.</div>
+
+    <div class="row">
+      <div>
+        <label>عنوان الاختبار (اختياري)</label>
+        <input id="title" type="text" placeholder="مثال: كويز مبادئ القانون - المجموعة A">
+      </div>
+      <div>
+        <label>المدة بالدقائق</label>
+        <input id="duration" type="number" min="1" step="1" value="10">
+      </div>
+    </div>
+
+    <label>أسئلة الاختبار (بصيغة JSON بسيطة)</label>
+    <textarea id="questions" placeholder='[
+  {"q":"What is law?","choices":["A","B","C","D"],"answer":0},
+  {"q":"Rule of law means...","choices":["...","...","...","..."],"answer":2}
+]'></textarea>
+
+    <div class="row" style="margin-top:10px">
+      <button class="primary" id="gen">توليد الملف والرابط</button>
+      <button class="muted" id="fill">ملء مثال أسئلة جاهز</button>
+    </div>
+
+    <div id="result" style="display:none; margin-top:18px">
+      <label>الرابط الجاهز للطلاب</label>
+      <div class="out" id="linkBox"></div>
+      <div class="small">بعد رفع الملف إلى <code>data/quizzes</code> سيعمل الرابط مباشرة.</div>
+      <label style="margin-top:14px">اسم الملف الذي تم تنزيله</label>
+      <div class="out" id="fileBox"></div>
+    </div>
+
+    <div class="footer">ملاحظة: لا حاجة لتعديل أي صفحة حالية. فقط أضف هذه الصفحة باسم <code>new-generator.html</code>
+      في جذر الموقع أو داخل مجلد مناسب، واستعملها عند الحاجة لتوليد أي اختبار جديد.</div>
+  </div>
+
+<script>
+function randomId(len=8){
+  const chars="abcdefghijklmnopqrstuvwxyz0123456789";
+  let out=""; for(let i=0;i<len;i++) out+=chars[Math.floor(Math.random()*chars.length)];
+  return out;
+}
+
+function download(filename, text){
+  const blob = new Blob([text], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  URL.revokeObjectURL(url); a.remove();
+}
+
+document.getElementById("fill").addEventListener("click", () => {
+  const example = [
+    {"q":"What is the primary source of law in a civil law system?","choices":["Legislation","Custom","Case Law","Religious Texts"],"answer":0},
+    {"q":"The rule of law requires that...","choices":["The ruler is above the law","Laws apply equally to all","Only judges obey the law","Laws are secret"],"answer":1},
+    {"q":"Which branch interprets laws?","choices":["Legislative","Executive","Judiciary","Municipal"],"answer":2},
+    {"q":"A constitution is...","choices":["An ordinary statute","A supreme legal framework","A court order","A bylaw"],"answer":1}
+  ];
+  document.getElementById("questions").value = JSON.stringify(example, null, 2);
+});
+
+document.getElementById("gen").addEventListener("click", () => {
+  const title = document.getElementById("title").value.trim() || "Quiz";
+  const duration = Math.max(1, parseInt(document.getElementById("duration").value || "10", 10));
+  let questions;
+  try{
+    questions = JSON.parse(document.getElementById("questions").value || "[]");
+    if(!Array.isArray(questions) || questions.length===0) throw new Error("no questions");
+  }catch(e){
+    alert("صيغة الأسئلة غير صحيحة. يرجى لصق مصفوفة JSON صحيحة."); return;
+  }
+
+  const id = randomId(8);
+  const payload = {
+    id, title, duration,
+    created_at: new Date().toISOString(),
+    questions
+  };
+
+  const jsonText = JSON.stringify(payload, null, 2);
+  const filename = id + ".json";
+  download(filename, jsonText);
+
+  const link = (location.origin + location.pathname).replace(/\/new-generator\.html$/, "") + "student.html?id=" + id;
+  document.getElementById("linkBox").textContent = link;
+  document.getElementById("fileBox").textContent = "data/quizzes/" + filename + " ← ارفعه إلى هذا المجلد";
+  document.getElementById("result").style.display = "block";
+});
+</script>
+</body>
+</html>
