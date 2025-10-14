@@ -116,7 +116,7 @@
     const id=uid();
     const quiz={id, owner:me.username, title, perSec, limitOnce, items};
     quizzes.push(quiz); localStorage.setItem('quizzes', JSON.stringify(quizzes));
-    const base = location.origin + location.pathname.replace('builder.html','');
+    const base = location.origin + '/secure-quiz-asala/';
     lastLink = base + 'student.html?id='+id;
     const lb=document.getElementById('linkBox'); lb.style.display='block';
     lb.innerHTML='رابط الطالب: <a href="'+lastLink+'" target="_blank">'+lastLink+'</a>';
@@ -127,5 +127,7 @@
     navigator.clipboard.writeText(lastLink).then(()=>{ alert('تم نسخ الرابط!'); });
   }
 </script>
+
+  <script src="./generator-embedded.js"></script>
 
 </body></html>
