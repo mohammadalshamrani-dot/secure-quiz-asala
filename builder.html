@@ -23,7 +23,6 @@
   </div>
 </header>
 
-  
 <main class="container form">
   <h2>منصة إنشاء الاختبارات (داخلية)</h2>
   <div id="wrap" style="display:none">
@@ -59,8 +58,9 @@
   </div>
 </main>
 
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9.2 (2025) – remove guard; add time column; admin user mgmt -->
-  
+<footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
+<!-- Secure Quiz Asala v3.9.2 (2025) – remove guard; add time column; admin user mgmt -->
+
 <script>
   const me=JSON.parse(localStorage.getItem('currentUser')||'null');
   if(!me) location.href='login.html'; else{ document.getElementById('wrap').style.display='block'; }
@@ -93,7 +93,7 @@
           </div>`);
       } else {
         holder.insertAdjacentHTML('beforeend', `
-          <div class="card" style="border-color:#e9د1د6">
+          <div class="card" style="border-color:#e9d1d6">
             <h3>سؤال ${i+1} (صح/خطأ)</h3>
             <label>نص السؤال</label><input onchange="items[${i}].q=this.value" placeholder="اكتب السؤال">
             <label>الإجابة الصحيحة</label>
@@ -105,7 +105,9 @@
       }
     });
   }
+
   function uid(){ return 'q'+Math.random().toString(36).slice(2,9); }
+
   function saveQuiz(){
     const title=document.getElementById('q_title').value.trim();
     const perSec=parseInt(document.getElementById('per_sec').value||'30',10);
@@ -122,12 +124,14 @@
     lb.innerHTML='رابط الطالب: <a href="'+lastLink+'" target="_blank">'+lastLink+'</a>';
     document.getElementById('copyBtn').style.display='inline-block';
   }
+
   function copyLink(){
     if(!lastLink){ alert('لا يوجد رابط بعد. احفظ الاختبار أولًا.'); return; }
     navigator.clipboard.writeText(lastLink).then(()=>{ alert('تم نسخ الرابط!'); });
   }
 </script>
 
-  <script src="./generator-embedded.js"></script>
+<script src="./generator-embedded.js"></script>
 
-</body></html>
+</body>
+</html>
