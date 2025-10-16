@@ -1,48 +1,45 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>منصة الاختبارات القصيرة – الرئيسية</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>منصة الاختبارات القصيرة – كلية القانون</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div id="splash">
-    <div class="splash-box">
-      <img src="logo.png" alt="شعار الأصالة">
-      <h2>منصة الاختبارات القصيرة</h2>
-      <p>المطور: د. محمد الشمراني – 2025</p>
-      <p class="small">جميع الحقوق محفوظة</p>
-    </div>
-  </div>
-  
-<header>
-  <div class="container header-inner">
+  <header class="header">
     <div class="brand">
-      <img src="logo.png" alt="شعار الأصالة" />
+      <img class="logo" src="./assets/logo-alasala.png" alt="ALASALA">
       <div class="title">كليات الأصالة – كلية القانون</div>
     </div>
-    <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="instructions.html">تعليمات سريعة</a>
-      <a href="contact.html">تواصل مع الإدارة</a>
-      <a href="login.html">دخول أعضاء هيئة التدريس</a>
-      <a href="admin.html">الإدارة</a>
+    <nav class="nav">
+      <a class="navlink" href="./index.html">الصفحة الرئيسية</a>
+      <a class="navlink" href="./contact.html">التواصل مع الإدارة</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-  <main class="container">
-    <section class="hero">
+  <main class="wrapper">
+    <section class="hero-card">
       <h1>منصة الاختبارات القصيرة</h1>
-      <p>تتيح المنصة إجراء اختبارات قصيرة بتقنيات آمنـة عالية، تشمل مؤقّتًا زمنيًا لكل سؤال، ونظام قفل تلقائي عند مغادرة الصفحة لمنع الغش.</p>
+      <p class="sub">تتيح المنصة إجراء اختبارات قصيرة بأقل تعقيد — بدون تسجيل دخول — ونتيجة فورية قابلة للالتقاط كصورة شاشة وإرسالها لعضو هيئة التدريس.</p>
+
       <div class="actions">
-        <a class="btn" href="login.html">دخول أعضاء هيئة التدريس</a>
-        <a class="btn outline" href="instructions.html">تعليمات سريعة</a>
-        <a class="btn outline" href="admin.html">الإدارة</a>
+        <a class="btn btn-prim" href="https://secure-quiz-asala-proxy.onrender.com">إنشاء اختبار قصير</a>
+        <a class="btn btn-ghost" href="#steps">تعليمات سريعة</a>
+        <a class="btn btn-ghost" href="./contact.html">تواصل مع الإدارة</a>
       </div>
+
+      <div class="pills" id="steps">
+        <div class="pill"><div class="title">1) إنشاء الاختبار</div><div class="bubble">اضغط الزر الأحمر</div></div>
+        <div class="pill"><div class="title">2) أداء الاختبار</div><div class="bubble">يجيب الطالب</div></div>
+        <div class="pill"><div class="title">3) تظهر النتيجة</div><div class="bubble">مع تعليمات ورمز تحقق</div></div>
+        <div class="pill"><div class="title">4) أخذ صورة للشاشة</div><div class="bubble">زر الالتقاط أسفل النتيجة</div></div>
+      </div>
+
+      <p class="notice">لا يحتاج عضو هيئة التدريس صفحة خاصة — يكفي صورة النتيجة + رمز التحقق.</p>
     </section>
+
+    <footer class="footer">تم تطوير المنصة بواسطة: د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer>
   </main>
-  <footer class="footer">تم تطوير المنصة بواسطة د. محمد الشمراني – 2025 · جميع الحقوق محفوظة</footer><!-- Secure Quiz Asala v3.9.2 (2025) – remove guard; add time column; admin user mgmt -->
-  <script>setTimeout(()=>{document.getElementById('splash').style.display='none';},5000);</script>
-</body></html>
+</body>
+</html>
